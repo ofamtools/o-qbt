@@ -40,6 +40,21 @@
       "source": "oden@v0.2.0/builtins.go:21"
     },
     {
+      "name": "complete",
+      "kind": "inline",
+      "summary": "complete a CLI word using the current argument values",
+      "source": "cli"
+    },
+    {
+      "name": "completion",
+      "kind": "inline",
+      "summary": "print a bash or zsh completion script",
+      "source": "cli",
+      "shadowed": [
+        "inline noun (alias of ochazuke.completion)"
+      ]
+    },
+    {
       "name": "config",
       "kind": "inline",
       "summary": "init path set show",
@@ -70,7 +85,7 @@
     {
       "name": "ochazuke.",
       "kind": "inline",
-      "summary": "(+73 nouns)",
+      "summary": "(+81 nouns)",
       "source": "namespace",
       "aliases": [
         "ochazuke"
@@ -171,7 +186,7 @@
     {
       "name": "ochazuke.chooser",
       "kind": "inline",
-      "summary": "cancel move next-source open pick previous-source up",
+      "summary": "cancel clear-props move next-source normal open pick previous-source up",
       "source": "noun",
       "aliases": [
         "chooser"
@@ -181,10 +196,7 @@
       "name": "ochazuke.completion",
       "kind": "inline",
       "summary": "accept dismiss move open",
-      "source": "noun",
-      "aliases": [
-        "completion"
-      ]
+      "source": "noun"
     },
     {
       "name": "ochazuke.config",
@@ -263,6 +275,56 @@
       ]
     },
     {
+      "name": "ochazuke.filter-condition",
+      "kind": "inline",
+      "source": "noun",
+      "aliases": [
+        "filter-condition"
+      ]
+    },
+    {
+      "name": "ochazuke.filter-direction",
+      "kind": "inline",
+      "source": "noun",
+      "aliases": [
+        "filter-direction"
+      ]
+    },
+    {
+      "name": "ochazuke.filter-form",
+      "kind": "inline",
+      "summary": "delete-saved direction edit-condition focus invert-condition move next remove-condition toggle write-saved",
+      "source": "noun",
+      "aliases": [
+        "filter-form"
+      ]
+    },
+    {
+      "name": "ochazuke.filter-save",
+      "kind": "inline",
+      "source": "noun",
+      "aliases": [
+        "filter-save"
+      ]
+    },
+    {
+      "name": "ochazuke.filter-values",
+      "kind": "inline",
+      "source": "noun",
+      "aliases": [
+        "filter-values"
+      ]
+    },
+    {
+      "name": "ochazuke.find-line",
+      "kind": "inline",
+      "summary": "cancel commit",
+      "source": "noun",
+      "aliases": [
+        "find-line"
+      ]
+    },
+    {
       "name": "ochazuke.focus",
       "kind": "inline",
       "summary": "display next previous set",
@@ -274,10 +336,18 @@
     {
       "name": "ochazuke.form",
       "kind": "inline",
-      "summary": "choose leave next next-missing previous redo run suggest undo",
+      "summary": "chip-edge chip-line chip-move chip-toggle choose clear invert leave next next-missing previous redo run suggest undo",
       "source": "noun",
       "aliases": [
         "form"
+      ]
+    },
+    {
+      "name": "ochazuke.form-chips",
+      "kind": "inline",
+      "source": "noun",
+      "aliases": [
+        "form-chips"
       ]
     },
     {
@@ -378,7 +448,7 @@
     {
       "name": "ochazuke.list",
       "kind": "inline",
-      "summary": "apply choose-column column end-visual filter filter-choose filter-clear filter-cycle filter-erase filter-keep filter-open filter-prop filter-prop-clear filter-props-clear filter-save filter-saved filter-saved-delete filter-saved-pick filter-type filters fit-column fit-columns focus goto mark move next-class pin-column previous-class reset-columns resize-column scroll scroll-columns select toggle-pin-column unpin-column unpin-columns visual yank",
+      "summary": "apply choose-column column end-visual filter filter-choose filter-clear filter-cycle filter-erase filter-keep filter-open filter-prop filter-prop-clear filter-props-clear filter-save filter-saved filter-saved-delete filter-saved-pick filter-type filters fit-column fit-columns flush-lingering focus goto mark move next-class pin-column previous-class reset-columns resize-column scroll scroll-columns select sort sort-clear sort-column toggle-pin-column unpin-column unpin-columns visual yank",
       "source": "noun",
       "aliases": [
         "list"
@@ -405,7 +475,7 @@
     {
       "name": "ochazuke.modal",
       "kind": "inline",
-      "summary": "pop push",
+      "summary": "close push",
       "source": "noun",
       "aliases": [
         "modal"
@@ -536,10 +606,18 @@
     {
       "name": "ochazuke.search",
       "kind": "inline",
-      "summary": "cycle-match set-match",
+      "summary": "cycle-match find next set-match",
       "source": "noun",
       "aliases": [
         "search"
+      ]
+    },
+    {
+      "name": "ochazuke.search-state",
+      "kind": "inline",
+      "source": "noun",
+      "aliases": [
+        "search-state"
       ]
     },
     {
@@ -589,7 +667,7 @@
     {
       "name": "ochazuke.settings",
       "kind": "inline",
-      "summary": "verb verbose apply close complete diff edit get list names owners path reload reset reset-all revert review section sections set tab undo write",
+      "summary": "all verb verbose apply close complete diff edit get list names owners path reload reset reset-all revert review section sections set tab undo write",
       "source": "noun",
       "aliases": [
         "settings"
@@ -688,7 +766,7 @@
     {
       "name": "ochazuke.view",
       "kind": "inline",
-      "summary": "scroll",
+      "summary": "edge page scroll",
       "source": "noun",
       "aliases": [
         "view"
@@ -755,7 +833,6 @@
     "bindings": "ochazuke.bindings",
     "bindings-help": "ochazuke.bindings-help",
     "chooser": "ochazuke.chooser",
-    "completion": "ochazuke.completion",
     "confirm": "ochazuke.confirm",
     "context": "ochazuke.context",
     "count": "ochazuke.count",
@@ -764,8 +841,15 @@
     "docs-viewer": "ochazuke.docs-viewer",
     "editor": "ochazuke.editor",
     "events": "ochazuke.events",
+    "filter-condition": "ochazuke.filter-condition",
+    "filter-direction": "ochazuke.filter-direction",
+    "filter-form": "ochazuke.filter-form",
+    "filter-save": "ochazuke.filter-save",
+    "filter-values": "ochazuke.filter-values",
+    "find-line": "ochazuke.find-line",
     "focus": "ochazuke.focus",
     "form": "ochazuke.form",
+    "form-chips": "ochazuke.form-chips",
     "form-choice": "ochazuke.form-choice",
     "form-field": "ochazuke.form-field",
     "form-option": "ochazuke.form-option",
@@ -796,6 +880,7 @@
     "registers": "ochazuke.registers",
     "request": "ochazuke.request",
     "search": "ochazuke.search",
+    "search-state": "ochazuke.search-state",
     "segment": "ochazuke.segment",
     "setting": "ochazuke.setting",
     "setting-change": "ochazuke.setting-change",
@@ -1540,7 +1625,7 @@
           "name": "instructions",
           "description": "Show generated catalog guidance for agents",
           "kind": "application",
-          "result": "text",
+          "result": "markdown",
           "history": "fetch",
           "builtin": true
         },
@@ -1930,11 +2015,28 @@
           "builtin": true
         },
         {
+          "guards": [
+            "chooser-prop-controls"
+          ],
           "examples": [
             {
-              "args": {
-                "delta": 1
-              },
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "clear-props",
+          "description": "Clear this chooser's prop conditions",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
               "note": "Template: replace placeholder values before running"
             }
           ],
@@ -1945,8 +2047,14 @@
           "kind": "application",
           "params": {
             "delta": {
-              "type": "integer",
-              "required": true
+              "type": "integer"
+            },
+            "to": {
+              "type": "string",
+              "enum": [
+                "first",
+                "last"
+              ]
             }
           },
           "result": "JSON value",
@@ -1967,6 +2075,25 @@
           "agent": "allow",
           "name": "next-source",
           "description": "Show the next source's rows; the query stays",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "chooser-normal-mode"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "normal",
+          "description": "Leave search editing in a chooser that supports normal mode",
           "kind": "application",
           "result": "JSON value",
           "history": "change",
@@ -2400,6 +2527,7 @@
               "note": "Vim's :h",
               "source": "framework",
               "bare": true,
+              "shadowVerb": "help",
               "palette": true
             }
           ]
@@ -2454,6 +2582,250 @@
           "description": "List the declared events (the framework's surface.opened, surface.left and app.quitting, then the application's and its extensions'), with their fields",
           "kind": "interaction",
           "result": "event[]",
+          "history": "action",
+          "builtin": true
+        }
+      ]
+    },
+    {
+      "name": "ochazuke.filter-form",
+      "verbs": [
+        {
+          "guards": [
+            "filter-form-delete-saved",
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "delete-saved",
+          "description": "Choose a saved filter to delete, with confirmation",
+          "kind": "interaction",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-sort",
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "direction",
+          "description": "Reverse the sort direction",
+          "kind": "interaction",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit-condition",
+          "description": "Edit the selected active condition",
+          "kind": "interaction",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "focus",
+          "description": "Focus a filter form control",
+          "kind": "interaction",
+          "params": {
+            "part": {
+              "type": "string",
+              "enum": [
+                "field",
+                "sort",
+                "conditions",
+                "save"
+              ]
+            }
+          },
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "invert-condition",
+          "description": "Invert the selected active condition",
+          "kind": "interaction",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-tab",
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "move",
+          "description": "Move between controls in drawing order",
+          "kind": "interaction",
+          "params": {
+            "step": {
+              "type": "integer"
+            }
+          },
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-text",
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "next",
+          "description": "Keep the text condition and return to the field picker",
+          "kind": "interaction",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "remove-condition",
+          "description": "Remove the selected active condition",
+          "kind": "interaction",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "toggle",
+          "description": "Toggle the highlighted value without leaving its picker",
+          "kind": "interaction",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "filter-form-save",
+            "filter-form-open"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "write-saved",
+          "description": "Save the current conditions and sort through list.filter-save",
+          "kind": "interaction",
+          "history": "action",
+          "builtin": true
+        }
+      ]
+    },
+    {
+      "name": "ochazuke.find-line",
+      "pin": "insert",
+      "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "cancel",
+          "description": "Close the find line without finding",
+          "kind": "interaction",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "commit",
+          "description": "Find the typed text and close the find line",
+          "kind": "interaction",
+          "result": "JSON value",
           "history": "action",
           "builtin": true
         }
@@ -2571,6 +2943,112 @@
       "name": "ochazuke.form",
       "verbs": [
         {
+          "guards": [
+            "form-chips"
+          ],
+          "examples": [
+            {
+              "args": {
+                "edge": "first"
+              },
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "chip-edge",
+          "description": "Put the chip cursor on an edge: first, last, first-col or last-col (the ends of its line)",
+          "kind": "interaction",
+          "params": {
+            "edge": {
+              "type": "string",
+              "required": true,
+              "enum": [
+                "first",
+                "last",
+                "first-col",
+                "last-col"
+              ]
+            }
+          },
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "form-chips"
+          ],
+          "examples": [
+            {
+              "args": {
+                "delta": 1
+              },
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "chip-line",
+          "description": "Move the chip cursor a line down or up; past the first or last line the focus goes to the field above or below",
+          "kind": "interaction",
+          "params": {
+            "delta": {
+              "type": "integer",
+              "required": true
+            }
+          },
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "form-chips"
+          ],
+          "examples": [
+            {
+              "args": {
+                "delta": 1
+              },
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "chip-move",
+          "description": "Move the chip cursor along its line, stopping at the line's ends",
+          "kind": "interaction",
+          "params": {
+            "delta": {
+              "type": "integer",
+              "required": true
+            }
+          },
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "form-chips"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "chip-toggle",
+          "description": "Turn the chip under the cursor on or off; written at once",
+          "kind": "interaction",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
           "examples": [
             {
               "args": {},
@@ -2581,6 +3059,44 @@
           "agent": "allow",
           "name": "choose",
           "description": "Choose the field's value from its choices",
+          "kind": "interaction",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "form-clearable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "clear",
+          "description": "Empty every field and turn every inverted field back; u undoes it a field at a time",
+          "kind": "interaction",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "form-invertible"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "invert",
+          "description": "Turn the focused field over: is becomes not and back; written at once",
           "kind": "interaction",
           "result": "JSON value",
           "history": "action",
@@ -2672,6 +3188,9 @@
           "builtin": true
         },
         {
+          "guards": [
+            "form-record-history"
+          ],
           "examples": [
             {
               "args": {},
@@ -2723,6 +3242,9 @@
           "builtin": true
         },
         {
+          "guards": [
+            "form-record-history"
+          ],
           "examples": [
             {
               "args": {},
@@ -3836,13 +4358,19 @@
               "type": "string",
               "description": "List, tree or chooser id (default focused)"
             },
+            "not": {
+              "type": "boolean",
+              "description": "Turn the condition over (= to !=, in to not-in, contains to not-contains); with the value chooser, its not toggle starts on"
+            },
             "op": {
               "type": "string",
               "enum": [
                 "=",
                 "!=",
                 "contains",
-                "in"
+                "not-contains",
+                "in",
+                "not-in"
               ]
             },
             "prop": {
@@ -3850,7 +4378,7 @@
             },
             "value": {
               "type": "any",
-              "description": "Typed value; in takes an array"
+              "description": "Typed value; in and not-in take an array"
             }
           },
           "result": "list state",
@@ -3926,7 +4454,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "filter-save",
-          "description": "Save current prop conditions as a list-scoped user filter in list.filters",
+          "description": "Save current prop conditions and sort as a list-scoped user filter in list.filters",
           "kind": "interaction",
           "params": {
             "id": {
@@ -3954,7 +4482,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "filter-saved",
-          "description": "Apply a saved prop filter by name, keeping / text",
+          "description": "Apply saved conditions and sort by name, keeping / text",
           "kind": "interaction",
           "params": {
             "id": {
@@ -3980,7 +4508,7 @@
             }
           ],
           "destructive": false,
-          "agent": "allow",
+          "agent": "confirm",
           "name": "filter-saved-delete",
           "description": "Delete a user saved filter; removing an override reveals the app default",
           "kind": "interaction",
@@ -3995,6 +4523,7 @@
             }
           },
           "result": "list state",
+          "confirm": "Delete saved filter {{name}}?",
           "history": "action",
           "builtin": true
         },
@@ -4120,6 +4649,26 @@
             }
           },
           "result": "list state",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "flush-lingering",
+          "description": "Remove changed rows waiting to leave the active filter",
+          "kind": "interaction",
+          "params": {
+            "id": {
+              "type": "string"
+            }
+          },
           "history": "action",
           "builtin": true
         },
@@ -4515,6 +5064,86 @@
         },
         {
           "guards": [
+            "list-sortable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "sort",
+          "description": "Sort the view stably by comma-separated props; -field descends, empty restores app order",
+          "kind": "interaction",
+          "params": {
+            "by": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string",
+              "description": "List, tree or chooser; default focused row view"
+            }
+          },
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "sort-clear",
+          "description": "Restore the app's row order, keeping filters",
+          "kind": "interaction",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "List, tree or chooser; default focused row view"
+            }
+          },
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "list-sortable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "sort-column",
+          "description": "Cycle the current column ascending, descending, off; in row mode choose a prop",
+          "kind": "interaction",
+          "params": {
+            "desc": {
+              "type": "boolean",
+              "description": "Set descending or ascending explicitly; omit to cycle"
+            },
+            "id": {
+              "type": "string",
+              "description": "List, tree or chooser; default focused row view"
+            },
+            "pick": {
+              "type": "boolean",
+              "description": "Always choose a field, including in cell mode"
+            }
+          },
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
             "list-table"
           ],
           "examples": [
@@ -4885,12 +5514,23 @@
           ],
           "destructive": false,
           "agent": "allow",
-          "name": "pop",
-          "description": "Close the active modal and restore its parent",
+          "name": "close",
+          "description": "Close the active modal: run its close request (CloseWith), else pop it back to the focus and mode it opened over",
           "kind": "interaction",
           "result": "context",
           "history": "action",
-          "builtin": true
+          "builtin": true,
+          "aliases": [
+            {
+              "alias": "ochazuke.modal.pop",
+              "action": "ochazuke.modal.close",
+              "noun": "ochazuke.modal",
+              "verb": "pop",
+              "since": "v0.83.0",
+              "removeAfter": "v0.84.0",
+              "source": "framework"
+            }
+          ]
         },
         {
           "examples": [
@@ -6182,6 +6822,71 @@
         },
         {
           "guards": [
+            "text-findable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "find",
+          "description": "Find text in the focused text view, docs viewer, Markdown viewer or timeline (Vim's /): with no query the find line opens; the cursor jumps to the next match, wrapping, as search.case and search.match say",
+          "kind": "interaction",
+          "params": {
+            "back": {
+              "type": "boolean",
+              "description": "Search up instead of down (Vim's ?)"
+            },
+            "count": {
+              "type": "integer",
+              "description": "Find the count-th match (default 1)"
+            },
+            "query": {
+              "type": "string",
+              "description": "Find this at once instead of opening the find line"
+            }
+          },
+          "result": "the find",
+          "positional": [
+            "query"
+          ],
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "text-refindable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "next",
+          "description": "Repeat the last find (Vim's n), or in the other direction with reverse (N), count times",
+          "kind": "interaction",
+          "params": {
+            "count": {
+              "type": "integer",
+              "description": "Repeat count (default 1)"
+            },
+            "reverse": {
+              "type": "boolean",
+              "description": "Search the other way from the last find (N)"
+            }
+          },
+          "result": "the find",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
             "search-matchable"
           ],
           "examples": [
@@ -7314,6 +8019,26 @@
     {
       "name": "ochazuke.settings",
       "verbs": [
+        {
+          "guards": [
+            "settings-all-section"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "never",
+          "agentDeclared": "never",
+          "name": "all",
+          "description": "Show the Settings page's All section: every setting in one list, each under its tab and section (opens the page when it is closed)",
+          "kind": "interaction",
+          "result": "context",
+          "history": "action",
+          "builtin": true
+        },
         {
           "examples": [
             {
@@ -8775,6 +9500,80 @@
       "verbs": [
         {
           "guards": [
+            "view-edge-moves"
+          ],
+          "examples": [
+            {
+              "args": {
+                "edge": "first"
+              },
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edge",
+          "description": "Move the focused component's cursor to an edge: its first or last row (a row number instead, 5G), or its first or last column; clamps, never spills. Any list, table, tree, timeline (inside a card, its steps), docs viewer or yank history",
+          "kind": "interaction",
+          "params": {
+            "edge": {
+              "type": "string",
+              "required": true,
+              "description": "The edge: first, last, first-col or last-col",
+              "enum": [
+                "first",
+                "last",
+                "first-col",
+                "last-col"
+              ]
+            },
+            "row": {
+              "type": "integer",
+              "description": "With first or last, the row or line numbered row instead (1 the first; a count: 5G); 0 or absent goes to the edge"
+            }
+          },
+          "result": "moved",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "view-pages"
+          ],
+          "examples": [
+            {
+              "args": {
+                "delta": 1
+              },
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "page",
+          "description": "Move the focused component's cursor and window a page (half a page with half) down or up; clamps, never spills. Any list, table, tree, timeline, docs viewer or yank history",
+          "kind": "interaction",
+          "params": {
+            "delta": {
+              "type": "integer",
+              "required": true,
+              "description": "1 down, -1 up"
+            },
+            "half": {
+              "type": "boolean",
+              "description": "Half a page (ctrl+d, ctrl+u); steps is then rows"
+            },
+            "steps": {
+              "type": "integer",
+              "description": "A count: pages, or rows with half (Vim's [count]ctrl+d); 0 or absent is one page or half a page"
+            }
+          },
+          "result": "moved",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
             "view-scrolls"
           ],
           "examples": [
@@ -10012,30 +10811,6 @@
   "bindings": [
     {
       "noun": "ochazuke.chooser",
-      "pattern": "printable",
-      "request": {
-        "verb": "insert",
-        "noun": "ochazuke.input"
-      },
-      "from": {
-        "text": "text"
-      },
-      "hidden": true
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "pattern": "paste",
-      "request": {
-        "verb": "insert",
-        "noun": "ochazuke.input"
-      },
-      "from": {
-        "text": "text"
-      },
-      "hidden": true
-    },
-    {
-      "noun": "ochazuke.chooser",
       "keys": "alt+[",
       "request": {
         "verb": "filter-cycle",
@@ -10063,8 +10838,8 @@
       "noun": "ochazuke.chooser",
       "keys": "alt+backspace",
       "request": {
-        "verb": "filter-props-clear",
-        "noun": "ochazuke.list"
+        "verb": "clear-props",
+        "noun": "ochazuke.chooser"
       },
       "hint": "clear props"
     },
@@ -10218,8 +10993,8 @@
       "noun": "ochazuke.chooser",
       "keys": "esc",
       "request": {
-        "verb": "cancel",
-        "noun": "ochazuke.chooser"
+        "verb": "close",
+        "noun": "ochazuke.modal"
       }
     },
     {
@@ -10274,7 +11049,7 @@
       "noun": "ochazuke.confirm",
       "keys": "esc",
       "request": {
-        "verb": "pop",
+        "verb": "close",
         "noun": "ochazuke.modal"
       }
     },
@@ -10282,9 +11057,19 @@
       "noun": "ochazuke.confirm",
       "keys": "n",
       "request": {
-        "verb": "pop",
+        "verb": "close",
         "noun": "ochazuke.modal"
       }
+    },
+    {
+      "noun": "ochazuke.confirm",
+      "keys": "q",
+      "request": {
+        "verb": "close",
+        "noun": "ochazuke.modal"
+      },
+      "hidden": true,
+      "help": "Close without running, as q closes every modal"
     },
     {
       "noun": "ochazuke.confirm",
@@ -10293,6 +11078,127 @@
         "verb": "accept",
         "noun": "ochazuke.confirm"
       }
+    },
+    {
+      "noun": "ochazuke.filter-form",
+      "keys": "enter",
+      "request": {
+        "verb": "next",
+        "noun": "ochazuke.filter-form"
+      },
+      "capture": true
+    },
+    {
+      "noun": "ochazuke.filter-form",
+      "keys": "shift+tab",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.filter-form",
+        "args": {
+          "step": -1
+        }
+      },
+      "capture": true,
+      "hidden": true
+    },
+    {
+      "noun": "ochazuke.filter-form",
+      "keys": "tab",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.filter-form",
+        "args": {
+          "step": 1
+        }
+      },
+      "capture": true,
+      "hint": "controls"
+    },
+    {
+      "noun": "ochazuke.filter-save",
+      "keys": "enter",
+      "request": {
+        "verb": "write-saved",
+        "noun": "ochazuke.filter-form"
+      },
+      "hint": "save"
+    },
+    {
+      "noun": "ochazuke.yank-history",
+      "keys": "G",
+      "request": {
+        "verb": "edge",
+        "noun": "ochazuke.view",
+        "args": {
+          "edge": "last"
+        }
+      },
+      "from": {
+        "row": "line"
+      },
+      "hidden": true
+    },
+    {
+      "noun": "ochazuke.yank-history",
+      "keys": "ctrl+b",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": -1
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "noun": "ochazuke.yank-history",
+      "keys": "ctrl+d",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": 1,
+          "half": true
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "noun": "ochazuke.yank-history",
+      "keys": "ctrl+f",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": 1
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "noun": "ochazuke.yank-history",
+      "keys": "ctrl+u",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": -1,
+          "half": true
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
     },
     {
       "noun": "ochazuke.yank-history",
@@ -10315,11 +11221,26 @@
     },
     {
       "noun": "ochazuke.yank-history",
-      "keys": "esc",
+      "keys": "g esc",
       "request": {
-        "verb": "pop",
-        "noun": "ochazuke.modal"
+        "verb": "leave",
+        "noun": "ochazuke.mode"
       }
+    },
+    {
+      "noun": "ochazuke.yank-history",
+      "keys": "g g",
+      "request": {
+        "verb": "edge",
+        "noun": "ochazuke.view",
+        "args": {
+          "edge": "first"
+        }
+      },
+      "from": {
+        "row": "line"
+      },
+      "hidden": true
     },
     {
       "noun": "ochazuke.yank-history",
@@ -10441,6 +11362,42 @@
         "verb": "open",
         "noun": "ochazuke.yank-history"
       }
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.chooser",
+      "pattern": "printable",
+      "request": {
+        "verb": "insert",
+        "noun": "ochazuke.input"
+      },
+      "from": {
+        "text": "text"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.chooser",
+      "pattern": "paste",
+      "request": {
+        "verb": "insert",
+        "noun": "ochazuke.input"
+      },
+      "from": {
+        "text": "text"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.chooser",
+      "keys": "esc",
+      "request": {
+        "verb": "normal",
+        "noun": "ochazuke.chooser"
+      },
+      "hidden": true
     },
     {
       "mode": "insert",
@@ -11067,6 +12024,74 @@
     },
     {
       "mode": "insert",
+      "noun": "ochazuke.filter-form",
+      "keys": "esc",
+      "request": {
+        "verb": "set",
+        "noun": "ochazuke.mode",
+        "args": {
+          "mode": "normal"
+        }
+      },
+      "when": "filter-form-text",
+      "hidden": true
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.filter-save",
+      "keys": "esc",
+      "request": {
+        "verb": "set",
+        "noun": "ochazuke.mode",
+        "args": {
+          "mode": "normal"
+        }
+      },
+      "hidden": true
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.find-line",
+      "keys": "enter",
+      "request": {
+        "verb": "commit",
+        "noun": "ochazuke.find-line"
+      },
+      "hint": "find"
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.find-line",
+      "keys": "esc",
+      "request": {
+        "verb": "close",
+        "noun": "ochazuke.modal"
+      }
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.find-line",
+      "keys": "shift+tab",
+      "request": {
+        "verb": "cycle-match",
+        "noun": "ochazuke.search",
+        "args": {
+          "step": -1
+        }
+      },
+      "hidden": true
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.find-line",
+      "keys": "tab",
+      "request": {
+        "verb": "cycle-match",
+        "noun": "ochazuke.search"
+      }
+    },
+    {
+      "mode": "insert",
       "noun": "ochazuke.form-field",
       "keys": "enter",
       "request": {
@@ -11282,8 +12307,8 @@
       "noun": "ochazuke.setting-value",
       "keys": "esc",
       "request": {
-        "verb": "cancel",
-        "noun": "ochazuke.setting-value"
+        "verb": "close",
+        "noun": "ochazuke.modal"
       }
     },
     {
@@ -11546,7 +12571,7 @@
         "verb": "leave",
         "noun": "ochazuke.mode"
       },
-      "help": "Leave without recording, back to the mode q was pressed in (a visual selection stays)"
+      "help": "Leave without recording, back to the mode Q was pressed in (a visual selection stays)"
     },
     {
       "mode": "macro_recording",
@@ -11578,7 +12603,7 @@
     {
       "mode": "macro_recording",
       "noun": "app",
-      "keys": "q",
+      "keys": "Q",
       "request": {
         "verb": "stop",
         "noun": "ochazuke.macro"
@@ -11615,6 +12640,20 @@
       },
       "hidden": true,
       "help": "Pick the register the next yank, delete or paste uses (\"a)"
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
+      "keys": "$",
+      "request": {
+        "verb": "edge",
+        "noun": "ochazuke.view",
+        "args": {
+          "edge": "last-col"
+        }
+      },
+      "hidden": true,
+      "help": "Go to the last column where the cursor moves sideways (Vim's $)"
     },
     {
       "mode": "normal",
@@ -11662,6 +12701,21 @@
     {
       "mode": "normal",
       "noun": "app",
+      "keys": "0",
+      "request": {
+        "verb": "edge",
+        "noun": "ochazuke.view",
+        "args": {
+          "edge": "first-col"
+        }
+      },
+      "when": "no-count",
+      "hidden": true,
+      "help": "Go to the first column where the cursor moves sideways (Vim's 0)"
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
       "keys": "@",
       "request": {
         "verb": "enter",
@@ -11675,6 +12729,23 @@
       },
       "hidden": true,
       "help": "Replay the macro in the register typed next (@a), count times"
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
+      "keys": "G",
+      "request": {
+        "verb": "edge",
+        "noun": "ochazuke.view",
+        "args": {
+          "edge": "last"
+        }
+      },
+      "from": {
+        "row": "line"
+      },
+      "hidden": true,
+      "help": "Go to the last row or line, or the row a count names (5G) (Vim's G)"
     },
     {
       "mode": "normal",
@@ -11713,6 +12784,20 @@
     {
       "mode": "normal",
       "noun": "app",
+      "keys": "Q",
+      "request": {
+        "verb": "enter",
+        "noun": "ochazuke.mode",
+        "args": {
+          "mode": "macro_pending"
+        }
+      },
+      "hidden": true,
+      "help": "Record a macro into the register typed next (Qa); Q again stops"
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
       "keys": "ctrl+a esc",
       "request": {
         "verb": "leave",
@@ -11732,6 +12817,41 @@
     {
       "mode": "normal",
       "noun": "app",
+      "keys": "ctrl+b",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": -1
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true,
+      "help": "Up a page; a count is pages (Vim's ctrl+b)"
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
+      "keys": "ctrl+d",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": 1,
+          "half": true
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true,
+      "help": "Down half a page; a count is rows (Vim's ctrl+d)"
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
       "keys": "ctrl+e",
       "request": {
         "verb": "scroll",
@@ -11745,6 +12865,41 @@
       },
       "hidden": true,
       "help": "Scroll the window a line down; the cursor stays unless it would leave it (Vim's ctrl+e, 3 ctrl+e)"
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
+      "keys": "ctrl+f",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": 1
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true,
+      "help": "Down a page; a count is pages (Vim's ctrl+f)"
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
+      "keys": "ctrl+u",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": -1,
+          "half": true
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true,
+      "help": "Up half a page; a count is rows (Vim's ctrl+u)"
     },
     {
       "mode": "normal",
@@ -11887,16 +13042,28 @@
     {
       "mode": "normal",
       "noun": "app",
-      "keys": "q",
+      "keys": "g esc",
       "request": {
-        "verb": "enter",
-        "noun": "ochazuke.mode",
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "app",
+      "keys": "g g",
+      "request": {
+        "verb": "edge",
+        "noun": "ochazuke.view",
         "args": {
-          "mode": "macro_pending"
+          "edge": "first"
         }
       },
+      "from": {
+        "row": "line"
+      },
       "hidden": true,
-      "help": "Record a macro into the register typed next (qa); q again stops"
+      "help": "Go to the first row or line, or the row a count names (5gg), of any list, timeline, viewer or component with a cursor (Vim's gg)"
     },
     {
       "mode": "normal",
@@ -12131,17 +13298,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.bindings-help",
-      "keys": "q",
-      "request": {
-        "verb": "pop",
-        "noun": "ochazuke.modal"
-      },
-      "hidden": true,
-      "help": "Close the help, as q closes the docs viewer (esc too)"
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.bindings-help",
       "keys": "shift+tab",
       "request": {
         "verb": "view",
@@ -12169,15 +13325,84 @@
     },
     {
       "mode": "normal",
+      "noun": "ochazuke.chooser",
+      "keys": "G",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.chooser",
+        "args": {
+          "to": "last"
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.chooser",
+      "keys": "g esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.chooser",
+      "keys": "g g",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.chooser",
+        "args": {
+          "to": "first"
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.chooser",
+      "keys": "j",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.chooser",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.chooser",
+      "keys": "k",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.chooser",
+        "args": {
+          "delta": -1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.docs-viewer",
+      "keys": "/",
+      "request": {
+        "verb": "find",
+        "noun": "ochazuke.search"
+      },
+      "hint": "find"
+    },
+    {
+      "mode": "normal",
       "noun": "ochazuke.docs-viewer",
       "keys": "G",
       "request": {
-        "verb": "scroll",
-        "noun": "ochazuke.detail",
+        "verb": "edge",
+        "noun": "ochazuke.view",
         "args": {
-          "id": "__docs-viewer/text",
-          "lines": 1000000
+          "edge": "last"
         }
+      },
+      "from": {
+        "row": "line"
       },
       "hidden": true
     },
@@ -12218,34 +13443,82 @@
     {
       "mode": "normal",
       "noun": "ochazuke.docs-viewer",
-      "keys": "ctrl+d",
+      "keys": "N",
       "request": {
-        "verb": "scroll",
-        "noun": "ochazuke.detail",
+        "verb": "next",
+        "noun": "ochazuke.search",
         "args": {
-          "id": "__docs-viewer/text",
-          "lines": 15
+          "reverse": true
         }
       },
       "from": {
         "count": "count"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.docs-viewer",
+      "keys": "ctrl+b",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": -1
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.docs-viewer",
+      "keys": "ctrl+d",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": 1,
+          "half": true
+        }
+      },
+      "from": {
+        "steps": "line"
       },
       "hint": "ctrl+d/u half page"
     },
     {
       "mode": "normal",
       "noun": "ochazuke.docs-viewer",
-      "keys": "ctrl+u",
+      "keys": "ctrl+f",
       "request": {
-        "verb": "scroll",
-        "noun": "ochazuke.detail",
+        "verb": "page",
+        "noun": "ochazuke.view",
         "args": {
-          "id": "__docs-viewer/text",
-          "lines": -15
+          "delta": 1
         }
       },
       "from": {
-        "count": "count"
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.docs-viewer",
+      "keys": "ctrl+u",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": -1,
+          "half": true
+        }
+      },
+      "from": {
+        "steps": "line"
       },
       "hidden": true
     },
@@ -12280,12 +13553,14 @@
       "noun": "ochazuke.docs-viewer",
       "keys": "g g",
       "request": {
-        "verb": "scroll",
-        "noun": "ochazuke.detail",
+        "verb": "edge",
+        "noun": "ochazuke.view",
         "args": {
-          "id": "__docs-viewer/text",
-          "lines": -1000000
+          "edge": "first"
         }
+      },
+      "from": {
+        "row": "line"
       },
       "hint": "g g/G ends"
     },
@@ -12326,12 +13601,15 @@
     {
       "mode": "normal",
       "noun": "ochazuke.docs-viewer",
-      "keys": "q",
+      "keys": "n",
       "request": {
-        "verb": "pop",
-        "noun": "ochazuke.modal"
+        "verb": "next",
+        "noun": "ochazuke.search"
       },
-      "hint": "close"
+      "from": {
+        "count": "count"
+      },
+      "hidden": true
     },
     {
       "mode": "normal",
@@ -12890,12 +14168,154 @@
     },
     {
       "mode": "normal",
+      "noun": "ochazuke.filter-condition",
+      "keys": "!",
+      "request": {
+        "verb": "invert-condition",
+        "noun": "ochazuke.filter-form"
+      },
+      "hint": "is/not"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-condition",
+      "keys": "d d",
+      "request": {
+        "verb": "remove-condition",
+        "noun": "ochazuke.filter-form"
+      },
+      "hint": "remove"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-condition",
+      "keys": "d esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-condition",
+      "keys": "enter",
+      "request": {
+        "verb": "edit-condition",
+        "noun": "ochazuke.filter-form"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-direction",
+      "keys": "enter",
+      "request": {
+        "verb": "direction",
+        "noun": "ochazuke.filter-form"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-form",
+      "keys": "D",
+      "request": {
+        "verb": "delete-saved",
+        "noun": "ochazuke.filter-form"
+      },
+      "hint": "delete saved"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-form",
+      "keys": "esc",
+      "request": {
+        "verb": "focus",
+        "noun": "ochazuke.filter-form",
+        "args": {
+          "part": "field"
+        }
+      },
+      "when": "filter-form-text",
+      "hint": "fields"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-form",
+      "keys": "z [",
+      "request": {
+        "verb": "filter-cycle",
+        "noun": "ochazuke.list",
+        "args": {
+          "step": -1
+        }
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-form",
+      "keys": "z ]",
+      "request": {
+        "verb": "filter-cycle",
+        "noun": "ochazuke.list",
+        "args": {
+          "step": 1
+        }
+      },
+      "hint": "next filter"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-form",
+      "keys": "z esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-values",
+      "keys": "esc",
+      "request": {
+        "verb": "focus",
+        "noun": "ochazuke.filter-form",
+        "args": {
+          "part": "field"
+        }
+      },
+      "capture": true,
+      "hint": "fields"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.filter-values",
+      "keys": "space",
+      "request": {
+        "verb": "toggle",
+        "noun": "ochazuke.filter-form"
+      },
+      "capture": true,
+      "hint": "toggle"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form",
+      "keys": "C",
+      "request": {
+        "verb": "clear",
+        "noun": "ochazuke.form"
+      },
+      "hint": "clear"
+    },
+    {
+      "mode": "normal",
       "noun": "ochazuke.form",
       "keys": "ctrl+r",
       "request": {
         "verb": "redo",
         "noun": "ochazuke.form"
-      }
+      },
+      "when": "input-no-redo"
     },
     {
       "mode": "normal",
@@ -12904,7 +14324,9 @@
       "request": {
         "verb": "leave",
         "noun": "ochazuke.form"
-      }
+      },
+      "when": "no-modal",
+      "help": "Leave a form placed on a page; in a modal form q and esc reach the modal noun (modal.close, which leaves it)"
     },
     {
       "mode": "normal",
@@ -12913,7 +14335,9 @@
       "request": {
         "verb": "leave",
         "noun": "ochazuke.form"
-      }
+      },
+      "when": "no-modal",
+      "help": "Leave a form placed on a page; in a modal form q and esc reach the modal noun (modal.close, which leaves it)"
     },
     {
       "mode": "normal",
@@ -12921,6 +14345,220 @@
       "keys": "u",
       "request": {
         "verb": "undo",
+        "noun": "ochazuke.form"
+      },
+      "when": "input-no-undo"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "!",
+      "request": {
+        "verb": "invert",
+        "noun": "ochazuke.form"
+      },
+      "hint": "not"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "$",
+      "request": {
+        "verb": "chip-edge",
+        "noun": "ochazuke.form",
+        "args": {
+          "edge": "last-col"
+        }
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "0",
+      "request": {
+        "verb": "chip-edge",
+        "noun": "ochazuke.form",
+        "args": {
+          "edge": "first-col"
+        }
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "G",
+      "request": {
+        "verb": "chip-edge",
+        "noun": "ochazuke.form",
+        "args": {
+          "edge": "last"
+        }
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "down",
+      "request": {
+        "verb": "chip-line",
+        "noun": "ochazuke.form",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "down",
+      "request": {
+        "verb": "next",
+        "noun": "ochazuke.form"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "g esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "g g",
+      "request": {
+        "verb": "chip-edge",
+        "noun": "ochazuke.form",
+        "args": {
+          "edge": "first"
+        }
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "h",
+      "request": {
+        "verb": "chip-move",
+        "noun": "ochazuke.form",
+        "args": {
+          "delta": -1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "j",
+      "request": {
+        "verb": "chip-line",
+        "noun": "ochazuke.form",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "j",
+      "request": {
+        "verb": "next",
+        "noun": "ochazuke.form"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "k",
+      "request": {
+        "verb": "chip-line",
+        "noun": "ochazuke.form",
+        "args": {
+          "delta": -1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "k",
+      "request": {
+        "verb": "previous",
+        "noun": "ochazuke.form"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "l",
+      "request": {
+        "verb": "chip-move",
+        "noun": "ochazuke.form",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "left",
+      "request": {
+        "verb": "chip-move",
+        "noun": "ochazuke.form",
+        "args": {
+          "delta": -1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "right",
+      "request": {
+        "verb": "chip-move",
+        "noun": "ochazuke.form",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "space",
+      "request": {
+        "verb": "chip-toggle",
+        "noun": "ochazuke.form"
+      },
+      "hint": "toggle"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "up",
+      "request": {
+        "verb": "chip-line",
+        "noun": "ochazuke.form",
+        "args": {
+          "delta": -1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-chips",
+      "keys": "up",
+      "request": {
+        "verb": "previous",
         "noun": "ochazuke.form"
       }
     },
@@ -13017,6 +14655,16 @@
     {
       "mode": "normal",
       "noun": "ochazuke.form-field",
+      "keys": "!",
+      "request": {
+        "verb": "invert",
+        "noun": "ochazuke.form"
+      },
+      "hint": "not"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.form-field",
       "keys": "down",
       "request": {
         "verb": "next",
@@ -13075,15 +14723,6 @@
       "request": {
         "verb": "pick",
         "noun": "ochazuke.form-option"
-      }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form-option",
-      "keys": "q",
-      "request": {
-        "verb": "pop",
-        "noun": "ochazuke.modal"
       }
     },
     {
@@ -13976,6 +15615,17 @@
     {
       "mode": "normal",
       "noun": "ochazuke.list",
+      "keys": "z s",
+      "request": {
+        "verb": "sort-column",
+        "noun": "ochazuke.list"
+      },
+      "hint": "sort",
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.list",
       "keys": "|",
       "request": {
         "verb": "column",
@@ -13991,7 +15641,16 @@
       "noun": "ochazuke.modal",
       "keys": "esc",
       "request": {
-        "verb": "pop",
+        "verb": "close",
+        "noun": "ochazuke.modal"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.modal",
+      "keys": "q",
+      "request": {
+        "verb": "close",
         "noun": "ochazuke.modal"
       }
     },
@@ -14506,6 +16165,15 @@
     {
       "mode": "normal",
       "noun": "ochazuke.settings-page",
+      "keys": "A",
+      "request": {
+        "verb": "all",
+        "noun": "ochazuke.settings"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.settings-page",
       "keys": "[",
       "request": {
         "verb": "tab",
@@ -14651,15 +16319,6 @@
     },
     {
       "mode": "normal",
-      "noun": "ochazuke.settings-review",
-      "keys": "q",
-      "request": {
-        "verb": "pop",
-        "noun": "ochazuke.modal"
-      }
-    },
-    {
-      "mode": "normal",
       "noun": "ochazuke.settings-section",
       "keys": "down",
       "request": {
@@ -14790,11 +16449,51 @@
     {
       "mode": "normal",
       "noun": "ochazuke.text-view",
-      "keys": "q",
+      "keys": "/",
       "request": {
-        "verb": "pop",
-        "noun": "ochazuke.modal"
-      }
+        "verb": "find",
+        "noun": "ochazuke.search"
+      },
+      "hint": "find"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.text-view",
+      "keys": "N",
+      "request": {
+        "verb": "next",
+        "noun": "ochazuke.search",
+        "args": {
+          "reverse": true
+        }
+      },
+      "from": {
+        "count": "count"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.text-view",
+      "keys": "n",
+      "request": {
+        "verb": "next",
+        "noun": "ochazuke.search"
+      },
+      "from": {
+        "count": "count"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline",
+      "keys": "/",
+      "request": {
+        "verb": "find",
+        "noun": "ochazuke.search"
+      },
+      "hint": "find"
     },
     {
       "mode": "normal",
@@ -14821,6 +16520,22 @@
         "noun": "ochazuke.timeline",
         "args": {
           "lines": -1
+        }
+      },
+      "from": {
+        "count": "count"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline",
+      "keys": "N",
+      "request": {
+        "verb": "next",
+        "noun": "ochazuke.search",
+        "args": {
+          "reverse": true
         }
       },
       "from": {
@@ -14922,6 +16637,19 @@
       "request": {
         "verb": "leave",
         "noun": "ochazuke.timeline"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline",
+      "keys": "n",
+      "request": {
+        "verb": "next",
+        "noun": "ochazuke.search"
+      },
+      "from": {
+        "count": "count"
       },
       "hidden": true
     },
@@ -15132,6 +16860,88 @@
     {
       "mode": "normal",
       "noun": "ochazuke.timeline-body",
+      "keys": "G",
+      "request": {
+        "verb": "edge",
+        "noun": "ochazuke.view",
+        "args": {
+          "edge": "last"
+        }
+      },
+      "from": {
+        "row": "line"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline-body",
+      "keys": "ctrl+b",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": -1
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline-body",
+      "keys": "ctrl+d",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": 1,
+          "half": true
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline-body",
+      "keys": "ctrl+f",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": 1
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline-body",
+      "keys": "ctrl+u",
+      "request": {
+        "verb": "page",
+        "noun": "ochazuke.view",
+        "args": {
+          "delta": -1,
+          "half": true
+        }
+      },
+      "from": {
+        "steps": "line"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline-body",
       "keys": "down",
       "request": {
         "verb": "step",
@@ -15163,6 +16973,22 @@
         "verb": "leave",
         "noun": "ochazuke.mode"
       }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.timeline-body",
+      "keys": "g g",
+      "request": {
+        "verb": "edge",
+        "noun": "ochazuke.view",
+        "args": {
+          "edge": "first"
+        }
+      },
+      "from": {
+        "row": "line"
+      },
+      "hidden": true
     },
     {
       "mode": "normal",
@@ -15858,7 +17684,7 @@
     {
       "mode": "visual",
       "noun": "app",
-      "keys": "q",
+      "keys": "Q",
       "request": {
         "verb": "enter",
         "noun": "ochazuke.mode",
@@ -15867,7 +17693,7 @@
         }
       },
       "hidden": true,
-      "help": "Record a macro into the register typed next (qa); q again stops"
+      "help": "Record a macro into the register typed next (Qa); Q again stops"
     },
     {
       "mode": "visual",
