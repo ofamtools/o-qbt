@@ -336,7 +336,7 @@ func (t *Tool) shell() *ocli.Shell {
 			return t.answer(Message{Message: "deleted torrent " + hs[0] + ", " + strings.Replace(what, "their", "its", 1)}, nil)
 		}
 		return t.answer(Message{Message: fmt.Sprintf("deleted %d torrents, %s", len(hs), what)}, nil)
-	}, "remove --target HASH, or a selection (--hashes H1,H2; --state STATE, the exact qBittorrent state; --filter, --category, --tag), from qBittorrent in batches of 200; --files deletes their data too (asks first; --yes skips the question)").Confirm("Delete torrent {{label}}?")
+	}, "remove --target HASH, or a selection (--hashes H1,H2; --state STATE, the exact qBittorrent state; --filter, --category, --tag), from qBittorrent in batches of 200; --files deletes their data too (asks first; --yes skips the question)").Destructive().Confirm("Delete torrent {{label}}?")
 	setHistory(r, ochazuke.HistoryChange, "torrent.delete")
 	r.Operations["torrent.delete"] = withParams(r.Operations["torrent.delete"], params(append([]any{
 		"files", ochazuke.Parameter{Type: "boolean", Description: "delete the downloaded data as well"},

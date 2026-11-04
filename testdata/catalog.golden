@@ -9750,7 +9750,7 @@
               "note": "Template: replace placeholder values before running"
             }
           ],
-          "destructive": false,
+          "destructive": true,
           "agent": "confirm",
           "name": "delete",
           "description": "remove --target HASH, or a selection (--hashes H1,H2; --state STATE, the exact qBittorrent state; --filter, --category, --tag), from qBittorrent in batches of 200; --files deletes their data too (asks first; --yes skips the question)",
