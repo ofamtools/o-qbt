@@ -85,7 +85,7 @@
     {
       "name": "ochazuke.",
       "kind": "inline",
-      "summary": "(+81 nouns)",
+      "summary": "(+82 nouns)",
       "source": "namespace",
       "aliases": [
         "ochazuke"
@@ -430,7 +430,7 @@
     {
       "name": "ochazuke.jobs",
       "kind": "inline",
-      "summary": "list",
+      "summary": "cancel list",
       "source": "noun",
       "aliases": [
         "jobs"
@@ -470,6 +470,15 @@
       "source": "noun",
       "aliases": [
         "mcp"
+      ]
+    },
+    {
+      "name": "ochazuke.messages",
+      "kind": "inline",
+      "summary": "show",
+      "source": "noun",
+      "aliases": [
+        "messages"
       ]
     },
     {
@@ -864,6 +873,7 @@
     "list": "ochazuke.list",
     "macro": "ochazuke.macro",
     "mcp": "ochazuke.mcp",
+    "messages": "ochazuke.messages",
     "modal": "ochazuke.modal",
     "mode": "ochazuke.mode",
     "modes": "ochazuke.modes",
@@ -1531,8 +1541,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "aliases",
           "description": "List every action alias: the framework's old names, the application's aliases and the alias rows of actions.json, each with the action it runs",
           "kind": "interaction",
@@ -1548,8 +1557,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "check",
           "description": "Report the entries of actions.json a load would skip, alias rows that clash with an action or another alias included, without installing anything",
           "kind": "interaction",
@@ -1565,8 +1573,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "list",
           "description": "List the actions installed from actions.json: verbs that run an external command",
           "kind": "interaction",
@@ -1582,8 +1589,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "path",
           "description": "Print the user actions file: actions.json beside bindings.json",
           "kind": "interaction",
@@ -1599,8 +1605,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reload",
           "description": "Read actions.json again: its verbs replace the last load's, a bad entry is skipped and reported; the user bindings are applied again",
           "kind": "interaction",
@@ -1662,8 +1667,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "check",
           "description": "Report the rows of the user bindings file that would be skipped, any merged row that does not validate, and as warnings the file's guard rows (debts) and any row that can never answer; with debts, every guard row of every table too; the status line names the format read (grouped or rows)",
           "kind": "interaction",
@@ -1685,13 +1689,12 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "defaults",
           "description": "Print the default bindings (the framework's and the application's, without the user's bindings.json) as a bindings file, each group tagged with its source: the embedded file, go or generated",
           "kind": "interaction",
           "result": "bindings file",
-          "history": "action",
+          "history": "fetch",
           "builtin": true
         },
         {
@@ -1702,8 +1705,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "export",
           "description": "Write every stored key row to a file in the grouped bindings format, default \u003cconfig dir\u003e/reference/bindings.reference.json (the file config export writes); never over the live bindings.json without force",
           "kind": "interaction",
@@ -1732,8 +1734,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "help",
           "description": "Open the keys the focus answers to, with the operation each runs and its description",
           "kind": "interaction",
@@ -1749,8 +1750,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "list",
           "description": "List the rows the current stack and mode answer to; all includes every stored noun and instance mode table",
           "kind": "interaction",
@@ -1774,8 +1774,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "load",
           "description": "Install binding rows from a bindings file (JSONC): the grouped format {bindings: [{context, bindings: {key: action}}]} or an array of rows",
           "kind": "interaction",
@@ -1797,8 +1796,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "path",
           "description": "Print the user bindings file: $XDG_CONFIG_HOME/\u003capp\u003e/bindings.json, else ~/.config/\u003capp\u003e/bindings.json",
           "kind": "interaction",
@@ -1814,8 +1812,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reload",
           "description": "Read the user bindings file again: its rows replace or unbind the defaults, a bad row is skipped and reported",
           "kind": "interaction",
@@ -1831,8 +1828,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "stops",
           "description": "List the rows every focus stop answers to, app-wide: each page's stops in drawing order, the open modals', then app; each with the focus and mode it is read at",
           "kind": "interaction",
@@ -2265,8 +2261,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "export",
           "description": "Write a reference of the user configuration (every setting, every key row) into a directory, default \u003cconfig dir\u003e/reference; never over the live files without force",
           "kind": "interaction",
@@ -2295,8 +2290,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "path",
           "description": "Print the config directory (bindings.json, settings.json, actions.json, themes.json), the state directory (history.jsonl, panes.json) and the default config export directory",
           "kind": "interaction",
@@ -2312,8 +2306,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reload",
           "description": "Read every config file again: themes.json, settings.json, actions.json, bindings.json, segments.json, then the application's own; a bad file or entry is skipped and reported",
           "kind": "interaction",
@@ -2601,8 +2594,8 @@
               "note": "Template: replace placeholder values before running"
             }
           ],
-          "destructive": false,
-          "agent": "allow",
+          "destructive": true,
+          "agent": "never",
           "name": "delete-saved",
           "description": "Choose a saved filter to delete, with confirmation",
           "kind": "interaction",
@@ -3925,6 +3918,29 @@
         {
           "examples": [
             {
+              "args": {
+                "job": 1
+              },
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "cancel",
+          "description": "Cancel a running job",
+          "kind": "interaction",
+          "params": {
+            "job": {
+              "type": "integer",
+              "required": true
+            }
+          },
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
               "args": {},
               "note": "Template: replace placeholder values before running"
             }
@@ -4507,8 +4523,8 @@
               "note": "Template: replace placeholder values before running"
             }
           ],
-          "destructive": false,
-          "agent": "confirm",
+          "destructive": true,
+          "agent": "never",
           "name": "filter-saved-delete",
           "description": "Delete a user saved filter; removing an override reveals the app default",
           "kind": "interaction",
@@ -5497,6 +5513,27 @@
           "kind": "application",
           "result": "JSON value",
           "quiet": true,
+          "history": "fetch",
+          "builtin": true
+        }
+      ]
+    },
+    {
+      "name": "ochazuke.messages",
+      "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "show",
+          "description": "Read recent messages in full",
+          "kind": "application",
+          "result": "JSON value",
           "history": "fetch",
           "builtin": true
         }
@@ -7179,6 +7216,12 @@
           "readOnly": true
         },
         {
+          "name": "protected",
+          "type": "boolean",
+          "description": "Only the owner may change this setting, even with the agent rights gate off",
+          "readOnly": true
+        },
+        {
           "name": "description",
           "type": "string",
           "description": "What the setting does",
@@ -7223,8 +7266,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "add",
           "description": "Add an item at the end of a list setting",
           "kind": "interaction",
@@ -7242,8 +7284,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "append",
           "description": "Add text at the end of a text setting, or items at the end of a list (skipping items it holds)",
           "kind": "interaction",
@@ -7283,8 +7324,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "cycle",
           "description": "Step a boolean, an enum or a number to its next or previous value (an enum wraps)",
           "kind": "interaction",
@@ -7324,8 +7364,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "decrease",
           "description": "Subtract an amount from a number or duration setting",
           "kind": "interaction",
@@ -7365,8 +7404,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "edit",
           "description": "Edit the setting: flip a boolean, take an enum's next value, add an item to a list, else type a new value",
           "kind": "interaction",
@@ -7400,8 +7438,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "get",
           "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
           "kind": "application",
@@ -7423,6 +7460,7 @@
                 "default",
                 "value",
                 "enum",
+                "protected",
                 "description",
                 "section",
                 "owner",
@@ -7454,8 +7492,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "increase",
           "description": "Add an amount to a number or duration setting",
           "kind": "interaction",
@@ -7495,8 +7532,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "list",
           "description": "List the things, each its props with id and label; where keeps the things whose props equal the values given; filter applies a named saved prop filter",
           "kind": "application",
@@ -7541,8 +7577,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "multiply",
           "description": "Multiply a number setting by an amount",
           "kind": "interaction",
@@ -7584,8 +7619,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "prepend",
           "description": "Add text at the start of a text setting, or items at the start of a list (skipping items it holds)",
           "kind": "interaction",
@@ -7627,8 +7661,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "remove",
           "description": "Remove text from a text setting (its first occurrence), or items from a list; what is not there is not an error",
           "kind": "interaction",
@@ -7668,8 +7701,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reset",
           "description": "Reset the setting to its default",
           "kind": "interaction",
@@ -7703,8 +7735,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "revert",
           "description": "Drop the setting's session value, so its saved value shows again",
           "kind": "interaction",
@@ -7729,8 +7760,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "set",
           "description": "Set the setting to a value, parsed by its type and checked against its allowed values",
           "kind": "interaction",
@@ -7770,8 +7800,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "show",
           "description": "Show the setting's value on the status line, name=value (a boolean name or noname); verbose adds where it was set",
           "kind": "interaction",
@@ -7790,7 +7819,7 @@
           "positional": [
             "name"
           ],
-          "history": "action",
+          "history": "fetch",
           "builtin": true
         },
         {
@@ -7801,8 +7830,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "toggle",
           "description": "Invert an on/off setting",
           "kind": "interaction",
@@ -7836,8 +7864,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "watch",
           "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
           "kind": "application",
@@ -7876,8 +7903,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "write",
           "description": "Write the setting's session value to settings.json",
           "kind": "interaction",
@@ -7914,8 +7940,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "add",
           "description": "Add an item to the list after this one",
           "kind": "interaction",
@@ -7931,8 +7956,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "delete",
           "description": "Delete the list item",
           "kind": "interaction",
@@ -7948,8 +7972,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "edit",
           "description": "Edit the list item",
           "kind": "interaction",
@@ -7965,8 +7988,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reset",
           "description": "Reset the whole list to its default",
           "kind": "interaction",
@@ -7988,8 +8010,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "cancel",
           "description": "Close the prompt and keep the value",
           "kind": "interaction",
@@ -8005,8 +8026,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "commit",
           "description": "Set the setting to the typed value and close the prompt",
           "kind": "interaction",
@@ -8030,8 +8050,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "all",
           "description": "Show the Settings page's All section: every setting in one list, each under its tab and section (opens the page when it is closed)",
           "kind": "interaction",
@@ -8047,8 +8066,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "apply",
           "description": "Run a :set line over the settings (opt, noopt, opt!, opt?, opt\u0026, opt\u003c, opt=v, opt+=v, opt-=v, opt^=v, all, all\u0026; several words, all or nothing); a leading verbose adds where values were set",
           "kind": "interaction",
@@ -8169,8 +8187,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "close",
           "description": "Leave the Settings page for the page it was opened from",
           "kind": "interaction",
@@ -8186,8 +8203,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "complete",
           "description": "Complete a :set line at the cursor: setting names (noNAME and invNAME for on/off ones, all, all\u0026), the current value after =, an enum's values, true and false, a list's items after -=; each id is the line up to the cursor completed",
           "kind": "interaction",
@@ -8217,13 +8233,12 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "diff",
           "description": "List the settings whose session value differs from the saved one: name, saved value, session value and origin",
           "kind": "interaction",
           "result": "setting-diff[]",
-          "history": "action",
+          "history": "fetch",
           "builtin": true
         },
         {
@@ -8234,8 +8249,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "edit",
           "description": "Open the Settings page (or switch to it): every change is saved as it is made",
           "kind": "interaction",
@@ -8273,8 +8287,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "get",
           "description": "Show one setting and its value",
           "kind": "interaction",
@@ -8298,8 +8311,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "list",
           "description": "List the declared settings with their values, defaults and descriptions",
           "kind": "interaction",
@@ -8315,8 +8327,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "names",
           "description": "List the names of the declared settings",
           "kind": "interaction",
@@ -8332,13 +8343,12 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "owners",
           "description": "List the owners of the settings (the Settings page's tabs) in order: id, title, description, and how many sections and settings each has",
           "kind": "interaction",
           "result": "setting-owner[]",
-          "history": "action",
+          "history": "fetch",
           "builtin": true
         },
         {
@@ -8349,8 +8359,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "path",
           "description": "Print the settings file: settings.json beside bindings.json",
           "kind": "interaction",
@@ -8366,8 +8375,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reload",
           "description": "Read settings.json again; observers see every value that changed",
           "kind": "interaction",
@@ -8385,8 +8393,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reset",
           "description": "Remove a setting's value from settings.json so it reads its default",
           "kind": "interaction",
@@ -8409,9 +8416,8 @@
               "note": "Template: replace placeholder values before running"
             }
           ],
-          "destructive": false,
+          "destructive": true,
           "agent": "never",
-          "agentDeclared": "never",
           "name": "reset-all",
           "description": "Reset every setting to its default: for this session, or in settings.json without a session or with settings.autosave",
           "kind": "interaction",
@@ -8427,8 +8433,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "revert",
           "description": "Drop every session value, so the saved values show again (asks first)",
           "kind": "interaction",
@@ -8444,8 +8449,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "review",
           "description": "Review this session's settings: each session value beside its saved one, to write or revert one at a time or all at once",
           "kind": "interaction",
@@ -8461,8 +8465,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "section",
           "description": "Show the next or previous section of the Settings page (wrapping), or the one named: within the shown tab, or across every tab in drawing order",
           "kind": "interaction",
@@ -8492,8 +8495,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "sections",
           "description": "List an owner's sections of settings in the Settings page's order (every owner's without one): owner, id, title, description and the settings in each",
           "kind": "interaction",
@@ -8504,7 +8506,7 @@
             }
           },
           "result": "setting-section[]",
-          "history": "action",
+          "history": "fetch",
           "builtin": true
         },
         {
@@ -8518,8 +8520,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "set",
           "description": "Set a setting, checked against its type and allowed values, and save settings.json",
           "kind": "interaction",
@@ -8548,8 +8549,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "tab",
           "description": "Show the next or previous tab of the Settings page (wrapping), or the one named, on the section it last showed",
           "kind": "interaction",
@@ -8575,8 +8575,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "undo",
           "description": "Take back the last change made on the Settings page",
           "kind": "interaction",
@@ -8592,8 +8591,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "write",
           "description": "Write every session value to settings.json",
           "kind": "interaction",
@@ -8632,8 +8630,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "copy",
           "description": "Yank the section's settings that are not at their default as :set lines",
           "kind": "interaction",
@@ -8655,8 +8652,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "open",
           "description": "Show the section and focus its settings",
           "kind": "interaction",
@@ -8678,8 +8674,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "pick",
           "description": "Pick a section of the shown tab from a chooser and show it",
           "kind": "interaction",
@@ -8695,8 +8690,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reset",
           "description": "Reset every setting of the section to its default, one undo step",
           "kind": "interaction",
@@ -8726,8 +8720,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "revert",
           "description": "Drop the session values of the section's settings, so the saved ones show again",
           "kind": "interaction",
@@ -8749,8 +8742,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "write",
           "description": "Write the session values of the section's settings to settings.json",
           "kind": "interaction",
@@ -8777,8 +8769,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "copy",
           "description": "Yank the tab's settings that are not at their default as :set lines",
           "kind": "interaction",
@@ -8800,8 +8791,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "open",
           "description": "Show the tab on the section it last showed and focus its settings",
           "kind": "interaction",
@@ -8823,8 +8813,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "reset",
           "description": "Reset every setting of the tab to its default, one undo step",
           "kind": "interaction",
@@ -8854,8 +8843,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "revert",
           "description": "Drop the session values of the tab's settings, so the saved ones show again",
           "kind": "interaction",
@@ -8877,8 +8865,7 @@
             }
           ],
           "destructive": false,
-          "agent": "never",
-          "agentDeclared": "never",
+          "agent": "allow",
           "name": "write",
           "description": "Write the session values of the tab's settings to settings.json",
           "kind": "interaction",
@@ -9751,7 +9738,7 @@
             }
           ],
           "destructive": true,
-          "agent": "confirm",
+          "agent": "never",
           "name": "delete",
           "description": "remove --target HASH, or a selection (--hashes H1,H2; --state STATE, the exact qBittorrent state; --filter, --category, --tag), from qBittorrent in batches of 200; --files deletes their data too (asks first; --yes skips the question)",
           "kind": "application",
