@@ -85,7 +85,7 @@
     {
       "name": "ochazuke.",
       "kind": "inline",
-      "summary": "(+82 nouns)",
+      "summary": "(+83 nouns)",
       "source": "namespace",
       "aliases": [
         "ochazuke"
@@ -149,6 +149,15 @@
       "source": "noun",
       "aliases": [
         "agent"
+      ]
+    },
+    {
+      "name": "ochazuke.association",
+      "kind": "inline",
+      "summary": "list",
+      "source": "noun",
+      "aliases": [
+        "association"
       ]
     },
     {
@@ -511,7 +520,7 @@
     {
       "name": "ochazuke.nouns",
       "kind": "inline",
-      "summary": "list places places-path",
+      "summary": "cancel-edit edit list places places-path",
       "source": "noun",
       "aliases": [
         "nouns"
@@ -529,7 +538,7 @@
     {
       "name": "ochazuke.outline",
       "kind": "inline",
-      "summary": "add collapse delete edit expand fold indent leave move next outdent paste redo row-key undo zoom-in zoom-out zoom-reset",
+      "summary": "add collapse delete edit expand fold indent leave move next outdent paste put redo row-key undo yank zoom-in zoom-out zoom-reset",
       "source": "noun",
       "aliases": [
         "outline"
@@ -554,7 +563,7 @@
     {
       "name": "ochazuke.page",
       "kind": "inline",
-      "summary": "next open pick previous hide show · std get list watch set",
+      "summary": "next open pick previous hide show · std get list watch set edit",
       "source": "noun",
       "aliases": [
         "page"
@@ -838,6 +847,7 @@
     "about-state": "ochazuke.about-state",
     "actions": "ochazuke.actions",
     "agent": "ochazuke.agent",
+    "association": "ochazuke.association",
     "binding": "ochazuke.binding",
     "bindings": "ochazuke.bindings",
     "bindings-help": "ochazuke.bindings-help",
@@ -984,7 +994,7 @@
           "params": {
             "force": {
               "type": "boolean",
-              "description": "quit without running the checks an application hangs on app.quit (BeforeQuit: unsaved edits are lost)"
+              "description": "quit without checks or waiting for writes; report unfinished values"
             }
           },
           "result": "boolean",
@@ -1651,6 +1661,33 @@
               "type": "string"
             }
           },
+          "history": "fetch",
+          "builtin": true
+        }
+      ]
+    },
+    {
+      "name": "ochazuke.association",
+      "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "list",
+          "description": "List live associations of the focus; optionally filter by noun",
+          "kind": "application",
+          "params": {
+            "noun": {
+              "type": "string",
+              "description": "Only associations of this noun"
+            }
+          },
+          "result": "JSON value",
           "history": "fetch",
           "builtin": true
         }
@@ -4171,6 +4208,7 @@
             }
           },
           "result": "list state",
+          "focusBound": true,
           "history": "action",
           "builtin": true
         },
@@ -4347,6 +4385,7 @@
             }
           },
           "result": "list state",
+          "focusBound": true,
           "history": "action",
           "builtin": true
         },
@@ -5273,6 +5312,7 @@
             }
           },
           "result": "list state",
+          "focusBound": true,
           "history": "action",
           "builtin": true
         },
@@ -5645,6 +5685,7 @@
             }
           },
           "result": "mode",
+          "focusBound": true,
           "history": "action",
           "builtin": true
         },
@@ -5742,6 +5783,7 @@
             }
           },
           "result": "mode",
+          "focusBound": true,
           "history": "action",
           "builtin": true
         }
@@ -5771,6 +5813,44 @@
     {
       "name": "ochazuke.nouns",
       "verbs": [
+        {
+          "guards": [
+            "edit-opening"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "cancel-edit",
+          "description": "Cancel a pending edit open without writing",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "noun-editable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Open the focused thing's standard edit form; existing inner edit keys take precedence",
+          "kind": "interaction",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
         {
           "examples": [
             {
@@ -5923,7 +6003,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "delete",
-          "description": "Delete the node and its children; u brings them back",
+          "description": "Delete the node (tree.delete-children says what happens to its children: a collapsed node takes them with it, an expanded one passes them up a level or to the top level); over a visual selection, every selected node, as one undo step; u brings them back",
           "kind": "application",
           "result": "JSON value",
           "history": "change",
@@ -6128,6 +6208,35 @@
           ],
           "destructive": false,
           "agent": "allow",
+          "name": "put",
+          "description": "Put a register's rows after the row's subtree as its next sibling, or before the row (before), with fresh ids (rows of the delete just made, put back as its text, keep their ids: a move, once), nested as yanked, as one undo step; on an empty tree they become the top level",
+          "kind": "application",
+          "params": {
+            "before": {
+              "type": "boolean",
+              "description": "put before the row instead of after its subtree"
+            },
+            "register": {
+              "type": "string",
+              "description": "Register name; the active register, else the unnamed one"
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "tree-editable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
           "name": "redo",
           "description": "Redo the last undone change",
           "kind": "application",
@@ -6178,6 +6287,31 @@
           "name": "undo",
           "description": "Undo the last change; the undo is written like any change",
           "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "tree-editable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "yank",
+          "description": "Copy the row and its subtree into a register (the active one, else the unnamed one) as indented lines; the system clipboard gets them as any yank does (the clipboard setting)",
+          "kind": "application",
+          "params": {
+            "register": {
+              "type": "string",
+              "description": "Register name; the active register, else the unnamed one"
+            }
+          },
           "result": "JSON value",
           "history": "change",
           "builtin": true
@@ -6272,6 +6406,40 @@
         }
       ],
       "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form; supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "hidden": {
+              "type": "boolean",
+              "description": "Out of the tabs and ctrl+j/k (the pages.hidden setting); page.open still opens it"
+            },
+            "id": {
+              "type": "string",
+              "description": "The page's id (default: the page the request acts for)",
+              "source": "ochazuke.page.list",
+              "free": true,
+              "noun": "ochazuke.page",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "id"
+          ],
+          "history": "action",
+          "builtin": true,
+          "standard": "edit"
+        },
         {
           "examples": [
             {
@@ -15730,6 +15898,18 @@
     {
       "mode": "normal",
       "noun": "ochazuke.outline",
+      "keys": "P",
+      "request": {
+        "verb": "put",
+        "noun": "ochazuke.outline",
+        "args": {
+          "before": true
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.outline",
       "keys": "a",
       "request": {
         "verb": "add",
@@ -15817,6 +15997,15 @@
     {
       "mode": "normal",
       "noun": "ochazuke.outline",
+      "keys": "p",
+      "request": {
+        "verb": "put",
+        "noun": "ochazuke.outline"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.outline",
       "keys": "right",
       "request": {
         "verb": "expand",
@@ -15847,6 +16036,24 @@
       "keys": "u",
       "request": {
         "verb": "undo",
+        "noun": "ochazuke.outline"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.outline",
+      "keys": "y esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.outline",
+      "keys": "y y",
+      "request": {
+        "verb": "yank",
         "noun": "ochazuke.outline"
       }
     },
@@ -18259,6 +18466,15 @@
         }
       },
       "hint": "yank"
+    },
+    {
+      "mode": "visual-line",
+      "noun": "ochazuke.outline",
+      "keys": "d",
+      "request": {
+        "verb": "delete",
+        "noun": "ochazuke.outline"
+      }
     },
     {
       "mode": "visual_count_pending",
