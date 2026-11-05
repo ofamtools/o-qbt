@@ -171,7 +171,7 @@
     {
       "name": "ochazuke.bindings",
       "kind": "inline",
-      "summary": "check defaults export help list load path reload stops",
+      "summary": "bind check defaults export help list load path reload stops",
       "source": "noun",
       "aliases": [
         "bindings"
@@ -180,7 +180,7 @@
     {
       "name": "ochazuke.bindings-help",
       "kind": "inline",
-      "summary": "mode noun place view",
+      "summary": "args bind bind-key mode noun place run view",
       "source": "noun",
       "aliases": [
         "bindings-help"
@@ -1699,6 +1699,53 @@
         {
           "examples": [
             {
+              "args": {
+                "action": "\u003caction\u003e",
+                "key": "\u003ckey\u003e"
+              },
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "bind",
+          "description": "Bind a key to an action by writing a row to the user's bindings.json (the first change you make to it from the program: a comment in the file is not kept, the old file is copied to bindings.json.bak) and loading it. The row goes in the action's noun's table in the mode; a key that already answers something else needs replace",
+          "kind": "interaction",
+          "params": {
+            "action": {
+              "type": "string",
+              "required": true,
+              "description": "the operation to run, noun.verb"
+            },
+            "key": {
+              "type": "string",
+              "required": true,
+              "description": "the key or key sequence, as the bindings file spells it: x, ctrl+x, g n"
+            },
+            "mode": {
+              "type": "string",
+              "description": "the mode the key answers in (default: the current one)"
+            },
+            "noun": {
+              "type": "string",
+              "description": "the noun whose table holds the row (default: the action's noun)"
+            },
+            "replace": {
+              "type": "boolean",
+              "description": "Take the key from the row that answers it now"
+            }
+          },
+          "result": "binding",
+          "positional": [
+            "key",
+            "action"
+          ],
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
               "args": {},
               "note": "Template: replace placeholder values before running"
             }
@@ -1880,6 +1927,72 @@
       "verbs": [
         {
           "guards": [
+            "help-has-args"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "args",
+          "description": "Open the args form for the selected verb, holding what its parameters' sources fill, before running it on what the help opened over",
+          "kind": "interaction",
+          "result": "operation",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "help-unbound-row"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "bind",
+          "description": "Bind a key to the selected unbound verb: a form asks for the key and writes the row to your bindings.json (bindings.bind)",
+          "kind": "interaction",
+          "result": "operation",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "help-unbound-row"
+          ],
+          "examples": [
+            {
+              "args": {
+                "key": "\u003ckey\u003e"
+              },
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "bind-key",
+          "description": "Bind the key just pressed to the selected unbound verb (b waits for it; esc cancels): writes the row to your bindings.json; a key that already runs something asks first",
+          "kind": "interaction",
+          "params": {
+            "key": {
+              "type": "string",
+              "required": true,
+              "description": "the key, as the bindings file spells it"
+            }
+          },
+          "result": "binding",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
             "help-pick"
           ],
           "examples": [
@@ -1932,6 +2045,25 @@
           "description": "Choose where the help's pick and table views put the noun: one of the places it was seen (the page, the levels above it, the modal), or none (the noun and app)",
           "kind": "interaction",
           "result": "place",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "help-runnable"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "run",
+          "description": "Run the selected verb, bound or not, on what the help opened over, as its key would (it asks first where the key would; a missing argument opens its form)",
+          "kind": "interaction",
+          "result": "operation",
           "history": "action",
           "builtin": true
         },
@@ -4097,18 +4229,22 @@
           "params": {
             "args": {
               "type": "object",
-              "description": "Arguments every row's request carries"
+              "description": "Arguments every row's request carries",
+              "plumbing": true
             },
             "confirmed": {
               "type": "boolean",
-              "description": "The rows' confirm was answered (the confirm modal sets it)"
+              "description": "The rows' confirm was answered (the confirm modal sets it)",
+              "plumbing": true
             },
             "id": {
-              "type": "string"
+              "type": "string",
+              "plumbing": true
             },
             "verb": {
               "type": "string",
-              "required": true
+              "required": true,
+              "forwards": true
             }
           },
           "result": "list state",
@@ -4204,7 +4340,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             }
           },
           "result": "list state",
@@ -4229,7 +4366,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             },
             "query": {
               "type": "string",
@@ -4259,7 +4397,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             }
           },
           "result": "list state",
@@ -4284,7 +4423,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             }
           },
           "result": "list state",
@@ -4337,7 +4477,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             }
           },
           "result": "list state",
@@ -4359,7 +4500,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             }
           },
           "result": "list state",
@@ -4381,7 +4523,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             }
           },
           "result": "list state",
@@ -4621,7 +4764,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             },
             "text": {
               "type": "string",
@@ -4804,10 +4948,12 @@
           "kind": "interaction",
           "params": {
             "id": {
-              "type": "string"
+              "type": "string",
+              "plumbing": true
             },
             "item": {
-              "type": "string"
+              "type": "string",
+              "plumbing": true
             }
           },
           "result": "list state",
@@ -4841,7 +4987,8 @@
               "required": true
             },
             "id": {
-              "type": "string"
+              "type": "string",
+              "plumbing": true
             },
             "steps": {
               "type": "integer",
@@ -5106,7 +5253,8 @@
           "kind": "interaction",
           "params": {
             "id": {
-              "type": "string"
+              "type": "string",
+              "plumbing": true
             },
             "item": {
               "type": "string",
@@ -5304,7 +5452,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "The list (default: the focused one)"
+              "description": "The list (default: the focused one)",
+              "plumbing": true
             },
             "on": {
               "type": "boolean",
@@ -9127,7 +9276,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "Terminal instance (defaults to the focused one)"
+              "description": "Terminal instance (defaults to the focused one)",
+              "plumbing": true
             }
           },
           "result": "JSON value",
@@ -9149,7 +9299,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "Terminal instance (defaults to the focused one)"
+              "description": "Terminal instance (defaults to the focused one)",
+              "plumbing": true
             }
           },
           "result": "JSON value",
@@ -9173,7 +9324,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "Terminal instance (defaults to the focused one)"
+              "description": "Terminal instance (defaults to the focused one)",
+              "plumbing": true
             },
             "keys": {
               "type": "string",
@@ -9205,7 +9357,8 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "Terminal instance (defaults to the focused one)"
+              "description": "Terminal instance (defaults to the focused one)",
+              "plumbing": true
             },
             "keys": {
               "type": "string",
@@ -11519,6 +11672,31 @@
       }
     },
     {
+      "mode": "help_bind_pending",
+      "noun": "ochazuke.bindings-help",
+      "pattern": "any",
+      "request": {
+        "verb": "bind-key",
+        "noun": "ochazuke.bindings-help"
+      },
+      "from": {
+        "key": "key"
+      },
+      "hint": "key to bind",
+      "help": "Bind this key to the selected unbound verb"
+    },
+    {
+      "mode": "help_bind_pending",
+      "noun": "ochazuke.bindings-help",
+      "keys": "esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      },
+      "hint": "cancel",
+      "help": "Leave without binding"
+    },
+    {
       "mode": "insert",
       "noun": "ochazuke.chooser",
       "pattern": "printable",
@@ -13407,7 +13585,7 @@
         "verb": "fold",
         "noun": "ochazuke.outline"
       },
-      "when": "help-tree",
+      "when": "help-foldable",
       "hidden": true
     },
     {
@@ -13419,6 +13597,43 @@
         "noun": "ochazuke.bindings-help"
       },
       "hint": "view"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.bindings-help",
+      "keys": "a",
+      "request": {
+        "verb": "args",
+        "noun": "ochazuke.bindings-help"
+      },
+      "when": "help-has-args",
+      "hint": "args",
+      "help": "Open the args form for the selected verb before running it"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.bindings-help",
+      "keys": "b",
+      "request": {
+        "verb": "enter",
+        "noun": "ochazuke.mode",
+        "args": {
+          "mode": "help_bind_pending"
+        }
+      },
+      "when": "help-unbound-row",
+      "hint": "bind",
+      "help": "Bind the next key you press to the selected unbound verb (esc cancels); a key that already runs something asks first"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.bindings-help",
+      "keys": "enter",
+      "request": {
+        "verb": "run",
+        "noun": "ochazuke.bindings-help"
+      },
+      "hint": "run"
     },
     {
       "mode": "normal",
