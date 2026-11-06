@@ -24,7 +24,7 @@
     {
       "name": "category",
       "kind": "inline",
-      "summary": "list",
+      "summary": "list · std get watch",
       "source": "noun"
     },
     {
@@ -57,7 +57,7 @@
     {
       "name": "config",
       "kind": "inline",
-      "summary": "init path set show",
+      "summary": "init path set show · std get edit watch",
       "source": "noun"
     },
     {
@@ -793,13 +793,13 @@
     {
       "name": "torrent",
       "kind": "inline",
-      "summary": "active delete downloading errored export list overview pause paused recheck resume seeding show stalled summary",
+      "summary": "active delete downloading errored export list overview pause paused recheck resume seeding show stalled summary · std get watch",
       "source": "noun"
     },
     {
       "name": "tracker",
       "kind": "inline",
-      "summary": "hosts list summary",
+      "summary": "hosts list summary · std watch",
       "source": "noun"
     },
     {
@@ -1001,7 +1001,211 @@
     },
     {
       "name": "category",
+      "kind": "collection",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The category's name (category/NAME names it too)",
+          "readOnly": true,
+          "key": true
+        },
+        {
+          "name": "savePath",
+          "type": "string",
+          "description": "The category's save path",
+          "readOnly": true
+        }
+      ],
       "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The category's name (default: the category the request acts for)",
+              "source": "category.list",
+              "free": true,
+              "noun": "category",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "from": {
+              "type": "any",
+              "description": "Copy this thing (an id or a human key, or a row holding its key): every prop create writes, read from it, unless given",
+              "source": "category.list",
+              "free": true,
+              "noun": "category",
+              "covers": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "create"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": true,
+          "agent": "never",
+          "name": "delete",
+          "description": "Delete a thing (asks first)",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The category's name (default: the category the request acts for)",
+              "source": "category.list",
+              "free": true,
+              "noun": "category",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "confirm": "Delete {{noun}} {{label}}?",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "delete"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "free": true,
+              "plumbing": true
+            },
+            "name": {
+              "type": "string",
+              "description": "The category's name (default: the category the request acts for)",
+              "source": "category.list",
+              "free": true,
+              "noun": "category",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "action",
+          "builtin": false,
+          "standard": "edit"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The category's name (default: the category the request acts for)",
+              "source": "category.list",
+              "free": true,
+              "noun": "category",
+              "focus": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "name",
+                "savePath"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "name",
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": false,
+          "standard": "get"
+        },
         {
           "examples": [
             {
@@ -1041,12 +1245,327 @@
           "rows": "category",
           "history": "fetch",
           "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "set",
+          "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
+          "kind": "application",
+          "params": {
+            "changes": {
+              "type": "object",
+              "description": "The old name of props (accepted for one release)"
+            },
+            "name": {
+              "type": "string",
+              "description": "The category's name (default: the category the request acts for)",
+              "source": "category.list",
+              "free": true,
+              "noun": "category",
+              "focus": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "More prop=value words after the first, filling props",
+              "rest": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "The prop toggle flips; a prop=value word fills props (with value, the one-prop form props replaces)",
+              "free": true,
+              "pairs": true
+            },
+            "props": {
+              "type": "object",
+              "description": "The props to write: an object of prop (or @role: @label, @owner, @archive) to value, a subset or all of them; the others keep their values"
+            },
+            "toggle": {
+              "type": "boolean",
+              "description": "Flip the boolean prop instead of giving a value",
+              "excludes": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "any",
+              "description": "The prop's new value, typed by the prop (a word such as 3, true or 400ms, a JSON array or object); props replaces it",
+              "valueOf": "prop"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name",
+            "prop",
+            "value",
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "set"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The category's name: this one alone (default: every category)",
+              "source": "category.list",
+              "free": true,
+              "noun": "category"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: watch the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "name"
+          ],
+          "history": "fetch",
+          "builtin": false,
+          "standard": "watch"
         }
       ]
     },
     {
       "name": "config",
+      "kind": "singleton",
+      "props": [
+        {
+          "name": "cfg_url",
+          "type": "string",
+          "description": "The Web UI address (the settings file's url)"
+        },
+        {
+          "name": "cfg_user",
+          "type": "string",
+          "description": "The Web UI user (the settings file's user)"
+        },
+        {
+          "name": "cfg_volume",
+          "type": "string",
+          "description": "The volume the guard reads free space from (the settings file's volume)"
+        },
+        {
+          "name": "cfg_ssh",
+          "type": "string",
+          "description": "The ssh destination for the guard's disk reads (the settings file's ssh)"
+        },
+        {
+          "name": "pass_set",
+          "type": "boolean",
+          "description": "Whether a password is set (config set pass reads it with echo off)",
+          "readOnly": true
+        },
+        {
+          "name": "exists",
+          "type": "boolean",
+          "description": "Whether the settings file exists",
+          "readOnly": true
+        }
+      ],
       "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store is a singleton; archive is for a collection",
+          "many": true,
+          "history": "change",
+          "builtin": false,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "cfg_ssh": {
+              "type": "string",
+              "description": "The ssh destination for the guard's disk reads (the settings file's ssh)"
+            },
+            "cfg_url": {
+              "type": "string",
+              "description": "The Web UI address (the settings file's url)"
+            },
+            "cfg_user": {
+              "type": "string",
+              "description": "The Web UI user (the settings file's user)"
+            },
+            "cfg_volume": {
+              "type": "string",
+              "description": "The volume the guard reads free space from (the settings file's volume)"
+            },
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store is a singleton; create is for a collection",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "create"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": true,
+          "agent": "never",
+          "name": "delete",
+          "description": "Delete a thing (asks first)",
+          "kind": "application",
+          "result": "JSON value",
+          "confirm": "Delete {{noun}} {{label}}?",
+          "disabled": true,
+          "unavailable": "its store is a singleton; delete is for a collection",
+          "many": true,
+          "history": "change",
+          "builtin": false,
+          "standard": "delete"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "cfg_ssh": {
+              "type": "string",
+              "description": "The ssh destination for the guard's disk reads (the settings file's ssh)"
+            },
+            "cfg_url": {
+              "type": "string",
+              "description": "The Web UI address (the settings file's url)"
+            },
+            "cfg_user": {
+              "type": "string",
+              "description": "The Web UI user (the settings file's user)"
+            },
+            "cfg_volume": {
+              "type": "string",
+              "description": "The volume the guard reads free space from (the settings file's volume)"
+            },
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "enum": [
+                "cfg_url",
+                "cfg_user",
+                "cfg_volume",
+                "cfg_ssh"
+              ],
+              "free": true,
+              "plumbing": true
+            }
+          },
+          "result": "JSON value",
+          "many": true,
+          "history": "action",
+          "builtin": false,
+          "standard": "edit"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "cfg_url",
+                "cfg_user",
+                "cfg_volume",
+                "cfg_ssh",
+                "pass_set",
+                "exists"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": false,
+          "standard": "get"
+        },
         {
           "examples": [
             {
@@ -1062,6 +1581,79 @@
           "result": "JSON value",
           "history": "change",
           "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "list",
+          "description": "List the things, each its props with id and label, as a page {items, page, per_page, total}; filter and where keep the things that meet conditions, sort orders them, group-by gathers them into groups, per-page and page cut the result into pages (rows, never groups)",
+          "kind": "application",
+          "params": {
+            "archived": {
+              "type": "boolean",
+              "description": "Include the archived things list.hide-archived hides by default"
+            },
+            "filter": {
+              "type": "string",
+              "description": "Keep the things that meet every condition: words prop=value, prop!=value, prop~value (contains), prop!~value, with a|b for alternatives; or the name of a saved prop filter for this noun. ANDed with where",
+              "free": true
+            },
+            "group-by": {
+              "type": "string",
+              "description": "Gather the rows that share these props' values into groups (comma-separated props); each row names its group",
+              "free": true
+            },
+            "group-sort": {
+              "type": "string",
+              "description": "Order the groups by group-by props, each prop[:desc] (default: the order the groups first appear in)",
+              "free": true
+            },
+            "limit": {
+              "type": "integer",
+              "description": "At most this many rows: the first page of that size (0: every row)"
+            },
+            "page": {
+              "type": "integer",
+              "description": "The page to answer, from 1 (with per-page)"
+            },
+            "per-page": {
+              "type": "integer",
+              "description": "Rows per page, counting rows, never groups (0: one page of every row)"
+            },
+            "props": {
+              "type": "string",
+              "description": "The props each row holds besides id and label, comma-separated (default: every prop but secrets)"
+            },
+            "sort": {
+              "type": "string",
+              "description": "Order the rows by props, comma-separated, each prop[:desc]; ties keep the store's order",
+              "free": true
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: keep the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "rows",
+          "disabled": true,
+          "unavailable": "its store is a singleton; list is for a collection or instances",
+          "rows": "config",
+          "positional": [
+            "limit",
+            "props",
+            "where"
+          ],
+          "history": "fetch",
+          "builtin": false,
+          "standard": "list"
         },
         {
           "examples": [
@@ -1141,6 +1733,29 @@
           "result": "JSON value",
           "history": "fetch",
           "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            }
+          },
+          "result": "JSON value",
+          "history": "fetch",
+          "builtin": false,
+          "standard": "watch"
         }
       ]
     },
@@ -16533,6 +17148,95 @@
     },
     {
       "name": "torrent",
+      "kind": "collection",
+      "props": [
+        {
+          "name": "hash",
+          "type": "string",
+          "description": "The torrent's info hash",
+          "readOnly": true,
+          "key": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The torrent's name",
+          "readOnly": true,
+          "role": "label"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "description": "qBittorrent's state (downloading, stalledUP, pausedDL, error, missingFiles ...)",
+          "readOnly": true
+        },
+        {
+          "name": "progress",
+          "type": "number",
+          "description": "Fraction done, 0 to 1",
+          "readOnly": true
+        },
+        {
+          "name": "size",
+          "type": "integer",
+          "description": "Bytes",
+          "readOnly": true
+        },
+        {
+          "name": "dlspeed",
+          "type": "integer",
+          "description": "Download speed, bytes/s",
+          "readOnly": true
+        },
+        {
+          "name": "upspeed",
+          "type": "integer",
+          "description": "Upload speed, bytes/s",
+          "readOnly": true
+        },
+        {
+          "name": "eta",
+          "type": "integer",
+          "description": "Seconds left",
+          "readOnly": true
+        },
+        {
+          "name": "ratio",
+          "type": "number",
+          "description": "Share ratio",
+          "readOnly": true
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "description": "The category",
+          "readOnly": true
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "description": "Comma-separated tags",
+          "readOnly": true
+        },
+        {
+          "name": "added_on",
+          "type": "integer",
+          "description": "When it was added (Unix seconds)",
+          "readOnly": true
+        },
+        {
+          "name": "completion_on",
+          "type": "integer",
+          "description": "When it completed (Unix seconds)",
+          "readOnly": true
+        },
+        {
+          "name": "save_path",
+          "type": "string",
+          "description": "Where its data is saved",
+          "readOnly": true
+        }
+      ],
       "verbs": [
         {
           "examples": [
@@ -16604,6 +17308,77 @@
           "result": "JSON value",
           "history": "fetch",
           "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "params": {
+            "hash": {
+              "type": "string",
+              "description": "The torrent's hash (default: the torrent the request acts for)",
+              "source": "torrent.list",
+              "free": true,
+              "noun": "torrent",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "hash"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "from": {
+              "type": "any",
+              "description": "Copy this thing (an id or a human key, or a row holding its key): every prop create writes, read from it, unless given",
+              "source": "torrent.list",
+              "free": true,
+              "noun": "torrent",
+              "covers": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "create"
         },
         {
           "examples": [
@@ -16736,6 +17511,45 @@
           "result": "JSON value",
           "history": "fetch",
           "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "free": true,
+              "plumbing": true
+            },
+            "hash": {
+              "type": "string",
+              "description": "The torrent's hash (default: the torrent the request acts for)",
+              "source": "torrent.list",
+              "free": true,
+              "noun": "torrent",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "hash"
+          ],
+          "history": "action",
+          "builtin": false,
+          "standard": "edit"
         },
         {
           "examples": [
@@ -16900,6 +17714,63 @@
           "result": "JSON value",
           "history": "change",
           "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "hash": {
+              "type": "string",
+              "description": "The torrent's hash (default: the torrent the request acts for)",
+              "source": "torrent.list",
+              "free": true,
+              "noun": "torrent",
+              "focus": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "hash",
+                "name",
+                "state",
+                "progress",
+                "size",
+                "dlspeed",
+                "upspeed",
+                "eta",
+                "ratio",
+                "category",
+                "tags",
+                "added_on",
+                "completion_on",
+                "save_path",
+                "@label"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "hash",
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": false,
+          "standard": "get"
         },
         {
           "examples": [
@@ -17247,6 +18118,73 @@
           ],
           "destructive": false,
           "agent": "allow",
+          "name": "set",
+          "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
+          "kind": "application",
+          "params": {
+            "changes": {
+              "type": "object",
+              "description": "The old name of props (accepted for one release)"
+            },
+            "hash": {
+              "type": "string",
+              "description": "The torrent's hash (default: the torrent the request acts for)",
+              "source": "torrent.list",
+              "free": true,
+              "noun": "torrent",
+              "focus": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "More prop=value words after the first, filling props",
+              "rest": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "The prop toggle flips; a prop=value word fills props (with value, the one-prop form props replaces)",
+              "free": true,
+              "pairs": true
+            },
+            "props": {
+              "type": "object",
+              "description": "The props to write: an object of prop (or @role: @label, @owner, @archive) to value, a subset or all of them; the others keep their values"
+            },
+            "toggle": {
+              "type": "boolean",
+              "description": "Flip the boolean prop instead of giving a value",
+              "excludes": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "any",
+              "description": "The prop's new value, typed by the prop (a word such as 3, true or 400ms, a JSON array or object); props replaces it",
+              "valueOf": "prop"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "hash",
+            "prop",
+            "value",
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "set"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
           "name": "show",
           "description": "one torrent's info and properties: --target HASH",
           "kind": "application",
@@ -17393,12 +18331,291 @@
           "result": "JSON value",
           "history": "fetch",
           "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "hash": {
+              "type": "string",
+              "description": "The torrent's hash: this one alone (default: every torrent)",
+              "source": "torrent.list",
+              "free": true,
+              "noun": "torrent"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: watch the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "hash"
+          ],
+          "history": "fetch",
+          "builtin": false,
+          "standard": "watch"
         }
       ]
     },
     {
       "name": "tracker",
+      "kind": "collection",
+      "props": [
+        {
+          "name": "host",
+          "type": "string",
+          "description": "The tracker's scheme and host (#2 ... for another entry of the same host)",
+          "readOnly": true,
+          "key": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "description": "The scheme and host (the whole announce URL, passkey included, only with full-url)",
+          "readOnly": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "description": "The tracker's status",
+          "readOnly": true
+        },
+        {
+          "name": "tier",
+          "type": "integer",
+          "description": "The tier",
+          "readOnly": true
+        },
+        {
+          "name": "peers",
+          "type": "integer",
+          "description": "Peers",
+          "readOnly": true
+        },
+        {
+          "name": "seeds",
+          "type": "integer",
+          "description": "Seeds",
+          "readOnly": true
+        },
+        {
+          "name": "leeches",
+          "type": "integer",
+          "description": "Leeches",
+          "readOnly": true
+        },
+        {
+          "name": "msg",
+          "type": "string",
+          "description": "The tracker's message",
+          "readOnly": true
+        }
+      ],
       "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "params": {
+            "host": {
+              "type": "string",
+              "description": "The tracker's host (default: the tracker the request acts for)",
+              "source": "tracker.list",
+              "free": true,
+              "noun": "tracker",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "host"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "create"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": true,
+          "agent": "never",
+          "name": "delete",
+          "description": "Delete a thing (asks first)",
+          "kind": "application",
+          "params": {
+            "host": {
+              "type": "string",
+              "description": "The tracker's host (default: the tracker the request acts for)",
+              "source": "tracker.list",
+              "free": true,
+              "noun": "tracker",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "confirm": "Delete {{noun}} {{label}}?",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "host"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "delete"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "free": true,
+              "plumbing": true
+            },
+            "host": {
+              "type": "string",
+              "description": "The tracker's host (default: the tracker the request acts for)",
+              "source": "tracker.list",
+              "free": true,
+              "noun": "tracker",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store reads no single thing (no Store.Get)",
+          "many": true,
+          "positional": [
+            "host"
+          ],
+          "history": "action",
+          "builtin": false,
+          "standard": "edit"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "host": {
+              "type": "string",
+              "description": "The tracker's host (default: the tracker the request acts for)",
+              "source": "tracker.list",
+              "free": true,
+              "noun": "tracker",
+              "focus": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "host",
+                "url",
+                "status",
+                "tier",
+                "peers",
+                "seeds",
+                "leeches",
+                "msg"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a tracker is read with its torrent: tracker list --torrent HASH",
+          "positional": [
+            "host",
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": false,
+          "standard": "get"
+        },
         {
           "examples": [
             {
@@ -17521,6 +18738,73 @@
           ],
           "destructive": false,
           "agent": "allow",
+          "name": "set",
+          "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
+          "kind": "application",
+          "params": {
+            "changes": {
+              "type": "object",
+              "description": "The old name of props (accepted for one release)"
+            },
+            "host": {
+              "type": "string",
+              "description": "The tracker's host (default: the tracker the request acts for)",
+              "source": "tracker.list",
+              "free": true,
+              "noun": "tracker",
+              "focus": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "More prop=value words after the first, filling props",
+              "rest": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "The prop toggle flips; a prop=value word fills props (with value, the one-prop form props replaces)",
+              "free": true,
+              "pairs": true
+            },
+            "props": {
+              "type": "object",
+              "description": "The props to write: an object of prop (or @role: @label, @owner, @archive) to value, a subset or all of them; the others keep their values"
+            },
+            "toggle": {
+              "type": "boolean",
+              "description": "Flip the boolean prop instead of giving a value",
+              "excludes": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "any",
+              "description": "The prop's new value, typed by the prop (a word such as 3, true or 400ms, a JSON array or object); props replaces it",
+              "valueOf": "prop"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "host",
+            "prop",
+            "value",
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": false,
+          "standard": "set"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
           "name": "summary",
           "description": "one row per tracker host across the torrents --filter, --category, --tag select: [{host, torrents, working, not_working, msg}]; working counts torrents with an entry there in status 2, not_working those with one in status 4 and none working; msg is the host's most common message (60 chars); one request per torrent, 8 at a time, progress on stderr",
           "kind": "application",
@@ -17580,6 +18864,45 @@
           "result": "JSON value",
           "history": "fetch",
           "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "host": {
+              "type": "string",
+              "description": "The tracker's host: this one alone (default: every tracker)",
+              "source": "tracker.list",
+              "free": true,
+              "noun": "tracker"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: watch the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "host"
+          ],
+          "history": "fetch",
+          "builtin": false,
+          "standard": "watch"
         }
       ]
     },

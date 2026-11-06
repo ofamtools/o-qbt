@@ -127,6 +127,7 @@ func (t *Tool) shell() *ocli.Shell {
 		return rows, err
 	}
 	loc := t.now().Location()
+	t.defineStores(r, api, torrentsOf, categoriesOf)
 	// hashes is what a torrent verb acts on: --target's hash, or all.
 	hashes := func(c ochazuke.Ctx, verb string) (string, error) {
 		all, _ := c.Args["all"].(bool)
