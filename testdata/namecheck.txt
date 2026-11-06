@@ -1,0 +1,13 @@
+# namecheck baseline: file, function, kind, literal, count, reason (tab separated).
+# A row with a reason is a legitimate use that stays. A row without one is debt that may only shrink:
+# NAMECHECK_UPDATE=1 removes rows and lowers counts, never adds them. Adding a row is a reviewed edit.
+guard.go	printSummary	case	"state"	1
+main.go	Tool.mount	compare	"noun"	1
+main.go	var shortcuts	table	"overview"	1
+qbt.go	var TorrentSorts	table	"name"	1
+qbt.go	var TorrentSorts	table	"state"	1
+shell.go	Tool.shell	case	"pause"	1
+shell.go	Tool.shell	case	"resume"	1
+shell.go	Tool.shell	compare	"all"	2
+shell.go	Tool.shell	compare	"torrent"	3
+shell.go	Tool.shell	cyclo	"-"	99
