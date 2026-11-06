@@ -10005,6 +10005,11 @@
           "readOnly": true
         },
         {
+          "name": "summary",
+          "type": "string",
+          "readOnly": true
+        },
+        {
           "name": "rows",
           "type": "string",
           "readOnly": true
@@ -10263,6 +10268,7 @@
                 "enabledSetting",
                 "disabled",
                 "unavailable",
+                "summary",
                 "rows",
                 "state",
                 "quiet",
