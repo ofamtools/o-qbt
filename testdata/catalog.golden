@@ -189,7 +189,7 @@
     {
       "name": "ochazuke.catalog",
       "kind": "inline",
-      "summary": "describe list",
+      "summary": "describe list · std get watch",
       "source": "noun"
     },
     {
@@ -1133,9 +1133,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -1156,7 +1161,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "name"
+            "name",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": false,
@@ -1489,24 +1496,33 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "cfg_ssh": {
               "type": "string",
-              "description": "The ssh destination for the guard's disk reads (the settings file's ssh)"
+              "description": "The ssh destination for the guard's disk reads (the settings file's ssh)",
+              "named": true
             },
             "cfg_url": {
               "type": "string",
-              "description": "The Web UI address (the settings file's url)"
+              "description": "The Web UI address (the settings file's url)",
+              "named": true
             },
             "cfg_user": {
               "type": "string",
-              "description": "The Web UI user (the settings file's user)"
+              "description": "The Web UI user (the settings file's user)",
+              "named": true
             },
             "cfg_volume": {
               "type": "string",
-              "description": "The volume the guard reads free space from (the settings file's volume)"
+              "description": "The volume the guard reads free space from (the settings file's volume)",
+              "named": true
+            },
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
             },
             "field": {
               "type": "string",
@@ -1523,6 +1539,10 @@
           },
           "result": "JSON value",
           "many": true,
+          "positional": [
+            "field",
+            "chooser"
+          ],
           "history": "action",
           "builtin": false,
           "standard": "edit"
@@ -2387,9 +2407,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -2410,7 +2435,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "key"
+            "key",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -2889,9 +2916,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -2912,7 +2944,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "id"
+            "id",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -3450,9 +3484,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -3473,7 +3512,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "id"
+            "id",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -4013,7 +4054,142 @@
     },
     {
       "name": "ochazuke.catalog",
+      "kind": "collection",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The noun's name",
+          "readOnly": true,
+          "key": true,
+          "human": true
+        },
+        {
+          "name": "about",
+          "type": "string",
+          "description": "What the noun is",
+          "readOnly": true,
+          "role": "label"
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "description": "Its store's kind (collection, singleton, instances), when it has one",
+          "readOnly": true
+        },
+        {
+          "name": "verbs",
+          "type": "list",
+          "description": "The names of its verbs",
+          "readOnly": true
+        }
+      ],
       "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The catalog's name (default: the catalog the request acts for)",
+              "source": "ochazuke.catalog.list",
+              "free": true,
+              "noun": "ochazuke.catalog",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "from": {
+              "type": "any",
+              "description": "Copy this thing (an id or a human key, or a row holding its key): every prop create writes, read from it, unless given",
+              "source": "ochazuke.catalog.list",
+              "free": true,
+              "noun": "ochazuke.catalog",
+              "covers": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "create"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": true,
+          "agent": "never",
+          "name": "delete",
+          "description": "Delete a thing (asks first)",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The catalog's name (default: the catalog the request acts for)",
+              "source": "ochazuke.catalog.list",
+              "free": true,
+              "noun": "ochazuke.catalog",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "confirm": "Delete {{noun}} {{label}}?",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "delete"
+        },
         {
           "examples": [
             {
@@ -4036,6 +4212,99 @@
           },
           "history": "fetch",
           "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "free": true,
+              "plumbing": true
+            },
+            "name": {
+              "type": "string",
+              "description": "The catalog's name (default: the catalog the request acts for)",
+              "source": "ochazuke.catalog.list",
+              "free": true,
+              "noun": "ochazuke.catalog",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "name",
+            "field",
+            "chooser"
+          ],
+          "history": "action",
+          "builtin": true,
+          "standard": "edit"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The catalog's name (default: the catalog the request acts for)",
+              "source": "ochazuke.catalog.list",
+              "free": true,
+              "noun": "ochazuke.catalog",
+              "focus": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "name",
+                "about",
+                "kind",
+                "verbs",
+                "@label"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "name",
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "get"
         },
         {
           "examples": [
@@ -4073,6 +4342,112 @@
           },
           "history": "fetch",
           "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "set",
+          "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
+          "kind": "application",
+          "params": {
+            "changes": {
+              "type": "object",
+              "description": "The old name of props (accepted for one release)"
+            },
+            "name": {
+              "type": "string",
+              "description": "The catalog's name (default: the catalog the request acts for)",
+              "source": "ochazuke.catalog.list",
+              "free": true,
+              "noun": "ochazuke.catalog",
+              "focus": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "More prop=value words after the first, filling props",
+              "rest": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "The prop toggle flips; a prop=value word fills props (with value, the one-prop form props replaces)",
+              "free": true,
+              "pairs": true
+            },
+            "props": {
+              "type": "object",
+              "description": "The props to write: an object of prop (or @role: @label, @owner, @archive) to value, a subset or all of them; the others keep their values"
+            },
+            "toggle": {
+              "type": "boolean",
+              "description": "Flip the boolean prop instead of giving a value",
+              "excludes": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "any",
+              "description": "The prop's new value, typed by the prop (a word such as 3, true or 400ms, a JSON array or object); props replaces it",
+              "valueOf": "prop"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name",
+            "prop",
+            "value",
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "set"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The catalog's name: this one alone (default: every catalog)",
+              "source": "ochazuke.catalog.list",
+              "free": true,
+              "noun": "ochazuke.catalog"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: watch the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "name"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "watch"
         }
       ]
     },
@@ -4760,9 +5135,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -4783,7 +5163,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "name"
+            "name",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -5936,9 +6318,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -5959,7 +6346,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "seq"
+            "seq",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -6463,9 +6852,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -6486,7 +6880,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "id"
+            "id",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -7417,9 +7813,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -7440,7 +7841,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "job"
+            "job",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -9812,9 +10215,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -9835,7 +10243,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "name"
+            "name",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -10230,6 +10640,11 @@
           "description": "Open the focused thing's standard edit form; existing inner edit keys take precedence",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -10811,9 +11226,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -10834,7 +11254,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "key"
+            "key",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -11289,6 +11711,11 @@
           "description": "Edit (rename) the node's line, with its text selected (select; omitted, the rename.select setting decides) so typing replaces it; typing is written after a pause and when the line is left",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -12027,9 +12454,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -12041,7 +12473,8 @@
             },
             "hidden": {
               "type": "boolean",
-              "description": "Out of the tabs and ctrl+j/k (the pages.hidden setting); page.open still opens it"
+              "description": "Out of the tabs and ctrl+j/k (the pages.hidden setting); page.open still opens it",
+              "named": true
             },
             "id": {
               "type": "string",
@@ -12055,7 +12488,9 @@
           "result": "JSON value",
           "many": true,
           "positional": [
-            "id"
+            "id",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -12752,9 +13187,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -12781,21 +13221,26 @@
                 "char",
                 "line",
                 "block"
-              ]
+              ],
+              "named": true
             },
             "text": {
               "type": "string",
-              "description": "The text it holds"
+              "description": "The text it holds",
+              "named": true
             },
             "width": {
               "type": "integer",
-              "description": "A block's width in cells (computed from the text when larger)"
+              "description": "A block's width in cells (computed from the text when larger)",
+              "named": true
             }
           },
           "result": "JSON value",
           "many": true,
           "positional": [
-            "name"
+            "name",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -13432,9 +13877,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -13455,7 +13905,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "id"
+            "id",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": true,
@@ -14405,6 +14857,11 @@
           "description": "Edit the setting: flip a boolean, take an enum's next value, add an item to a list, else type a new value",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -15384,6 +15841,11 @@
           "description": "Edit the list item",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -16164,9 +16626,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -16178,6 +16645,10 @@
           "disabled": true,
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
+          "positional": [
+            "field",
+            "chooser"
+          ],
           "history": "action",
           "builtin": true,
           "standard": "edit"
@@ -17522,9 +17993,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -17545,7 +18021,9 @@
           "unavailable": "its store writes no props (no Store.Patch)",
           "many": true,
           "positional": [
-            "hash"
+            "hash",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": false,
@@ -18535,9 +19013,14 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "plumbing": true
+            },
             "field": {
               "type": "string",
               "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
@@ -18558,7 +19041,9 @@
           "unavailable": "its store reads no single thing (no Store.Get)",
           "many": true,
           "positional": [
-            "host"
+            "host",
+            "field",
+            "chooser"
           ],
           "history": "action",
           "builtin": false,
