@@ -63,7 +63,7 @@
     {
       "name": "guard",
       "kind": "inline",
-      "summary": "check install log rebase resume status uninstall",
+      "summary": "check disk install log rebase resume status uninstall",
       "source": "noun"
     },
     {
@@ -793,13 +793,13 @@
     {
       "name": "torrent",
       "kind": "inline",
-      "summary": "active delete downloading errored export list overview pause paused recheck resume seeding show stalled summary · std get watch",
+      "summary": "active delete downloading errored export find list overview pause paused recheck resume seeding show stalled summary vocabulary · std get watch",
       "source": "noun"
     },
     {
       "name": "tracker",
       "kind": "inline",
-      "summary": "hosts list summary · std watch",
+      "summary": "counts hosts list registry summary · std watch",
       "source": "noun"
     },
     {
@@ -1818,6 +1818,69 @@
           },
           "result": "JSON value",
           "history": "change",
+          "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "disk",
+          "description": "free space and the guard's numbers (o qbt space): free, base, used, headroom, min-free, resume-above, limit, qbt-free; FIELD prints one alone (o qbt space free), a size or with --bytes the bytes; df errors are reported",
+          "kind": "application",
+          "params": {
+            "bytes": {
+              "type": "boolean",
+              "description": "bytes instead of sizes"
+            },
+            "field": {
+              "type": "string",
+              "description": "print only this number",
+              "enum": [
+                "free",
+                "base",
+                "used",
+                "headroom",
+                "min-free",
+                "resume-above",
+                "limit",
+                "qbt-free"
+              ]
+            },
+            "limit": {
+              "type": "string",
+              "description": "allowance: how far free space may drop below the baseline: bytes, or a number with K, M, G or T (default 10G)",
+              "named": true
+            },
+            "min-free": {
+              "type": "string",
+              "description": "floor: pause when free space is below this size (default config guard.minFree, else 5GiB)",
+              "named": true
+            },
+            "mode": {
+              "type": "string",
+              "description": "the rule: floor (pause below --min-free, resume above --resume-above) or allowance (pause --limit below the baseline); default config guard.mode, else floor",
+              "enum": [
+                "floor",
+                "allowance"
+              ],
+              "named": true
+            },
+            "resume-above": {
+              "type": "string",
+              "description": "floor: resume, when the guard paused, once free space is above this size (default config guard.resumeAbove, else 20GiB)",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "field"
+          ],
+          "history": "fetch",
           "builtin": false
         },
         {
@@ -18256,6 +18319,143 @@
           ],
           "destructive": false,
           "agent": "allow",
+          "name": "find",
+          "description": "the torrents filter words select (o qbt WORDS runs this): words of one category OR, categories AND, not-WORD drops; --tracker and --name match a pattern in --match mode; takes torrent list's query and output flags, --limit after the filter",
+          "kind": "application",
+          "params": {
+            "category": {
+              "type": "string",
+              "description": "only this category (\"\" = uncategorised)",
+              "named": true
+            },
+            "columns": {
+              "type": "string",
+              "description": "comma-separated columns, in order, for table, tsv, csv, md and toon",
+              "named": true
+            },
+            "filter": {
+              "type": "string",
+              "description": "torrents/info's filter (default all)",
+              "enum": [
+                "all",
+                "downloading",
+                "seeding",
+                "completed",
+                "paused",
+                "stopped",
+                "active",
+                "inactive",
+                "resumed",
+                "running",
+                "stalled",
+                "stalled_uploading",
+                "stalled_downloading",
+                "errored",
+                "checking",
+                "moving"
+              ],
+              "named": true
+            },
+            "format": {
+              "type": "string",
+              "description": "table (the default on a terminal), json (otherwise), jsonl, tsv, csv, md or toon",
+              "enum": [
+                "table",
+                "json",
+                "jsonl",
+                "tsv",
+                "csv",
+                "md",
+                "toon"
+              ],
+              "named": true
+            },
+            "limit": {
+              "type": "integer",
+              "description": "at most N torrents",
+              "named": true
+            },
+            "match": {
+              "type": "string",
+              "description": "how --tracker and --name match: substring (default; substr), fuzzy, regex or glob",
+              "enum": [
+                "substring",
+                "fuzzy",
+                "regex",
+                "substr",
+                "glob"
+              ],
+              "named": true
+            },
+            "name": {
+              "type": "string",
+              "description": "a pattern the torrent name must match, in --match mode",
+              "named": true
+            },
+            "out": {
+              "type": "string",
+              "description": "write to FILE instead of printing; its extension picks the format when --format is absent",
+              "named": true
+            },
+            "reverse": {
+              "type": "boolean",
+              "description": "reverse the order",
+              "named": true
+            },
+            "sort": {
+              "type": "string",
+              "description": "sort by this field on the server (default name, here)",
+              "enum": [
+                "added_on",
+                "completed_on",
+                "dlspeed",
+                "eta",
+                "name",
+                "progress",
+                "ratio",
+                "size",
+                "state",
+                "upspeed"
+              ],
+              "named": true
+            },
+            "tag": {
+              "type": "string",
+              "description": "only this tag (\"\" = untagged)",
+              "named": true
+            },
+            "terms": {
+              "type": "string",
+              "description": "filter words (o qbt words): same category OR, categories AND; not-WORD drops what WORD selects",
+              "source": "torrent.vocabulary",
+              "free": true,
+              "rest": true
+            },
+            "tracker": {
+              "type": "string",
+              "description": "a pattern any tracker name or host must match, in --match mode (quote a glob: '*.to')",
+              "source": "tracker.registry",
+              "free": true,
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "rows": "torrent",
+          "positional": [
+            "terms"
+          ],
+          "history": "fetch",
+          "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
           "name": "get",
           "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
           "kind": "application",
@@ -18873,6 +19073,48 @@
           ],
           "destructive": false,
           "agent": "allow",
+          "name": "vocabulary",
+          "description": "the filter words (o qbt words): category, name, aliases, the values it selects; the categories are tracker, privacy, completion, activity and state",
+          "kind": "application",
+          "params": {
+            "columns": {
+              "type": "string",
+              "description": "comma-separated columns, in order, for table, tsv, csv, md and toon",
+              "named": true
+            },
+            "format": {
+              "type": "string",
+              "description": "table (the default on a terminal), json (otherwise), jsonl, tsv, csv, md or toon",
+              "enum": [
+                "table",
+                "json",
+                "jsonl",
+                "tsv",
+                "csv",
+                "md",
+                "toon"
+              ],
+              "named": true
+            },
+            "out": {
+              "type": "string",
+              "description": "write to FILE instead of printing; its extension picks the format when --format is absent",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "fetch",
+          "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
           "name": "watch",
           "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
           "kind": "application",
@@ -18992,6 +19234,142 @@
           "history": "change",
           "builtin": false,
           "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "counts",
+          "description": "torrents per tracker table name (a torrent no entry owns counts under its hosts): torrents, size, completed, active; takes filter words and torrent list's query; one request",
+          "kind": "application",
+          "params": {
+            "category": {
+              "type": "string",
+              "description": "only this category (\"\" = uncategorised)",
+              "named": true
+            },
+            "columns": {
+              "type": "string",
+              "description": "comma-separated columns, in order, for table, tsv, csv, md and toon",
+              "named": true
+            },
+            "filter": {
+              "type": "string",
+              "description": "torrents/info's filter (default all)",
+              "enum": [
+                "all",
+                "downloading",
+                "seeding",
+                "completed",
+                "paused",
+                "stopped",
+                "active",
+                "inactive",
+                "resumed",
+                "running",
+                "stalled",
+                "stalled_uploading",
+                "stalled_downloading",
+                "errored",
+                "checking",
+                "moving"
+              ],
+              "named": true
+            },
+            "format": {
+              "type": "string",
+              "description": "table (the default on a terminal), json (otherwise), jsonl, tsv, csv, md or toon",
+              "enum": [
+                "table",
+                "json",
+                "jsonl",
+                "tsv",
+                "csv",
+                "md",
+                "toon"
+              ],
+              "named": true
+            },
+            "limit": {
+              "type": "integer",
+              "description": "at most N torrents",
+              "named": true
+            },
+            "match": {
+              "type": "string",
+              "description": "how --tracker and --name match: substring (default; substr), fuzzy, regex or glob",
+              "enum": [
+                "substring",
+                "fuzzy",
+                "regex",
+                "substr",
+                "glob"
+              ],
+              "named": true
+            },
+            "name": {
+              "type": "string",
+              "description": "a pattern the torrent name must match, in --match mode",
+              "named": true
+            },
+            "out": {
+              "type": "string",
+              "description": "write to FILE instead of printing; its extension picks the format when --format is absent",
+              "named": true
+            },
+            "reverse": {
+              "type": "boolean",
+              "description": "reverse the order",
+              "named": true
+            },
+            "sort": {
+              "type": "string",
+              "description": "sort by this field on the server (default name, here)",
+              "enum": [
+                "added_on",
+                "completed_on",
+                "dlspeed",
+                "eta",
+                "name",
+                "progress",
+                "ratio",
+                "size",
+                "state",
+                "upspeed"
+              ],
+              "named": true
+            },
+            "tag": {
+              "type": "string",
+              "description": "only this tag (\"\" = untagged)",
+              "named": true
+            },
+            "terms": {
+              "type": "string",
+              "description": "filter words (o qbt words): same category OR, categories AND; not-WORD drops what WORD selects",
+              "source": "torrent.vocabulary",
+              "free": true,
+              "rest": true
+            },
+            "tracker": {
+              "type": "string",
+              "description": "a pattern any tracker name or host must match, in --match mode (quote a glob: '*.to')",
+              "source": "tracker.registry",
+              "free": true,
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "terms"
+          ],
+          "history": "fetch",
+          "builtin": false
         },
         {
           "examples": [
@@ -19277,6 +19655,48 @@
           ],
           "destructive": false,
           "agent": "allow",
+          "name": "registry",
+          "description": "the tracker table the filter words use: name, aliases, hosts, private; config.json's trackers list replaces an entry of the same name and adds others",
+          "kind": "application",
+          "params": {
+            "columns": {
+              "type": "string",
+              "description": "comma-separated columns, in order, for table, tsv, csv, md and toon",
+              "named": true
+            },
+            "format": {
+              "type": "string",
+              "description": "table (the default on a terminal), json (otherwise), jsonl, tsv, csv, md or toon",
+              "enum": [
+                "table",
+                "json",
+                "jsonl",
+                "tsv",
+                "csv",
+                "md",
+                "toon"
+              ],
+              "named": true
+            },
+            "out": {
+              "type": "string",
+              "description": "write to FILE instead of printing; its extension picks the format when --format is absent",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "fetch",
+          "builtin": false
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
           "name": "set",
           "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
           "kind": "application",
@@ -19345,9 +19765,17 @@
           "destructive": false,
           "agent": "allow",
           "name": "summary",
-          "description": "one row per tracker host across the torrents --filter, --category, --tag select: [{host, torrents, working, not_working, msg}]; working counts torrents with an entry there in status 2, not_working those with one in status 4 and none working; msg is the host's most common message (60 chars); one request per torrent, 8 at a time, progress on stderr",
+          "description": "one row per tracker host (--by name: per tracker table name) across the torrents --filter, --category, --tag select: [{host, torrents, working, not_working, msg}]; working counts torrents with an entry there in status 2, not_working those with one in status 4 and none working; msg is the host's most common message (60 chars); one request per torrent, 8 at a time, progress on stderr",
           "kind": "application",
           "params": {
+            "by": {
+              "type": "string",
+              "description": "group by host (default) or name: the tracker table's names (o qbt tracker table), a host no entry owns as itself",
+              "enum": [
+                "host",
+                "name"
+              ]
+            },
             "category": {
               "type": "string",
               "description": "only this category (\"\" = uncategorised)"

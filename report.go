@@ -165,12 +165,18 @@ const msgSample = 60
 // SummarizeTrackers aggregates each torrent's trackers (perTorrent[i] is
 // one torrent's) by host: most torrents first, then by host.
 func SummarizeTrackers(perTorrent [][]Tracker) []HostSummary {
+	return SummarizeTrackersBy(perTorrent, TrackerHost)
+}
+
+// SummarizeTrackersBy is SummarizeTrackers grouped by key(url) instead of
+// the host (tableName: the tracker table's names).
+func SummarizeTrackersBy(perTorrent [][]Tracker, key func(string) string) []HostSummary {
 	by := map[string]*HostSummary{}
 	msgs := map[string]map[string]int{}
 	for _, trs := range perTorrent {
 		status := map[string][2]bool{} // host: {working, not working}
 		for _, tr := range trs {
-			h := TrackerHost(tr.URL)
+			h := key(tr.URL)
 			s := status[h]
 			s[0] = s[0] || tr.Status == TrackerWorking
 			s[1] = s[1] || tr.Status == TrackerNotWorking

@@ -12,6 +12,10 @@ The qBittorrent family tool (`o-qbt`, so `o qbt`). An oden app with an ochazuke 
 | Aggregations: summary per state, overview | `report.go` |
 | The output engine: `Table`, formats (table, json, jsonl, tsv, csv, md, toon), humanisers | `format.go` |
 | Each record type as a `Table`; the overview's rendering | `tables.go` |
+| Filter words (`o qbt avz completed inactive`): the tracker table, the categories and words, word resolution, `--tracker`/`--name` patterns, tracker counts | `filter.go` |
+| The filter's verbs (`torrent find`, `torrent vocabulary`, `tracker registry`, `tracker counts`, `guard disk`) | `filterverbs.go` |
+| Completion of filter words at the top level (wraps the shell's `complete`) | `complete.go` |
+| `o qbt space`: free space and the guard's numbers, one number per FIELD | `space.go` |
 | The guard: floor and allowance modes, baseline, marker, log, df over ssh, launchd agent | `guard.go` |
 | Fake qBittorrent and the test tool; output goldens in `testdata/` (`go test -update`) | `fake_test.go` |
 

@@ -12,6 +12,8 @@
 //	o-qbt torrent list|active|seeding|downloading|paused|errored|stalled [--filter F] [--category C] [--tag T] [--sort FIELD] [--reverse] [--limit N]
 //	o-qbt torrent export --out FILE | summary | overview  (o-qbt overview)
 //	o-qbt torrent show|pause|resume|recheck|delete [--target HASH|--all]
+//	o-qbt WORD... [--tracker P] [--name P] [--match substring|fuzzy|regex|glob]  (torrent find: filter words, filter.go)
+//	o-qbt words | space [FIELD] [--bytes]                                        (torrent vocabulary, guard disk)
 //
 // Every list-like verb takes --format table|json|jsonl|tsv|csv|md|toon,
 // --columns a,b,c and --out FILE (format.go).
@@ -100,8 +102,11 @@ func (t *Tool) getenv(name string) string {
 
 // Main runs one command: a noun of the runtime (oden resolves a unique
 // prefix, the shell a verb's), catalog, an oden builtin, a shortcut
-// (torrents is torrent list, overview torrent overview), the shell's usage
-// with no words, else oden's not found report.
+// (torrents is torrent list, overview torrent overview, words torrent
+// words, space guard space), the shell's usage with no words, else filter
+// words (torrent find WORDS; a first word that is no filter word either
+// is oden's not found, with its suggestions): a first word that names a command always runs
+// the command.
 func (t *Tool) Main(ctx context.Context, args []string) error {
 	if t.now == nil {
 		t.now = time.Now
@@ -120,17 +125,28 @@ func (t *Tool) Main(ctx context.Context, args []string) error {
 		if words := shortcuts[args[0]]; words != nil {
 			return t.runShell(ctx, sh, append(slices.Clone(words), args[1:]...))
 		}
-		return oden.ErrNotFound
+		// Anything else is filter words: o qbt avz nyaa completed.
+		if !t.filterWord(args[0]) {
+			return oden.ErrNotFound
+		}
+		return t.runShell(ctx, sh, append(slices.Clone(filterCommand), args...))
 	}
 	return app.Run(ctx)
 }
 
 // shortcuts are top-level words that stand for a noun and verb.
-var shortcuts = map[string][]string{"torrents": {"torrent", "list"}, "categories": {"category", "list"}, "overview": {"torrent", "overview"}}
+var shortcuts = map[string][]string{"torrents": {"torrent", "list"}, "categories": {"category", "list"}, "overview": {"torrent", "overview"}, "words": {"torrent", "vocabulary"}, "space": {"guard", "disk"}}
+
+// filterCommand is what a first word that is no command and no shortcut
+// runs, with every word: the filter (filter.go).
+var filterCommand = []string{"torrent", "find"}
 
 // mount reuses shared command metadata and keeps human output at execution.
 func (t *Tool) mount(app *oden.App, sh *ocli.Shell) {
 	ocli.Mount(app, sh)
+	if e := app.Catalog().Lookup("complete"); e != nil && e.Command != nil && e.Command.Run != nil {
+		e.Command.Run = t.completeFilters(app, sh, e.Command.Run)
+	}
 	for _, entry := range app.Catalog().Entries {
 		if entry.Command == nil || entry.Source != "noun" {
 			continue

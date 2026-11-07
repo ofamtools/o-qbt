@@ -87,21 +87,30 @@ func (t *Tool) shell() *ocli.Shell {
 		}
 		return lists[noun].SetItems(items)
 	}
-	// torrentsOf is the torrents q selects, set as the torrent list's rows.
-	torrentsOf := func(ctx context.Context, q TorrentQuery) ([]Torrent, []Row, error) {
+	// fetchTorrents is torrents/info for q.
+	fetchTorrents := func(ctx context.Context, q TorrentQuery) ([]Torrent, error) {
 		c, err := api()
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
-		ts, err := Torrents(ctx, c, q)
-		if err != nil {
-			return nil, nil, err
-		}
+		return Torrents(ctx, c, q)
+	}
+	// setTorrents makes ts the torrent list's rows.
+	setTorrents := func(ts []Torrent) ([]Row, error) {
 		rows := make([]Row, len(ts))
 		for i, x := range ts {
 			rows[i] = torrentRow(x)
 		}
-		return ts, rows, setRows("torrent", rows)
+		return rows, setRows("torrent", rows)
+	}
+	// torrentsOf is the torrents q selects, set as the torrent list's rows.
+	torrentsOf := func(ctx context.Context, q TorrentQuery) ([]Torrent, []Row, error) {
+		ts, err := fetchTorrents(ctx, q)
+		if err != nil {
+			return nil, nil, err
+		}
+		rows, err := setTorrents(ts)
+		return ts, rows, err
 	}
 	torrentRows := func(ctx context.Context) ([]Row, error) {
 		_, rows, err := torrentsOf(ctx, TorrentQuery{})
@@ -128,6 +137,7 @@ func (t *Tool) shell() *ocli.Shell {
 	}
 	loc := t.now().Location()
 	t.defineStores(r, api, torrentsOf, categoriesOf)
+	t.defineFilters(r, api, fetchTorrents, setTorrents, loc)
 	// hashes is what a torrent verb acts on: --target's hash, or all.
 	hashes := func(c ochazuke.Ctx, verb string) (string, error) {
 		all, _ := c.Args["all"].(bool)
@@ -406,9 +416,9 @@ func (t *Tool) shell() *ocli.Shell {
 		}, "one torrent's trackers, without DHT/PeX/LSD: --target HASH; rows {id: host, label: \"host  status\", data: {url, status, tier, peers, seeds, leeches, msg}}; url is the scheme and host only (passkeys live in the path) unless --full-url; columns host status tier peers seeds leeches msg (default), url").Rows("tracker").Fetch().
 		Verb("summary", func(c ochazuke.Ctx) ochazuke.Result {
 			trs, err := trackersOf(c)
-			hs := SummarizeTrackers(trs)
+			hs, err := t.summarizeTrackers(c, trs, err)
 			return t.present(c, hs, TrackerSummaryTable(hs), err)
-		}, "one row per tracker host across the torrents --filter, --category, --tag select: [{host, torrents, working, not_working, msg}]; working counts torrents with an entry there in status 2, not_working those with one in status 4 and none working; msg is the host's most common message (60 chars); one request per torrent, 8 at a time, progress on stderr").Fetch().
+		}, "one row per tracker host (--by name: per tracker table name) across the torrents --filter, --category, --tag select: [{host, torrents, working, not_working, msg}]; working counts torrents with an entry there in status 2, not_working those with one in status 4 and none working; msg is the host's most common message (60 chars); one request per torrent, 8 at a time, progress on stderr").Fetch().
 		Verb("hosts", func(c ochazuke.Ctx) ochazuke.Result {
 			trs, err := trackersOf(c)
 			if err != nil {
@@ -430,6 +440,7 @@ func (t *Tool) shell() *ocli.Shell {
 	for _, verb := range []string{"summary", "hosts"} {
 		r.Operations["tracker."+verb] = withParams(r.Operations["tracker."+verb], params(append(queryParams(true)[:6], outputParams()...)...))
 	}
+	r.Operations["tracker.summary"].Parameters["by"] = ochazuke.Parameter{Type: "string", Enum: SummaryKeys, Description: "group by host (default) or name: the tracker table's names (o qbt tracker table), a host no entry owns as itself"}
 
 	r.Define("transfer").
 		Verb("info", func(c ochazuke.Ctx) ochazuke.Result {
@@ -528,10 +539,7 @@ func (t *Tool) shell() *ocli.Shell {
 	// uninstall are; status reads.
 	setHistory(r, ochazuke.HistoryChange, "guard.check", "guard.rebase", "guard.resume", "guard.install", "guard.uninstall")
 	setHistory(r, ochazuke.HistoryFetch, "guard.status")
-	guardParams := []any{"limit", limitParam,
-		"mode", ochazuke.Parameter{Type: "string", Enum: GuardModes, Description: "the rule: floor (pause below --min-free, resume above --resume-above) or allowance (pause --limit below the baseline); default config guard.mode, else floor"},
-		"min-free", ochazuke.Parameter{Type: "string", Description: "floor: pause when free space is below this size (default config guard.minFree, else 5GiB)"},
-		"resume-above", ochazuke.Parameter{Type: "string", Description: "floor: resume, when the guard paused, once free space is above this size (default config guard.resumeAbove, else 20GiB)"}}
+	guardParams := guardParamKV()
 	for _, verb := range []string{"check", "status", "resume"} {
 		r.Operations["guard."+verb] = withParams(r.Operations["guard."+verb], params(guardParams...))
 	}
@@ -589,6 +597,14 @@ func (t *Tool) shell() *ocli.Shell {
 		return fmt.Errorf("no torrent with hash %s (o qbt torrent list)", target)
 	}
 	return sh
+}
+
+// guardParamKV are the guard's rule flags, name/value pairs for params.
+func guardParamKV() []any {
+	return []any{"limit", limitParam,
+		"mode", ochazuke.Parameter{Type: "string", Enum: GuardModes, Description: "the rule: floor (pause below --min-free, resume above --resume-above) or allowance (pause --limit below the baseline); default config guard.mode, else floor"},
+		"min-free", ochazuke.Parameter{Type: "string", Description: "floor: pause when free space is below this size (default config guard.minFree, else 5GiB)"},
+		"resume-above", ochazuke.Parameter{Type: "string", Description: "floor: resume, when the guard paused, once free space is above this size (default config guard.resumeAbove, else 20GiB)"}}
 }
 
 func withParams(op ochazuke.Operation, p map[string]ochazuke.Parameter) ochazuke.Operation {

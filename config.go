@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 
 	"golang.org/x/term"
@@ -28,6 +29,9 @@ type Config struct {
 	Volume string      `json:"volume"` // the NAS path guard measures with df
 	SSH    string      `json:"ssh"`    // the ssh alias guard runs df through
 	Guard  GuardConfig `json:"guard,omitzero"`
+	// Trackers extend and override the filter words' tracker table
+	// (DefaultTrackers): an entry named like a default replaces it.
+	Trackers []TrackerEntry `json:"trackers,omitempty"`
 }
 
 // GuardConfig is config.json's guard block; empty fields are DefaultGuard's.
@@ -235,7 +239,7 @@ func (t *Tool) ConfigSet(key, value string, fromStdin bool) (Message, error) {
 	if c.field(key) == nil {
 		return Message{}, fmt.Errorf("config set: unknown key %q (%s)", key, strings.Join(configKeys, ", "))
 	}
-	if c == (Config{}) {
+	if reflect.DeepEqual(c, Config{}) {
 		c = DefaultConfig
 	}
 	if key == "pass" {

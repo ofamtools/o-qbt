@@ -31,7 +31,10 @@ o qbt tracker list --target HASH [--full-url] [output] | summary [query] [output
 o qbt transfer info [output] | limit --dl N --up N | speed-limits-toggle     (bytes/s, 0 = unlimited)
 o qbt guard check|status|rebase|resume [--mode floor|allowance] [--min-free 5GiB] [--resume-above 20GiB] [--limit 10G] | rebase --bytes N | install | uninstall | log [N]
 o qbt category list [output]
-o qbt torrents | categories | overview          (shortcuts)
+o qbt torrents | categories | overview | words | space   (shortcuts)
+o qbt WORD... [--tracker P] [--name P] [--match substring|fuzzy|regex|glob] [query] [output]   (filter words: torrent find)
+o qbt space [free|base|used|headroom|min-free|resume-above|limit|qbt-free] [--bytes]          (guard disk)
+o qbt tracker registry | counts [WORD...] [query] [output] | summary --by host|name
 o qbt config init | show | set KEY [VALUE] [--stdin]
 o qbt catalog
 ```
@@ -87,6 +90,91 @@ torrent[3]{hash,name,state,progress,size,dlspeed,eta}:
 ```
 
 The rule, exactly: a header `NAME[N]{col,col,...}:` (N records, the columns in order), then one line per record, indented two spaces, its values joined by `,`. Numbers and booleans are bare (raw: bytes, bytes/s, seconds, 0..1 progress, Unix times); a missing value is empty. A string is bare unless it contains a `,`, a `"` or a newline; then it is wrapped in `"` with `\` `"` and newline written `\\` `\"` `\n`. A string that looks like a number is not quoted, so a reader types values by column.
+
+## Filter words
+
+`o qbt` is mostly for finding torrents, so filter words mix and match at the top level:
+
+```sh
+o qbt avz completed inactive          # avistaz AND completed AND inactive
+o qbt avz nyaa completed inactive     # (avistaz OR nyaa) AND completed AND inactive
+o qbt private fseeding                # force-started seeds on any private tracker
+o qbt tl not-completed                # torrentleech, not finished
+o qbt seeding fseeding --sort ratio   # seeding, forced or not
+o qbt --tracker '*.to' --match glob   # any tracker host ending in .to
+o qbt nyaa --name 'S01' --format md --columns name,state,trackers
+```
+
+Each word belongs to one category. **Words of one category OR, categories AND**: `avz nyaa completed inactive` is (avistaz OR nyaa) AND completed AND inactive. `not-WORD` drops the torrents WORD selects (`not-avz not-nyaa`: neither). Only bare words and `--flags` are used, so nothing needs quoting in bash or zsh except a glob or regex pattern you pass to `--tracker`/`--name` (`'*.to'`). The result is the torrent list: `torrent list`'s columns and its `--format`, `--columns`, `--out`, `--filter`, `--category`, `--tag`, `--sort` and `--reverse`; `--limit` cuts after the filter. The columns `trackers` (the tracker hostnames, never the announce URLs) and `private` are there for `--columns`. `o qbt words` lists every word (`--format` renders it); `o qbt torrent find WORD...` is the same command spelled out.
+
+| Category | Words | A torrent's value |
+|---|---|---|
+| tracker | the tracker table's names and aliases: `avistaz` (`avz`, `av`), `privatehd` (`phd`), `cinemaz`, `exoticaz`, `animez`, `torrentleech` (`tl`), `nyaa`, `myanonamouse` (`mam`), `jptv` | the table names owning one of its tracker hosts (a host or a subdomain of one), from the current tracker and the magnet URI's tracker list |
+| privacy | `public`, `private` | the torrent's private flag (qBittorrent 5); before that, whether a private table entry owns one of its hosts |
+| completion | `completed` (`done`), `incomplete` | progress is 100% or not |
+| activity | `active`, `inactive` (`idle`) | moving data now (below) |
+| state | the groups below, and every literal qBittorrent state | its state |
+
+**Active** means moving data now: download or upload speed above zero, or a state qBittorrent gives only while data moves (`downloading`, `uploading`, `metaDL`, `forcedMetaDL`, `moving`). Everything else is inactive. Forced is not activity: a forced seed nobody is downloading from is inactive. This differs from `torrent active` (qBittorrent's own `active` filter), which counts every forced torrent as active.
+
+State groups; a plain group and its forced one (`f` prefix) never overlap, so `seeding fseeding` is both:
+
+| Word (aliases) | States |
+|---|---|
+| `download` (`downloading`) | downloading, stalledDL, queuedDL, metaDL, checkingDL, allocating |
+| `fdownload` (`force-download`, `forced-download`) | forcedDL, forcedMetaDL |
+| `seeding` (`seed`) | uploading, stalledUP, queuedUP |
+| `fseeding` (`force-seeding`, `forced-seeding`) | forcedUP |
+| `started` | the download and seeding states, checkingUP, moving (not stopped, not forced) |
+| `fstarted` (`force-started`, `forced`) | forcedUP, forcedDL, forcedMetaDL |
+| `stopped` (`paused`) | stoppedUP, stoppedDL, pausedUP, pausedDL |
+| `queued` | queuedUP, queuedDL |
+| `stalled` | stalledUP, stalledDL |
+| `checking` | checkingUP, checkingDL, checkingResumeData |
+| `errored` | error, missingFiles |
+| a literal state | `stalledUP`, `missingFiles`, ... in any case; `downloading` is the group's alias, so the literal state alone is `download not-stalledDL not-queuedDL not-metaDL not-checkingDL not-allocating` |
+
+The old `torrent seeding|downloading|active|...` verbs are unchanged: they ask qBittorrent's own filter, which counts forced torrents in `seeding` and `downloading`.
+
+**How a word resolves**: an exact word or alias (any case; a group wins over a literal state of the same name), else the one word it is a prefix of (`comp` → completed, `stalledu` → stalledUP, `torr` → torrentleech), else the one tracker whose name or host holds it (`leech`, `tleech` → torrentleech). Several candidates is an error naming them (`"pri" is ambiguous: private (privacy), privatehd (tracker)`); no candidate is an error pointing at `o qbt words`.
+
+**The first word**: a first word that names a command, a unique prefix of one (oden's rule) or a shortcut runs that command, exactly as before (`o qbt torrent list`, `o qbt tr` is ambiguous). Anything else is filter words; a first word that is no filter word either is oden's `command not found` with its suggestion. No filter word or alias is a command or a prefix of one (a test checks), but a prefix you type first can be: `o qbt torr` is `torrent`, so put another word first (`o qbt private torr`) or type the whole name.
+
+**Patterns**: `--tracker P` matches any tracker table name or host, `--name P` the torrent's name, in `--match` mode: `substring` (the default; `substr`; every space-separated word, any order), `fuzzy` (the characters in order), `regex` (Go RE2), `glob` (`*`, `?`, `[...]`; quote it), all case-insensitive unless the pattern has a capital (smart case; glob always ignores case). The first three are ochazuke's match modes. `--tracker` is in the tracker category, so it ORs with tracker words; `--name` is its own category.
+
+**The tracker table** (`o qbt tracker registry`) lives in the code with additions in `config.json`: an entry named like a built-in replaces it, any other is added.
+
+```json
+"trackers": [
+  {"name": "nyaa", "aliases": ["ny"], "hosts": ["nyaa.si", "nyaa.tracker.wf"], "private": false},
+  {"name": "opentrackr", "aliases": ["otr"], "hosts": ["opentrackr.org"]}
+]
+```
+
+`o qbt tracker counts [WORD...]` counts torrents per table name (a torrent no entry owns counts under each of its hosts) with size, completed and active, in one request; it takes the filter words (`o qbt tracker counts completed inactive`). `o qbt tracker summary --by name` is the per-tracker status summary grouped by table name instead of host.
+
+**Completion**: `o qbt completion zsh` (or `bash`) prints the completion script; the first word completes commands, shortcuts and filter words, later words complete filter words (`not-` forms after `not-`), the flags, `--match` modes and `--tracker` names.
+
+## Free space
+
+`o qbt space` (`guard disk`) prints the numbers the guard weighs:
+
+| Field | |
+|---|---|
+| `free` | free space on the guard's volume now (`ssh nas df`) |
+| `base` | the stored baseline (`guard rebase`) |
+| `used` | baseline minus free (allowance mode's measure) |
+| `headroom` | free minus `min-free`: room before floor mode stops downloads |
+| `min-free`, `resume-above`, `limit` | the guard's thresholds (config, or `--min-free`, `--resume-above`, `--limit`) |
+| `qbt-free` | the free space qBittorrent reports for its save path |
+
+`o qbt space FIELD` prints one of them alone, as a size (`280.4 GiB`), or the bytes with `--bytes`; only `qbt-free` (and the whole table) logs in to qBittorrent. A df failure is shown in the table and is the error of a single field that needs it.
+
+```sh
+o qbt space
+o qbt space free --bytes
+o qbt space base
+```
 
 ## Trackers
 

@@ -30,6 +30,10 @@ type Torrent struct {
 	AddedOn     int64   `json:"added_on"`
 	CompletedOn int64   `json:"completion_on"`
 	SavePath    string  `json:"save_path"`
+	Private     *bool   `json:"private,omitempty"` // qBittorrent 5; nil before
+	// Hosts are the hostnames of its trackers (the current one and the
+	// magnet URI's), never the URLs: passkeys live there (UnmarshalJSON).
+	Hosts []string `json:"-"`
 }
 
 // TorrentData is a torrent row's data.

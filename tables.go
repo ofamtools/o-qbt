@@ -23,13 +23,46 @@ func torrentColumns(loc *time.Location) []Column {
 		{Name: "added_on", Human: hTime(loc)},
 		{Name: "completed_on", Human: hTime(loc)},
 		{Name: "save_path"},
+		{Name: "trackers"}, {Name: "private"},
 	}
 }
 
 var torrentDefault = []string{"hash", "name", "state", "progress", "size", "dlspeed", "eta"}
 
 func torrentValues(t Torrent) []any {
-	return []any{t.Hash, t.Name, t.State, t.Progress, t.Size, t.DLSpeed, t.ETA, t.UPSpeed, t.Ratio, t.Category, t.Tags, t.AddedOn, t.CompletedOn, t.SavePath}
+	var private any
+	if t.Private != nil {
+		private = *t.Private
+	}
+	return []any{t.Hash, t.Name, t.State, t.Progress, t.Size, t.DLSpeed, t.ETA, t.UPSpeed, t.Ratio, t.Category, t.Tags, t.AddedOn, t.CompletedOn, t.SavePath, strings.Join(t.Hosts, ","), private}
+}
+
+// WordTable is the filter vocabulary as table "word": one row per word.
+func WordTable(ws []FilterWord) Table {
+	t := Table{Name: "word", Native: ws, Columns: []Column{{Name: "category"}, {Name: "name"}, {Name: "aliases"}, {Name: "selects"}, {Name: "about"}}, Rows: make([][]any, len(ws))}
+	for i, w := range ws {
+		t.Rows[i] = []any{w.Category, w.Name, strings.Join(w.Aliases, ","), strings.Join(w.Selects, ","), w.About}
+	}
+	return t
+}
+
+// TrackerTableTable is the tracker table as table "tracker".
+func TrackerTableTable(es []TrackerEntry) Table {
+	t := Table{Name: "tracker", Native: es, Columns: []Column{{Name: "name"}, {Name: "aliases"}, {Name: "hosts"}, {Name: "private"}}, Rows: make([][]any, len(es))}
+	for i, e := range es {
+		t.Rows[i] = []any{e.Name, strings.Join(e.Aliases, ","), strings.Join(e.Hosts, ","), e.Private}
+	}
+	return t
+}
+
+// TrackerCountTable is torrents per tracker table name.
+func TrackerCountTable(cs []TrackerCount) Table {
+	t := Table{Name: "tracker", Columns: []Column{{Name: "tracker"}, {Name: "private"}, {Name: "torrents", Right: true}, {Name: "size", Human: hBytes, Right: true},
+		{Name: "completed", Right: true}, {Name: "active", Right: true}}, Rows: make([][]any, len(cs))}
+	for i, c := range cs {
+		t.Rows[i] = []any{c.Tracker, c.Private, c.Torrents, c.Size, c.Completed, c.Active}
+	}
+	return t
 }
 
 // TorrentTable is ts as table "torrent".
