@@ -1,7 +1,7 @@
 // Command o-qbt is the family tool for qBittorrent (Web API v2) on the NAS:
 // the server's version and speeds as a credentials test, torrents and
-// categories as rows, transfer limits, and the free-space guard that pauses
-// every torrent before a download fills the volume. It is an oden app (so
+// categories as rows, transfer limits, and the free-space guard that stops
+// downloads (never seeds) before they fill the volume. It is an oden app (so
 // o qbt ARGS runs it) with an ochazuke runtime behind ochazuke/cli
 // (shell.go): every noun's verbs are operations, lists declare their rows,
 // app rows answers every list as JSON Lines, and catalog describes it all

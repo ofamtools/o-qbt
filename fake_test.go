@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"maps"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -31,10 +32,12 @@ type fakeQBT struct {
 	calls   []string // "METHOD /path hashes=..." per request
 	queries []string // torrents/info's query strings, in order
 	removed []string
+	list    []map[string]any  // the torrents, a copy of fakeTorrentList; stop, start and setForceStart change their state
+	prev    map[string]string // a stopped torrent's state before the stop, by hash
 }
 
 func newFake(t *testing.T) *fakeQBT {
-	f := &fakeQBT{pass: "good"}
+	f := &fakeQBT{pass: "good", list: fakeList(fakeTorrentList), prev: map[string]string{}}
 	f.Server = httptest.NewServer(http.HandlerFunc(f.serve))
 	t.Cleanup(f.Close)
 	return f
@@ -81,7 +84,7 @@ func (f *fakeQBT) serve(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, `{"rid":1,"full_update":true,"server_state":{"free_space_on_disk":628000000000,"dl_info_speed":3565158,"up_info_speed":1024}}`)
 	case "/api/v2/torrents/info":
 		f.queries = append(f.queries, r.URL.RawQuery)
-		json.NewEncoder(w).Encode(fakeTorrents(r.URL.Query()))
+		json.NewEncoder(w).Encode(fakeTorrents(f.list, r.URL.Query()))
 	case "/api/v2/torrents/trackers":
 		trs, ok := fakeTrackers[r.Form.Get("hash")]
 		if !ok {
@@ -96,14 +99,76 @@ func (f *fakeQBT) serve(w http.ResponseWriter, r *http.Request) {
 	case "/api/v2/torrents/stop", "/api/v2/torrents/start":
 		if f.v4 {
 			w.WriteHeader(http.StatusNotFound)
+			return
 		}
+		f.setState(r.URL.Path, r.Form.Get("hashes"), r.Form.Get("value"))
+	case "/api/v2/torrents/setForceStart":
+		f.setState(r.URL.Path, r.Form.Get("hashes"), r.Form.Get("value"))
 	case "/api/v2/torrents/delete":
 		f.removed = append(f.removed, r.Form.Get("hashes")+" files="+r.Form.Get("deleteFiles"))
-	case "/api/v2/torrents/pause", "/api/v2/torrents/resume", "/api/v2/torrents/recheck",
+	case "/api/v2/torrents/pause", "/api/v2/torrents/resume":
+		f.setState(r.URL.Path, r.Form.Get("hashes"), "")
+	case "/api/v2/torrents/recheck",
 		"/api/v2/transfer/setDownloadLimit", "/api/v2/transfer/setUploadLimit", "/api/v2/transfer/toggleSpeedLimitsMode":
 	default:
 		w.WriteHeader(http.StatusNotFound)
 	}
+}
+
+// fakeList is a deep copy of ts.
+func fakeList(ts []map[string]any) []map[string]any {
+	out := make([]map[string]any, len(ts))
+	for i, t := range ts {
+		out[i] = maps.Clone(t)
+	}
+	return out
+}
+
+// setState applies stop (pause), start (resume) or setForceStart to hashes
+// ("all" or "h1|h2") as qBittorrent does: stop remembers the state and
+// shows stoppedDL or stoppedUP; start restores it, unforced; force start
+// shows forcedDL or forcedUP. Called with f.mu held.
+func (f *fakeQBT) setState(path, hashes, value string) {
+	op := path[strings.LastIndex(path, "/")+1:]
+	for _, t := range f.list {
+		h := t["hash"].(string)
+		if hashes != "all" && !slices.Contains(strings.Split(hashes, "|"), h) {
+			continue
+		}
+		state, done := t["state"].(string), t["progress"].(float64) >= 1
+		suffix := map[bool]string{false: "DL", true: "UP"}[done]
+		switch op {
+		case "stop", "pause":
+			if !strings.HasPrefix(state, "stopped") && !strings.HasPrefix(state, "paused") {
+				f.prev[h] = state
+				t["state"] = "stopped" + suffix
+			}
+		case "start", "resume":
+			if p, ok := f.prev[h]; ok {
+				delete(f.prev, h)
+				t["state"] = strings.Replace(strings.Replace(p, "forcedDL", "downloading", 1), "forcedMetaDL", "metaDL", 1)
+			} else if strings.HasPrefix(state, "stopped") || strings.HasPrefix(state, "paused") {
+				t["state"] = map[bool]string{false: "downloading", true: "stalledUP"}[done]
+			}
+		case "setForceStart":
+			if value == "true" {
+				delete(f.prev, h)
+				t["state"] = "forced" + suffix
+			}
+		}
+	}
+}
+
+// state is the fake's state of hash.
+func (f *fakeQBT) state(hash string) string {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	for _, t := range f.list {
+		if t["hash"] == hash {
+			return t["state"].(string)
+		}
+	}
+	return ""
 }
 
 // posted is the non-login POSTs, in order.
@@ -172,9 +237,9 @@ var fakeFilters = map[string][]string{"downloading": {"downloading"}, "seeding":
 
 // fakeTorrents applies torrents/info's query as qBittorrent does: filter,
 // category, tag, then sort, reverse, limit.
-func fakeTorrents(q url.Values) []map[string]any {
+func fakeTorrents(list []map[string]any, q url.Values) []map[string]any {
 	out := []map[string]any{}
-	for _, t := range fakeTorrentList {
+	for _, t := range list {
 		if f := q.Get("filter"); f != "" && f != "all" {
 			if f == "active" {
 				if t["dlspeed"].(float64)+t["upspeed"].(float64) == 0 {

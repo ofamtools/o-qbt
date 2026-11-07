@@ -1,6 +1,6 @@
 # o-qbt
 
-A family tool for qBittorrent (Web API v2) on the NAS: a credentials test, torrents and categories as rows, transfer limits, and a free-space guard that pauses every torrent before a download fills the volume. `o qbt ARGS` runs it; nabe (`o tui`) shows it after it is registered.
+A family tool for qBittorrent (Web API v2) on the NAS: a credentials test, torrents and categories as rows, transfer limits, and a free-space guard that stops downloads (never seeds) before they fill the volume. `o qbt ARGS` runs it; nabe (`o tui`) shows it after it is registered.
 
 ## Install
 
@@ -108,9 +108,13 @@ o qbt tracker list --target HASH
 
 `guard check` is the monitor step: it reads the volume's free space with `ssh nas df -B1 --output=avail /volume1` and applies one of two rules, `guard.mode` in `config.json` (or `--mode`).
 
-**floor** (the default): when free space is below `minFree` (default 5 GiB; `guard.minFree`, `--min-free 5GiB`) it pauses every torrent and writes a marker. While the marker exists, later checks log `skipped-already-paused` until free space is back above `resumeAbove` (default 20 GiB, an absolute level; `guard.resumeAbove`, `--resume-above 20GiB`), when the guard resumes every torrent and clears the marker. It only resumes what it paused: torrents paused by hand (no marker) stay paused. `resumeAbove` must be above `minFree`.
+**It stops downloads only, never seeds.** A pause stops the torrents whose state is a downloading one: `downloading`, `stalledDL`, `metaDL`, `forcedMetaDL`, `forcedDL`, `queuedDL`, `checkingDL` and `allocating`. Forced downloads (`forcedDL`, `forcedMetaDL`) are downloads and are stopped too; the guard restores their force start when it starts them again. Seeding torrents (`uploading`, `stalledUP`, `forcedUP`, `queuedUP`, `checkingUP`), stopped ones (`stoppedDL`, `stoppedUP`; v4's `pausedDL`, `pausedUP`), `checkingResumeData`, `moving`, `error` and `missingFiles` are left alone, so seeding goes on and a private tracker sees no hit-and-run. The marker (`~/.local/share/o-qbt/paused`) is JSON listing what the guard stopped, `{"time": "...", "torrents": [{"hash", "name", "state", "forced"}]}`; starting again starts those hashes and nothing else, so a torrent stopped by hand stays stopped. A marker from an older o-qbt (a bare timestamp) still reads, as one that lists no torrents: resuming it starts none and says so.
 
-**allowance** (opt-in): when the stored baseline minus the free space is more than `--limit` (default 10 GiB) it pauses every torrent and writes the marker, and stays paused until `guard resume` (resume all, clear the marker) or `guard rebase` (store the current free space, or `--bytes N`, as the baseline and clear the marker). Only this mode reads the baseline; `rebase` in floor mode stores it and says so.
+**floor** (the default): when free space is below `minFree` (default 5 GiB; `guard.minFree`, `--min-free 5GiB`) it stops the downloads and writes the marker. While free space stays below `minFree`, each check also stops any download that started since (an RSS feed or an *arr adding one) and adds it to the marker. Between `minFree` and `resumeAbove` checks log `skipped-already-paused`; once free space is above `resumeAbove` (default 20 GiB, an absolute level; `guard.resumeAbove`, `--resume-above 20GiB`) the guard starts the torrents the marker lists and clears it. Without a marker it starts nothing. `resumeAbove` must be above `minFree`.
+
+**allowance** (opt-in): when the stored baseline minus the free space is more than `--limit` (default 10 GiB) it stops the downloads and writes the marker (and, while still over the limit, stops new ones), and stays paused until `guard resume` (start the marker's torrents, clear the marker) or `guard rebase` (store the current free space, or `--bytes N`, as the baseline and clear the marker without starting anything). Only this mode reads the baseline; `rebase` in floor mode stores it and says so.
+
+When the rule says pause but nothing is downloading, the check logs `no-downloads` and writes no marker: there is nothing to start again, and the next check looks again. `guard resume` starts the marker's torrents in either mode; to start every torrent use `o qbt torrent resume --all`.
 
 ```sh
 o qbt config set guard.mode floor            # or allowance
@@ -122,13 +126,15 @@ o qbt config set guard.minFree 8GiB
 "guard": {"mode": "floor", "minFree": "5GiB", "resumeAbove": "20GiB"}
 ```
 
-Without a password a check logs `error:no-credentials` and exits 0. Each check, rebase and resume appends one line (GiB) to `~/.local/share/o-qbt/guard.log`:
+Without a password a check logs `error:no-credentials` and exits 0. Each check, rebase and resume appends one line (GiB) to `~/.local/share/o-qbt/guard.log`. A pause says how many downloads it stopped and how many torrents (seeds and the rest) it left alone; a resume says how many it started and how many it force-started:
 
 ```
 2026-10-25T12:30:00-0400 mode=floor min=5.0 resume=20.0 free=577.1 baseline=584.8 used=7.7 limit=10.0 action=ok
+2026-10-25T12:35:00-0400 mode=floor min=5.0 resume=20.0 free=4.2 baseline=584.8 used=580.6 limit=10.0 action=paused downloads=3 left-alone=212
+2026-10-25T19:05:00-0400 mode=floor min=5.0 resume=20.0 free=24.0 baseline=584.8 used=560.8 limit=10.0 action=resumed downloads=3 forced=1
 ```
 
-`guard install` writes `~/Library/LaunchAgents/com.unixsuperhero.o-qbt-guard.plist` (runs `~/bin/o-qbt guard check` every 300 s and at load; stdout and stderr in `~/Library/Logs/o-qbt/`), lints it and bootstraps it in `gui/UID`. `guard status` shows the agent, the last log line, the mode and its thresholds (`min free`, `resume`), free space (against the baseline and limit in allowance mode) and whether the guard paused. `guard uninstall` removes the agent and keeps the data.
+`guard install` writes `~/Library/LaunchAgents/com.unixsuperhero.o-qbt-guard.plist` (runs `~/bin/o-qbt guard check` every 300 s and at load; stdout and stderr in `~/Library/Logs/o-qbt/`), lints it and bootstraps it in `gui/UID`. `guard status` shows the agent, the last log line, the mode and its thresholds (`min free`, `resume`), free space (against the baseline and limit in allowance mode) and whether the guard paused (since when, and how many downloads). `guard uninstall` removes the agent and keeps the data.
 
 It replaces the earlier shell guard (`qbt-guard.sh` on the NAS, driven by `com.unixsuperhero.qbt-guard`).
 

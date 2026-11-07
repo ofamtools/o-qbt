@@ -11,6 +11,7 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -170,6 +171,12 @@ func (c *Client) Pause(ctx context.Context, hashes string) (string, error) {
 // Resume starts hashes ("all" for every torrent).
 func (c *Client) Resume(ctx context.Context, hashes string) (string, error) {
 	return c.PostEither(ctx, "/api/v2/torrents/start", "/api/v2/torrents/resume", url.Values{"hashes": {hashes}})
+}
+
+// SetForceStart turns force start on or off for hashes ("h1|h2"); turning
+// it on also starts them, ignoring the queue limits.
+func (c *Client) SetForceStart(ctx context.Context, hashes string, on bool) error {
+	return c.Post(ctx, "/api/v2/torrents/setForceStart", url.Values{"hashes": {hashes}, "value": {strconv.FormatBool(on)}})
 }
 
 func oneLine(s string) string {

@@ -499,20 +499,20 @@ func (t *Tool) shell() *ocli.Shell {
 			return t.answer(v, err)
 		}, desc)
 	}
-	guardVerb("check", "the monitor step: df the volume over ssh; floor mode (default) pauses every torrent when free space is below --min-free (5GiB) and resumes them above --resume-above (20GiB) when the guard paused; allowance mode pauses once free space is more than --limit below the baseline; one line to guard.log", func(ctx context.Context, _ ochazuke.Ctx, gs GuardSettings) (any, error) {
+	guardVerb("check", "the monitor step: df the volume over ssh; floor mode (default) stops the downloads (forced downloads too) when free space is below --min-free (5GiB) and starts the ones it stopped above --resume-above (20GiB); allowance mode stops them once free space is more than --limit below the baseline; seeds and torrents stopped by hand are never touched; the marker lists what it stopped; one line to guard.log", func(ctx context.Context, _ ochazuke.Ctx, gs GuardSettings) (any, error) {
 		return t.GuardCheck(ctx, gs)
 	})
 	guardVerb("status", "the launchd agent, the last guard.log line, the mode and its thresholds, free space (against the baseline in allowance mode), whether the guard paused", func(ctx context.Context, _ ochazuke.Ctx, gs GuardSettings) (any, error) {
 		return t.GuardStatusOf(ctx, gs)
 	})
-	guardVerb("rebase", "store the current free space as the baseline (or --bytes N) and clear the marker; only allowance mode reads the baseline", func(ctx context.Context, c ochazuke.Ctx, gs GuardSettings) (any, error) {
+	guardVerb("rebase", "store the current free space as the baseline (or --bytes N) and clear the marker without starting what it lists (guard resume starts it); only allowance mode reads the baseline", func(ctx context.Context, c ochazuke.Ctx, gs GuardSettings) (any, error) {
 		n := ochazuke.IntArg(c.Args, "bytes", 0)
 		if n < 0 {
 			return nil, errors.New("--bytes is a positive byte count")
 		}
 		return t.GuardRebase(ctx, int64(n), gs)
 	})
-	guardVerb("resume", "resume every torrent and clear the marker", func(ctx context.Context, _ ochazuke.Ctx, gs GuardSettings) (any, error) {
+	guardVerb("resume", "start the downloads the guard stopped (the marker's list; force start restored) and clear the marker; seeds and torrents stopped by hand are not touched", func(ctx context.Context, _ ochazuke.Ctx, gs GuardSettings) (any, error) {
 		return t.GuardResume(ctx, gs)
 	})
 	r.Define("guard").
@@ -523,7 +523,7 @@ func (t *Tool) shell() *ocli.Shell {
 		Verb("log", func(c ochazuke.Ctx) ochazuke.Result {
 			return t.answer(t.GuardLogTail(ochazuke.IntArg(c.Args, "tail", 20)), nil)
 		}, "the last --tail N lines of guard.log (default 20)").Fetch().Positional("tail")
-	// check is the monitor step: it may pause or resume every torrent and
+	// check is the monitor step: it may stop or start downloads and
 	// appends to guard.log, so it is a change, as rebase, resume, install and
 	// uninstall are; status reads.
 	setHistory(r, ochazuke.HistoryChange, "guard.check", "guard.rebase", "guard.resume", "guard.install", "guard.uninstall")

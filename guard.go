@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html"
@@ -14,16 +15,23 @@ import (
 	"time"
 )
 
-// The guard pauses every torrent before the NAS volume fills. In floor
-// mode (the default) it pauses when free space is below minFree and, when
-// it was the one that paused (the marker), resumes once free space is back
-// above resumeAbove. In allowance mode it pauses once free space has
-// dropped more than a limit below a stored baseline, and stays paused until
-// guard resume or rebase. Its state is in the data dir ($XDG_DATA_HOME/o-qbt,
-// else ~/.local/share/o-qbt):
+// The guard stops downloads before the NAS volume fills; it never stops a
+// seed (a stopped seed on a private tracker is a hit-and-run). It stops
+// only torrents in a DownloadStates state, forced downloads included, and
+// records their hashes in the marker. In floor mode (the default) it pauses
+// when free space is below minFree and, once free space is back above
+// resumeAbove, starts the torrents the marker lists, nothing else. In
+// allowance mode it pauses once free space has dropped more than a limit
+// below a stored baseline, and stays paused until guard resume or rebase.
+// While the rule still says pause, each check also stops downloads that
+// started since (new ones from an RSS feed or an *arr) and adds them to the
+// marker. Its state is in the data dir ($XDG_DATA_HOME/o-qbt, else
+// ~/.local/share/o-qbt):
 //
 //	baseline   free bytes when the guard was last rebased
-//	paused     the marker: the time guard check paused everything
+//	paused     the marker: JSON GuardMarker, the time the guard first paused
+//	           and the downloads it stopped (a bare timestamp from older
+//	           versions still reads, as a marker listing no torrents)
 //	guard.log  one line per check, rebase and resume
 //
 // guard install runs guard check every 300 s from a launchd agent.
@@ -39,6 +47,18 @@ const GuardInterval = 300
 const DefaultLimit int64 = 10 << 30
 
 const gib = 1 << 30
+
+// DownloadStates are the qBittorrent states (Web API v2, qBittorrent 4 and
+// 5) of a torrent that is downloading or waiting to: the only ones the
+// guard stops. Seeding (uploading, stalledUP, forcedUP, queuedUP,
+// checkingUP), stopped (stoppedDL, stoppedUP; v4 pausedDL, pausedUP),
+// checkingResumeData, moving, error, missingFiles and unknown are never
+// touched.
+var DownloadStates = []string{"downloading", "stalledDL", "metaDL", "forcedMetaDL", "forcedDL", "queuedDL", "checkingDL", "allocating"}
+
+// ForcedStates are the DownloadStates of a force-started torrent; the guard
+// restores force start when it resumes one.
+var ForcedStates = []string{"forcedDL", "forcedMetaDL"}
 
 // GuardModes are the guard's rules; the first is the default.
 var GuardModes = []string{"floor", "allowance"}
@@ -116,13 +136,14 @@ type GuardLine struct {
 	Used        int64  `json:"used"`
 	Limit       int64  `json:"limit"`
 	Action      string `json:"action"`
-	Note        string `json:"note,omitempty"` // not logged
+	Detail      string `json:"detail,omitempty"` // what the action touched, logged after it: downloads=3 left-alone=12
+	Note        string `json:"note,omitempty"`   // not logged
 }
 
 func (g GuardLine) String() string {
 	gb := func(n int64) float64 { return float64(n) / gib }
 	return fmt.Sprintf("%s mode=%s min=%.1f resume=%.1f free=%.1f baseline=%.1f used=%.1f limit=%.1f action=%s", g.Time, g.Mode,
-		gb(g.MinFree), gb(g.ResumeAbove), gb(g.Free), gb(g.Baseline), gb(g.Used), gb(g.Limit), g.Action)
+		gb(g.MinFree), gb(g.ResumeAbove), gb(g.Free), gb(g.Baseline), gb(g.Used), gb(g.Limit), g.Action) + strings.TrimRight(" "+g.Detail, " ")
 }
 
 func (g GuardLine) Text() string {
@@ -178,16 +199,67 @@ func (t *Tool) writeBaseline(n int64) error {
 	return os.WriteFile(t.baselinePath(), []byte(strconv.FormatInt(n, 10)+"\n"), 0o600)
 }
 
-// marker is the paused marker's contents, "" when absent.
-func (t *Tool) marker() string {
+// GuardMarker is the paused marker: when the guard first paused and the
+// downloads it stopped. Legacy is a marker an older o-qbt wrote (a bare
+// timestamp, or anything that is not this JSON): it lists no torrents, so
+// resuming it starts none.
+type GuardMarker struct {
+	Time     string          `json:"time"`
+	Torrents []PausedTorrent `json:"torrents"`
+	Legacy   bool            `json:"-"`
+}
+
+// PausedTorrent is one download the guard stopped.
+type PausedTorrent struct {
+	Hash   string `json:"hash"`
+	Name   string `json:"name"`
+	State  string `json:"state"`  // its state when the guard stopped it
+	Forced bool   `json:"forced"` // it was force-started: resuming restores force start
+}
+
+// has reports whether m lists hash.
+func (m GuardMarker) has(hash string) bool {
+	return slices.ContainsFunc(m.Torrents, func(p PausedTorrent) bool { return p.Hash == hash })
+}
+
+// readMarker is the marker; ok is false without one. A marker that is not
+// GuardMarker JSON reads as Legacy with its text as the time ("yes" when
+// empty).
+func (t *Tool) readMarker() (m GuardMarker, ok bool) {
 	data, err := os.ReadFile(t.markerPath())
 	if err != nil {
-		return ""
+		return m, false
 	}
-	if s := strings.TrimSpace(string(data)); s != "" {
-		return s
+	s := strings.TrimSpace(string(data))
+	if json.Unmarshal(data, &m) == nil && m.Time != "" {
+		return m, true
 	}
-	return "yes"
+	if s == "" {
+		s = "yes"
+	}
+	return GuardMarker{Time: s, Legacy: true}, true
+}
+
+// writeMarker replaces the marker with m (written aside, then renamed).
+func (t *Tool) writeMarker(m GuardMarker) error {
+	data, err := json.MarshalIndent(m, "", "  ")
+	if err != nil {
+		return err
+	}
+	if err := os.MkdirAll(t.DataDir(), 0o700); err != nil {
+		return err
+	}
+	tmp := t.markerPath() + ".tmp"
+	if err := os.WriteFile(tmp, append(data, '\n'), 0o600); err != nil {
+		return err
+	}
+	return os.Rename(tmp, t.markerPath())
+}
+
+// marker is the time in the paused marker, "" when absent.
+func (t *Tool) marker() string {
+	m, _ := t.readMarker()
+	return m.Time
 }
 
 // sshDF is the volume's available bytes, from df on the ssh host.
@@ -230,15 +302,15 @@ func parseSize(s string) (int64, error) {
 // error without one in allowance mode) and the volume's free space (a df
 // failure is an error), then decides:
 //
-// floor: paused by the guard and free at or below resumeAbove skips; no
-// password logs error:no-credentials and succeeds (the agent keeps
-// running and the log says what is missing); paused by the guard and free
-// above resumeAbove resumes all and clears the marker; free below minFree
-// pauses all and writes the marker; else ok.
+// floor: paused by the guard and free between minFree and resumeAbove
+// skips; no password logs error:no-credentials and succeeds (the agent
+// keeps running and the log says what is missing); paused by the guard and
+// free above resumeAbove resumes the marker's torrents and clears it; free
+// below minFree pauses the downloads (pauseDownloads); else ok.
 //
-// allowance: a marker skips (one pause until guard resume or rebase); no
-// password logs error:no-credentials; within the limit logs ok; else
-// pause all and write the marker.
+// allowance: a marker within the limit skips (one pause until guard resume
+// or rebase); no password logs error:no-credentials; within the limit logs
+// ok; else pauses the downloads.
 func (t *Tool) GuardCheck(ctx context.Context, gs GuardSettings) (GuardLine, error) {
 	c, _, _, err := t.config()
 	if err != nil {
@@ -263,65 +335,133 @@ func (t *Tool) GuardCheck(ctx context.Context, gs GuardSettings) (GuardLine, err
 	if ok {
 		g.Used = base - g.Free
 	}
-	paused := t.marker() != ""
+	m, paused := t.readMarker()
 	if gs.Mode == "floor" {
 		switch {
-		case paused && g.Free <= gs.ResumeAbove:
+		case paused && g.Free >= gs.MinFree && g.Free <= gs.ResumeAbove:
 			g.Action = "skipped-already-paused"
 		case c.Pass == "":
 			g.Action = "error:no-credentials"
-		case paused:
-			return t.resumeAll(ctx, c, g)
+		case paused && g.Free > gs.ResumeAbove:
+			return t.resumeMarked(ctx, c, g)
 		case g.Free < gs.MinFree:
-			return t.pauseAll(ctx, c, g)
+			return t.pauseDownloads(ctx, c, g, m, paused)
 		default:
 			g.Action = "ok"
 		}
 		return t.logLine(g)
 	}
 	switch {
-	case paused:
+	case paused && g.Used <= gs.Limit:
 		g.Action = "skipped-already-paused"
 	case c.Pass == "":
 		g.Action = "error:no-credentials"
 	case g.Used <= gs.Limit:
 		g.Action = "ok"
 	default:
-		return t.pauseAll(ctx, c, g)
+		return t.pauseDownloads(ctx, c, g, m, paused)
 	}
 	return t.logLine(g)
 }
 
-// pauseAll stops every torrent, writes the marker and logs paused.
-func (t *Tool) pauseAll(ctx context.Context, c Config, g GuardLine) (GuardLine, error) {
-	if _, err := t.client(c).Pause(ctx, "all"); err != nil {
+// pauseDownloads stops the torrents in a DownloadStates state, adds them to
+// the marker m (had: m exists) and logs paused downloads=N left-alone=M;
+// every other torrent (seeding, stopped, checking, errored) is left alone.
+// With no download to stop it writes no marker: a marker means the guard
+// stopped something to start again, and without one the next check looks
+// again and stops a download that has started since. It logs
+// skipped-already-paused when a marker exists, else no-downloads.
+func (t *Tool) pauseDownloads(ctx context.Context, c Config, g GuardLine, m GuardMarker, had bool) (GuardLine, error) {
+	cl := t.client(c)
+	ts, err := Torrents(ctx, cl, TorrentQuery{})
+	if err != nil {
+		g.Action = "error:list"
+		t.logLine(g)
+		return g, err
+	}
+	var hashes []string
+	for _, x := range ts {
+		if !slices.Contains(DownloadStates, x.State) {
+			continue
+		}
+		hashes = append(hashes, x.Hash)
+		if !m.has(x.Hash) {
+			m.Torrents = append(m.Torrents, PausedTorrent{Hash: x.Hash, Name: x.Name, State: x.State, Forced: slices.Contains(ForcedStates, x.State)})
+		}
+	}
+	left := len(ts) - len(hashes)
+	if len(hashes) == 0 {
+		g.Action = "no-downloads"
+		if had {
+			g.Action = "skipped-already-paused"
+		}
+		g.Detail = fmt.Sprintf("downloads=0 left-alone=%d", left)
+		return t.logLine(g)
+	}
+	if _, err := cl.Pause(ctx, strings.Join(hashes, "|")); err != nil {
 		g.Action = "error:pause"
 		t.logLine(g)
 		return g, err
 	}
-	if err := os.WriteFile(t.markerPath(), []byte(g.Time+"\n"), 0o600); err != nil {
+	if m.Time == "" {
+		m.Time = g.Time
+	}
+	m.Legacy = false
+	if err := t.writeMarker(m); err != nil {
 		return g, err
 	}
 	g.Action = "paused"
+	g.Detail = fmt.Sprintf("downloads=%d left-alone=%d", len(hashes), left)
 	return t.logLine(g)
 }
 
-// resumeAll starts every torrent, clears the marker and logs resumed.
-func (t *Tool) resumeAll(ctx context.Context, c Config, g GuardLine) (GuardLine, error) {
-	if _, err := t.client(c).Resume(ctx, "all"); err != nil {
-		g.Action = "error:resume"
-		t.logLine(g)
-		return g, err
+// resumeMarked starts the torrents the marker lists, restores force start
+// on the ones that had it, clears the marker and logs resumed downloads=N
+// forced=F. It never starts a torrent the marker does not list, so one
+// stopped by hand stays stopped; a Legacy marker, or none, starts nothing
+// and says so in the note. On an error the marker stays, so the next check
+// tries again.
+func (t *Tool) resumeMarked(ctx context.Context, c Config, g GuardLine) (GuardLine, error) {
+	m, ok := t.readMarker()
+	var hashes, forced []string
+	for _, p := range m.Torrents {
+		hashes = append(hashes, p.Hash)
+		if p.Forced {
+			forced = append(forced, p.Hash)
+		}
+	}
+	switch {
+	case !ok:
+		g.Note = "note: no marker, so the guard stopped nothing to start again (o qbt torrent resume --all starts every torrent)"
+	case m.Legacy:
+		g.Note = "note: the marker is from an older o-qbt and lists no torrents, so none were started (o qbt torrent resume --target HASH, or --all)"
+	}
+	if len(hashes) > 0 {
+		cl := t.client(c)
+		if _, err := cl.Resume(ctx, strings.Join(hashes, "|")); err != nil {
+			g.Action = "error:resume"
+			t.logLine(g)
+			return g, err
+		}
+		if len(forced) > 0 {
+			if err := cl.SetForceStart(ctx, strings.Join(forced, "|"), true); err != nil {
+				g.Action = "error:force-start"
+				t.logLine(g)
+				return g, err
+			}
+		}
 	}
 	if err := os.Remove(t.markerPath()); err != nil && !errors.Is(err, os.ErrNotExist) {
 		return g, err
 	}
 	g.Action = "resumed"
+	g.Detail = fmt.Sprintf("downloads=%d forced=%d", len(hashes), len(forced))
 	return t.logLine(g)
 }
 
 // GuardRebase stores bytes as the baseline (the current free space when
-// bytes is 0), clears the marker and logs rebase. The baseline only
+// bytes is 0), clears the marker without starting the torrents it lists
+// (guard resume starts them) and logs rebase. The baseline only
 // matters in allowance mode; in floor mode the answer says so.
 func (t *Tool) GuardRebase(ctx context.Context, bytes int64, gs GuardSettings) (GuardLine, error) {
 	c, _, _, err := t.config()
@@ -353,7 +493,8 @@ func (t *Tool) GuardRebase(ctx context.Context, bytes int64, gs GuardSettings) (
 	return t.logLine(g)
 }
 
-// GuardResume resumes every torrent, clears the marker and logs resumed.
+// GuardResume starts the torrents the guard stopped (the marker's), restores
+// their force start, clears the marker and logs resumed.
 func (t *Tool) GuardResume(ctx context.Context, gs GuardSettings) (GuardLine, error) {
 	c, _, _, err := t.config()
 	if err != nil {
@@ -364,7 +505,7 @@ func (t *Tool) GuardResume(ctx context.Context, gs GuardSettings) (GuardLine, er
 	if free, err := t.df(ctx, c); err == nil {
 		g.Free, g.Used = free, g.Baseline-free
 	}
-	return t.resumeAll(ctx, c, g)
+	return t.resumeMarked(ctx, c, g)
 }
 
 // GuardStatus is guard status's answer.
@@ -416,8 +557,12 @@ func (t *Tool) GuardStatusOf(ctx context.Context, gs GuardSettings) (GuardStatus
 		return GuardStatus{}, err
 	}
 	s := GuardStatus{Mode: gs.Mode, MinFree: gs.MinFree, ResumeAbove: gs.ResumeAbove, Target: c.SSH + ":" + c.Volume, Limit: gs.Limit, PassSet: c.Pass != "", Log: t.guardLog(), Paused: "no"}
-	if m := t.marker(); m != "" {
-		s.Paused = "by the guard since " + m + " (o qbt guard resume)"
+	if m, ok := t.readMarker(); ok {
+		what := fmt.Sprintf("%d downloads", len(m.Torrents))
+		if m.Legacy {
+			what = "an older marker that lists no torrents"
+		}
+		s.Paused = "by the guard since " + m.Time + ": " + what + "; seeds left alone (o qbt guard resume)"
 	}
 	if s.Baseline, _, err = t.readBaseline(); err != nil {
 		return s, err
