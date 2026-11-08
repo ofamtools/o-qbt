@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "name": "o-qbt",
+  "namespace": "qbt",
   "version": "0.1.0",
   "state": "app.rows",
   "stateDelta": 1,
@@ -17,7 +18,7 @@
       "summary": "print the nouns, verbs, bindings and pages as JSON; catalog inspect writes them as an HTML page",
       "source": "cli",
       "shadowed": [
-        "inline oden@v0.2.0/builtins.go:21",
+        "inline oden@v0.3.0/builtins.go:22",
         "inline noun (alias of ochazuke.catalog)"
       ]
     },
@@ -31,13 +32,13 @@
       "name": "command",
       "kind": "inline",
       "summary": "list, show or stream command rows as JSON",
-      "source": "oden@v0.2.0/builtins.go:21"
+      "source": "oden@v0.3.0/builtins.go:22"
     },
     {
       "name": "commands",
       "kind": "inline",
       "summary": "print the command registry as JSON",
-      "source": "oden@v0.2.0/builtins.go:21"
+      "source": "oden@v0.3.0/builtins.go:22"
     },
     {
       "name": "complete",
@@ -70,7 +71,7 @@
       "name": "help",
       "kind": "inline",
       "summary": "list the commands by audience",
-      "source": "oden@v0.2.0/builtins.go:21",
+      "source": "oden@v0.3.0/builtins.go:22",
       "aliases": [
         "-h",
         "--help"
@@ -80,23 +81,23 @@
       "name": "info",
       "kind": "inline",
       "summary": "describe this bin or a command",
-      "source": "oden@v0.2.0/builtins.go:21"
+      "source": "oden@v0.3.0/builtins.go:22"
     },
     {
       "name": "ochazuke.",
       "kind": "inline",
-      "summary": "(+81 nouns)",
+      "summary": "(+82 nouns)",
       "source": "namespace",
       "aliases": [
         "ochazuke"
       ]
     },
     {
-      "name": "ochazuke.__chooser-state",
+      "name": "ochazuke.__picker-state",
       "kind": "inline",
       "source": "noun",
       "aliases": [
-        "__chooser-state"
+        "__picker-state"
       ]
     },
     {
@@ -131,6 +132,15 @@
       "source": "noun",
       "aliases": [
         "about-state"
+      ]
+    },
+    {
+      "name": "ochazuke.action",
+      "kind": "inline",
+      "summary": "· std get list watch",
+      "source": "noun",
+      "aliases": [
+        "action"
       ]
     },
     {
@@ -191,15 +201,6 @@
       "kind": "inline",
       "summary": "describe list · std get watch",
       "source": "noun"
-    },
-    {
-      "name": "ochazuke.chooser",
-      "kind": "inline",
-      "summary": "cancel clear-props move next-source normal open pick previous-source up",
-      "source": "noun",
-      "aliases": [
-        "chooser"
-      ]
     },
     {
       "name": "ochazuke.completion",
@@ -579,6 +580,15 @@
       ]
     },
     {
+      "name": "ochazuke.picker",
+      "kind": "inline",
+      "summary": "cancel clear-props complete enter into move next-source normal open pick previous-source up · std get list watch",
+      "source": "noun",
+      "aliases": [
+        "picker"
+      ]
+    },
+    {
       "name": "ochazuke.prompt",
       "kind": "inline",
       "source": "noun",
@@ -785,7 +795,7 @@
       "name": "state",
       "kind": "inline",
       "summary": "print command rows as JSON Lines",
-      "source": "oden@v0.2.0/builtins.go:21",
+      "source": "oden@v0.3.0/builtins.go:22",
       "shadowed": [
         "inline noun (alias of ochazuke.state)"
       ]
@@ -812,28 +822,28 @@
       "name": "version",
       "kind": "inline",
       "summary": "print the version, commit and build metadata",
-      "source": "oden@v0.2.0/builtins.go:21"
+      "source": "oden@v0.3.0/builtins.go:22"
     },
     {
       "name": "which",
       "kind": "inline",
       "summary": "print what a command word resolves to",
-      "source": "oden@v0.2.0/builtins.go:21"
+      "source": "oden@v0.3.0/builtins.go:22"
     }
   ],
   "aliases": {
-    "__chooser-state": "ochazuke.__chooser-state",
+    "__picker-state": "ochazuke.__picker-state",
     "about": "ochazuke.about",
     "about-page": "ochazuke.about-page",
     "about-row": "ochazuke.about-row",
     "about-state": "ochazuke.about-state",
+    "action": "ochazuke.action",
     "actions": "ochazuke.actions",
     "agent": "ochazuke.agent",
     "association": "ochazuke.association",
     "binding": "ochazuke.binding",
     "bindings": "ochazuke.bindings",
     "bindings-help": "ochazuke.bindings-help",
-    "chooser": "ochazuke.chooser",
     "confirm": "ochazuke.confirm",
     "context": "ochazuke.context",
     "count": "ochazuke.count",
@@ -876,6 +886,7 @@
     "outline-row": "ochazuke.outline-row",
     "page": "ochazuke.page",
     "pane": "ochazuke.pane",
+    "picker": "ochazuke.picker",
     "prompt": "ochazuke.prompt",
     "register": "ochazuke.register",
     "registers": "ochazuke.registers",
@@ -1133,12 +1144,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -1496,7 +1507,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "cfg_ssh": {
@@ -1521,7 +1532,7 @@
             },
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -2219,6 +2230,412 @@
       ]
     },
     {
+      "name": "ochazuke.action",
+      "kind": "collection",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The action's name (an operation's last part)",
+          "readOnly": true,
+          "key": true,
+          "human": true
+        },
+        {
+          "name": "nouns",
+          "type": "list",
+          "description": "The nouns that have it",
+          "readOnly": true
+        },
+        {
+          "name": "operations",
+          "type": "list",
+          "description": "Its operations' keys",
+          "readOnly": true
+        }
+      ],
+      "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The action's name (default: the action the request acts for)",
+              "source": "ochazuke.action.list",
+              "free": true,
+              "noun": "ochazuke.action",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "from": {
+              "type": "any",
+              "description": "Copy this thing (an id or a human key, or a row holding its key): every prop create writes, read from it, unless given",
+              "source": "ochazuke.action.list",
+              "free": true,
+              "noun": "ochazuke.action",
+              "covers": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "create"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": true,
+          "agent": "never",
+          "name": "delete",
+          "description": "Delete a thing (asks first)",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The action's name (default: the action the request acts for)",
+              "source": "ochazuke.action.list",
+              "free": true,
+              "noun": "ochazuke.action",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "confirm": "Delete {{noun}} {{label}}?",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "delete"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
+              "plumbing": true
+            },
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "free": true,
+              "plumbing": true
+            },
+            "name": {
+              "type": "string",
+              "description": "The action's name (default: the action the request acts for)",
+              "source": "ochazuke.action.list",
+              "free": true,
+              "noun": "ochazuke.action",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "name",
+            "field",
+            "chooser"
+          ],
+          "history": "action",
+          "builtin": true,
+          "standard": "edit"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The action's name (default: the action the request acts for)",
+              "source": "ochazuke.action.list",
+              "free": true,
+              "noun": "ochazuke.action",
+              "focus": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "name",
+                "nouns",
+                "operations"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "name",
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "get"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "list",
+          "description": "List the things, each its props with id and label, as a page {items, page, per_page, total}; filter and where keep the things that meet conditions, sort orders them, group-by gathers them into groups, per-page and page cut the result into pages (rows, never groups)",
+          "kind": "application",
+          "params": {
+            "archived": {
+              "type": "boolean",
+              "description": "Include the archived things list.hide-archived hides by default"
+            },
+            "filter": {
+              "type": "string",
+              "description": "Keep the things that meet every condition: words prop=value, prop!=value, prop~value (contains), prop!~value, with a|b for alternatives; or the name of a saved prop filter for this noun. ANDed with where",
+              "free": true
+            },
+            "group-by": {
+              "type": "string",
+              "description": "Gather the rows that share these props' values into groups (comma-separated props); each row names its group",
+              "free": true
+            },
+            "group-sort": {
+              "type": "string",
+              "description": "Order the groups by group-by props, each prop[:desc] (default: the order the groups first appear in)",
+              "free": true
+            },
+            "limit": {
+              "type": "integer",
+              "description": "At most this many rows: the first page of that size (0: every row)"
+            },
+            "noun": {
+              "type": "string",
+              "description": "Only the actions this noun has (ochazuke.nouns list {action} is the other side)"
+            },
+            "page": {
+              "type": "integer",
+              "description": "The page to answer, from 1 (with per-page)"
+            },
+            "per-page": {
+              "type": "integer",
+              "description": "Rows per page, counting rows, never groups (0: one page of every row)"
+            },
+            "props": {
+              "type": "string",
+              "description": "The props each row holds besides id and label, comma-separated (default: every prop but secrets)"
+            },
+            "sort": {
+              "type": "string",
+              "description": "Order the rows by props, comma-separated, each prop[:desc]; ties keep the store's order",
+              "free": true
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: keep the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "rows",
+          "rows": "ochazuke.action",
+          "positional": [
+            "limit",
+            "noun",
+            "props",
+            "where"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "list"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "set",
+          "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
+          "kind": "application",
+          "params": {
+            "changes": {
+              "type": "object",
+              "description": "The old name of props (accepted for one release)"
+            },
+            "name": {
+              "type": "string",
+              "description": "The action's name (default: the action the request acts for)",
+              "source": "ochazuke.action.list",
+              "free": true,
+              "noun": "ochazuke.action",
+              "focus": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "More prop=value words after the first, filling props",
+              "rest": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "The prop toggle flips; a prop=value word fills props (with value, the one-prop form props replaces)",
+              "free": true,
+              "pairs": true
+            },
+            "props": {
+              "type": "object",
+              "description": "The props to write: an object of prop (or @role: @label, @owner, @archive) to value, a subset or all of them; the others keep their values"
+            },
+            "toggle": {
+              "type": "boolean",
+              "description": "Flip the boolean prop instead of giving a value",
+              "excludes": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "any",
+              "description": "The prop's new value, typed by the prop (a word such as 3, true or 400ms, a JSON array or object); props replaces it",
+              "valueOf": "prop"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "name",
+            "prop",
+            "value",
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "set"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The action's name: this one alone (default: every action)",
+              "source": "ochazuke.action.list",
+              "free": true,
+              "noun": "ochazuke.action"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: watch the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "name"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "watch"
+        }
+      ]
+    },
+    {
       "name": "ochazuke.actions",
       "kind": "collection",
       "props": [
@@ -2470,12 +2887,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -2979,12 +3396,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -3547,12 +3964,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -4286,12 +4703,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -4515,187 +4932,6 @@
       ]
     },
     {
-      "name": "ochazuke.chooser",
-      "pin": "insert",
-      "verbs": [
-        {
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "cancel",
-          "description": "Close without choosing",
-          "kind": "application",
-          "result": "JSON value",
-          "history": "action",
-          "builtin": true
-        },
-        {
-          "guards": [
-            "chooser-prop-controls"
-          ],
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "clear-props",
-          "description": "Clear this chooser's prop conditions",
-          "kind": "application",
-          "result": "JSON value",
-          "history": "change",
-          "builtin": true
-        },
-        {
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "move",
-          "description": "Move the highlight; from none, down selects first and up follows chooser.up-from-none",
-          "kind": "application",
-          "params": {
-            "delta": {
-              "type": "integer"
-            },
-            "to": {
-              "type": "string",
-              "enum": [
-                "first",
-                "last"
-              ]
-            }
-          },
-          "result": "JSON value",
-          "motion": true,
-          "history": "action",
-          "builtin": true
-        },
-        {
-          "guards": [
-            "chooser-sources"
-          ],
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "next-source",
-          "description": "Show the next source's rows; the query stays",
-          "kind": "application",
-          "result": "JSON value",
-          "history": "change",
-          "builtin": true
-        },
-        {
-          "guards": [
-            "chooser-normal-mode"
-          ],
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "normal",
-          "description": "Leave search editing in a chooser that supports normal mode",
-          "kind": "application",
-          "result": "JSON value",
-          "history": "change",
-          "builtin": true
-        },
-        {
-          "guards": [
-            "chooser-opens"
-          ],
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "open",
-          "description": "Open the highlighted row inside its source (browse into a folder)",
-          "kind": "application",
-          "result": "JSON value",
-          "history": "change",
-          "builtin": true
-        },
-        {
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "pick",
-          "description": "Take the highlighted row, else the top match, else create from the query",
-          "kind": "application",
-          "result": "JSON value",
-          "history": "change",
-          "builtin": true
-        },
-        {
-          "guards": [
-            "chooser-sources"
-          ],
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "previous-source",
-          "description": "Show the previous source's rows; the query stays",
-          "kind": "application",
-          "result": "JSON value",
-          "history": "change",
-          "builtin": true
-        },
-        {
-          "guards": [
-            "chooser-up"
-          ],
-          "examples": [
-            {
-              "args": {},
-              "note": "Template: replace placeholder values before running"
-            }
-          ],
-          "destructive": false,
-          "agent": "allow",
-          "name": "up",
-          "description": "Step the source back out (the parent folder)",
-          "kind": "application",
-          "result": "JSON value",
-          "history": "change",
-          "builtin": true
-        }
-      ]
-    },
-    {
       "name": "ochazuke.completion",
       "verbs": [
         {
@@ -4742,7 +4978,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "move",
-          "description": "Move the suggestion highlight; from none, down selects first and up follows chooser.up-from-none",
+          "description": "Move the suggestion highlight; from none, down selects first and up follows picker.up-from-none",
           "kind": "interaction",
           "params": {
             "delta": {
@@ -5203,12 +5439,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -6068,7 +6304,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "next-missing",
-          "description": "Focus the field that still needs a value (this one, else the next); a field with choices opens its chooser",
+          "description": "Focus the field that still needs a value (this one, else the next); a field with choices opens its picker",
           "kind": "interaction",
           "params": {
             "insert": {
@@ -6393,12 +6629,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -6927,12 +7163,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -7433,7 +7669,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "move",
-          "description": "Move by left/right/up/down, Vim word-forward/backward/end, Readline word-next/previous, line-start/end, first-line/last-line",
+          "description": "Move by a text motion: left/right/up/down, Vim word- and WORD-forward/backward/end, Readline word-next/previous, line-start/end, first-line/last-line, paragraph-forward/backward, screen-top/middle/bottom, match (%)",
           "kind": "interaction",
           "params": {
             "line": {
@@ -7892,12 +8128,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -8300,7 +8536,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "choose-column",
-          "description": "Choose a table's current column from a chooser of its titles",
+          "description": "Choose a table's current column from a picker of its titles",
           "kind": "interaction",
           "params": {
             "id": {
@@ -8487,7 +8723,7 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "List, tree or chooser id (default focused)"
+              "description": "List, tree or picker id (default focused)"
             },
             "step": {
               "type": "integer"
@@ -8592,11 +8828,11 @@
             },
             "id": {
               "type": "string",
-              "description": "List, tree or chooser id (default focused)"
+              "description": "List, tree or picker id (default focused)"
             },
             "not": {
               "type": "boolean",
-              "description": "Turn the condition over (= to !=, in to not-in, contains to not-contains); with the value chooser, its not toggle starts on"
+              "description": "Turn the condition over (= to !=, in to not-in, contains to not-contains); with the value picker, its not toggle starts on"
             },
             "op": {
               "type": "string",
@@ -8639,7 +8875,7 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "List, tree or chooser id (default focused)"
+              "description": "List, tree or picker id (default focused)"
             },
             "index": {
               "type": "integer",
@@ -8671,7 +8907,7 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "List, tree or chooser id (default focused)"
+              "description": "List, tree or picker id (default focused)"
             }
           },
           "result": "list state",
@@ -8695,7 +8931,7 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "List, tree or chooser id (default focused)"
+              "description": "List, tree or picker id (default focused)"
             },
             "name": {
               "type": "string",
@@ -8723,7 +8959,7 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "List, tree or chooser id (default focused)"
+              "description": "List, tree or picker id (default focused)"
             },
             "name": {
               "type": "string",
@@ -8751,7 +8987,7 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "List, tree or chooser id (default focused)"
+              "description": "List, tree or picker id (default focused)"
             },
             "name": {
               "type": "string",
@@ -8773,12 +9009,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "filter-saved-pick",
-          "description": "List saved prop filters in a chooser and apply the selected one",
+          "description": "List saved prop filters in a picker and apply the selected one",
           "kind": "interaction",
           "params": {
             "id": {
               "type": "string",
-              "description": "List, tree or chooser id (default focused)"
+              "description": "List, tree or picker id (default focused)"
             }
           },
           "result": "list state",
@@ -9278,7 +9514,7 @@
           "params": {
             "column": {
               "type": "string",
-              "description": "A column title, or its number in declaration order (1 the first); default the current column (cell mode), else a chooser"
+              "description": "A column title, or its number in declaration order (1 the first); default the current column (cell mode), else a picker"
             },
             "id": {
               "type": "string",
@@ -9517,7 +9753,7 @@
             },
             "id": {
               "type": "string",
-              "description": "List, tree or chooser; default focused row view"
+              "description": "List, tree or picker; default focused row view"
             }
           },
           "history": "action",
@@ -9538,7 +9774,7 @@
           "params": {
             "id": {
               "type": "string",
-              "description": "List, tree or chooser; default focused row view"
+              "description": "List, tree or picker; default focused row view"
             }
           },
           "history": "action",
@@ -9566,7 +9802,7 @@
             },
             "id": {
               "type": "string",
-              "description": "List, tree or chooser; default focused row view"
+              "description": "List, tree or picker; default focused row view"
             },
             "pick": {
               "type": "boolean",
@@ -9594,7 +9830,7 @@
           "params": {
             "column": {
               "type": "string",
-              "description": "A column title, or its number in declaration order (1 the first); default the current column (cell mode), else a chooser"
+              "description": "A column title, or its number in declaration order (1 the first); default the current column (cell mode), else a picker"
             },
             "id": {
               "type": "string",
@@ -9626,7 +9862,7 @@
           "params": {
             "column": {
               "type": "string",
-              "description": "A column title, or its number in declaration order (1 the first); default the current column (cell mode), else a chooser"
+              "description": "A column title, or its number in declaration order (1 the first); default the current column (cell mode), else a picker"
             },
             "id": {
               "type": "string",
@@ -10309,12 +10545,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -10736,7 +10972,7 @@
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -10816,6 +11052,10 @@
           "description": "List the things, each its props with id and label, as a page {items, page, per_page, total}; filter and where keep the things that meet conditions, sort orders them, group-by gathers them into groups, per-page and page cut the result into pages (rows, never groups)",
           "kind": "application",
           "params": {
+            "action": {
+              "type": "string",
+              "description": "Only the nouns that have this action (ochazuke.action list {noun} is the other side)"
+            },
             "archived": {
               "type": "boolean",
               "description": "Include the archived things list.hide-archived hides by default"
@@ -10866,6 +11106,7 @@
           "result": "rows",
           "rows": "ochazuke.nouns",
           "positional": [
+            "action",
             "limit",
             "props",
             "where"
@@ -11036,6 +11277,30 @@
           "human": true
         },
         {
+          "name": "noun",
+          "type": "string",
+          "description": "The noun",
+          "readOnly": true
+        },
+        {
+          "name": "verb",
+          "type": "string",
+          "description": "The verb",
+          "readOnly": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The operation's name (its verb)",
+          "readOnly": true
+        },
+        {
+          "name": "namespace",
+          "type": "string",
+          "description": "The namespace that defined it",
+          "readOnly": true
+        },
+        {
           "name": "destructive",
           "type": "boolean",
           "readOnly": true
@@ -11048,18 +11313,6 @@
         {
           "name": "examples",
           "type": "object",
-          "readOnly": true
-        },
-        {
-          "name": "verb",
-          "type": "string",
-          "description": "The verb",
-          "readOnly": true
-        },
-        {
-          "name": "noun",
-          "type": "string",
-          "description": "The noun",
           "readOnly": true
         },
         {
@@ -11100,6 +11353,11 @@
         {
           "name": "foreground",
           "type": "boolean",
+          "readOnly": true
+        },
+        {
+          "name": "opensPage",
+          "type": "string",
           "readOnly": true
         },
         {
@@ -11325,12 +11583,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -11387,11 +11645,13 @@
               "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
               "enum": [
                 "key",
+                "noun",
+                "verb",
+                "name",
+                "namespace",
                 "destructive",
                 "agent",
                 "examples",
-                "verb",
-                "noun",
                 "description",
                 "parameters",
                 "result",
@@ -11399,6 +11659,7 @@
                 "confirm",
                 "repeatable",
                 "foreground",
+                "opensPage",
                 "slot",
                 "timeout",
                 "enabledSetting",
@@ -11814,7 +12075,7 @@
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -12556,12 +12817,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -12771,7 +13032,7 @@
           "name": "pick",
           "description": "Choose a page, most recently visited first and the current one last: type to filter, enter opens",
           "kind": "interaction",
-          "result": "chooser state",
+          "result": "picker state",
           "history": "action",
           "builtin": true
         },
@@ -13060,6 +13321,783 @@
       ]
     },
     {
+      "about": "The pickers: declared (AddPicker, a catalog's pickers) and one per noun with a list verb (picker.derive)",
+      "name": "ochazuke.picker",
+      "pin": "insert",
+      "kind": "collection",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "What picker.open takes",
+          "readOnly": true,
+          "key": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "description": "The picker's title",
+          "readOnly": true,
+          "role": "label"
+        },
+        {
+          "name": "noun",
+          "type": "string",
+          "description": "The noun its rows belong to",
+          "readOnly": true
+        },
+        {
+          "name": "about",
+          "type": "string",
+          "description": "What it lists",
+          "readOnly": true
+        },
+        {
+          "name": "derived",
+          "type": "boolean",
+          "description": "Derived from the noun's list verb (picker.derive), not declared",
+          "readOnly": true
+        },
+        {
+          "name": "keys",
+          "type": "string",
+          "description": "The keys bound to open it, separated by spaces",
+          "readOnly": true
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "description": "The verb its rows come from; empty is the noun's list",
+          "readOnly": true
+        },
+        {
+          "name": "preview",
+          "type": "string",
+          "description": "The verb run on the highlighted row for its preview",
+          "readOnly": true
+        },
+        {
+          "name": "pick-verb",
+          "type": "string",
+          "description": "The verb run on the picked row (PickerDef.Pick; a prop named pick would clash with the pick verb)",
+          "readOnly": true
+        },
+        {
+          "name": "verb",
+          "type": "string",
+          "description": "The verb that opens it, when it opens by one",
+          "readOnly": true
+        },
+        {
+          "name": "match",
+          "type": "string",
+          "description": "The match mode it opens in",
+          "readOnly": true
+        }
+      ],
+      "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The picker's name (default: the picker the request acts for)",
+              "source": "ochazuke.picker.list",
+              "free": true,
+              "noun": "ochazuke.picker",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "cancel",
+          "description": "Close without choosing",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true,
+          "aliases": [
+            {
+              "alias": "ochazuke.picker.close",
+              "action": "ochazuke.picker.cancel",
+              "noun": "ochazuke.picker",
+              "verb": "close",
+              "since": "v0.96.0",
+              "removeAfter": "v0.97.0",
+              "source": "framework"
+            }
+          ]
+        },
+        {
+          "guards": [
+            "picker-prop-controls"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "clear-props",
+          "description": "Clear this picker's prop conditions",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "picker-completes"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "complete",
+          "description": "Complete the highlighted path into the query; nothing is confirmed",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "from": {
+              "type": "any",
+              "description": "Copy this thing (an id or a human key, or a row holding its key): every prop create writes, read from it, unless given",
+              "source": "ochazuke.picker.list",
+              "free": true,
+              "noun": "ochazuke.picker",
+              "covers": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store creates no things (no Store.Create)",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "create"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": true,
+          "agent": "never",
+          "name": "delete",
+          "description": "Delete a thing (asks first)",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The picker's name (default: the picker the request acts for)",
+              "source": "ochazuke.picker.list",
+              "free": true,
+              "noun": "ochazuke.picker",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "confirm": "Delete {{noun}} {{label}}?",
+          "disabled": true,
+          "unavailable": "its store deletes no things (no Store.Delete)",
+          "many": true,
+          "positional": [
+            "name"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "delete"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
+              "plumbing": true
+            },
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "free": true,
+              "plumbing": true
+            },
+            "name": {
+              "type": "string",
+              "description": "The picker's name (default: the picker the request acts for)",
+              "source": "ochazuke.picker.list",
+              "free": true,
+              "noun": "ochazuke.picker",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "name",
+            "field",
+            "chooser"
+          ],
+          "history": "action",
+          "builtin": true,
+          "standard": "edit"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "enter",
+          "description": "Browse into the highlighted row when it opens, else pick it",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The picker's name (default: the picker the request acts for)",
+              "source": "ochazuke.picker.list",
+              "free": true,
+              "noun": "ochazuke.picker",
+              "focus": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "name",
+                "title",
+                "noun",
+                "about",
+                "derived",
+                "keys",
+                "source",
+                "preview",
+                "pick-verb",
+                "verb",
+                "match",
+                "@label"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "name",
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "get"
+        },
+        {
+          "guards": [
+            "picker-opens"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "into",
+          "description": "Browse into the highlighted row inside its source (a folder)",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true,
+          "aliases": [
+            {
+              "alias": "chooser.open",
+              "action": "ochazuke.picker.into",
+              "noun": "chooser",
+              "verb": "open",
+              "since": "v0.96.0",
+              "removeAfter": "v0.97.0",
+              "source": "framework"
+            },
+            {
+              "alias": "ochazuke.chooser.open",
+              "action": "ochazuke.picker.into",
+              "noun": "ochazuke.chooser",
+              "verb": "open",
+              "since": "v0.96.0",
+              "removeAfter": "v0.97.0",
+              "source": "framework"
+            },
+            {
+              "alias": "ochazuke.picker.descend",
+              "action": "ochazuke.picker.into",
+              "noun": "ochazuke.picker",
+              "verb": "descend",
+              "since": "v0.96.0",
+              "removeAfter": "v0.97.0",
+              "source": "framework"
+            }
+          ]
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "list",
+          "description": "List the things, each its props with id and label, as a page {items, page, per_page, total}; filter and where keep the things that meet conditions, sort orders them, group-by gathers them into groups, per-page and page cut the result into pages (rows, never groups)",
+          "kind": "application",
+          "params": {
+            "archived": {
+              "type": "boolean",
+              "description": "Include the archived things list.hide-archived hides by default"
+            },
+            "filter": {
+              "type": "string",
+              "description": "Keep the things that meet every condition: words prop=value, prop!=value, prop~value (contains), prop!~value, with a|b for alternatives; or the name of a saved prop filter for this noun. ANDed with where",
+              "free": true
+            },
+            "group-by": {
+              "type": "string",
+              "description": "Gather the rows that share these props' values into groups (comma-separated props); each row names its group",
+              "free": true
+            },
+            "group-sort": {
+              "type": "string",
+              "description": "Order the groups by group-by props, each prop[:desc] (default: the order the groups first appear in)",
+              "free": true
+            },
+            "limit": {
+              "type": "integer",
+              "description": "At most this many rows: the first page of that size (0: every row)"
+            },
+            "page": {
+              "type": "integer",
+              "description": "The page to answer, from 1 (with per-page)"
+            },
+            "per-page": {
+              "type": "integer",
+              "description": "Rows per page, counting rows, never groups (0: one page of every row)"
+            },
+            "props": {
+              "type": "string",
+              "description": "The props each row holds besides id and label, comma-separated (default: every prop but secrets)"
+            },
+            "sort": {
+              "type": "string",
+              "description": "Order the rows by props, comma-separated, each prop[:desc]; ties keep the store's order",
+              "free": true
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: keep the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "rows",
+          "rows": "ochazuke.picker",
+          "positional": [
+            "limit",
+            "props",
+            "where"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "list"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "move",
+          "description": "Move the highlight; from none, down selects first and up follows picker.up-from-none",
+          "kind": "application",
+          "params": {
+            "delta": {
+              "type": "integer"
+            },
+            "to": {
+              "type": "string",
+              "enum": [
+                "first",
+                "last"
+              ]
+            }
+          },
+          "result": "JSON value",
+          "motion": true,
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "picker-sources"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "next-source",
+          "description": "Show the next source's rows; the query stays",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "guards": [
+            "picker-normal-mode"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "normal",
+          "description": "Leave search editing in a picker that supports normal mode",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "open",
+          "description": "Open a picker by name (picker.list lists them; pickers is the picker of pickers); with no name, the path picker on its find source, filling the input in focus",
+          "kind": "interaction",
+          "params": {
+            "filter": {
+              "type": "string",
+              "description": "No name only: any, file or dir; defaults to the originating path field's filter"
+            },
+            "name": {
+              "type": "string",
+              "description": "The picker to open; empty opens the path picker on find",
+              "source": "ochazuke.picker.list",
+              "noun": "ochazuke.picker"
+            },
+            "path": {
+              "type": "string",
+              "description": "No name only: where find starts (its longest existing folder; the rest is typed); otherwise the path field's value, the paths line, or the working folder"
+            },
+            "query": {
+              "type": "string",
+              "description": "Text typed into the picker's search line when it opens"
+            }
+          },
+          "result": "picker state",
+          "positional": [
+            "name"
+          ],
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "pick",
+          "description": "Take the highlighted row, else the top match, else create from the query",
+          "kind": "application",
+          "params": {
+            "current": {
+              "type": "boolean",
+              "description": "Take the source's current row instead of the highlight (the path picker's find: the folder it searches)"
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true,
+          "aliases": [
+            {
+              "alias": "ochazuke.picker.choose",
+              "action": "ochazuke.picker.pick",
+              "noun": "ochazuke.picker",
+              "verb": "choose",
+              "since": "v0.96.0",
+              "removeAfter": "v0.97.0",
+              "source": "framework"
+            }
+          ]
+        },
+        {
+          "guards": [
+            "picker-sources"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "previous-source",
+          "description": "Show the previous source's rows; the query stays",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "set",
+          "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
+          "kind": "application",
+          "params": {
+            "changes": {
+              "type": "object",
+              "description": "The old name of props (accepted for one release)"
+            },
+            "name": {
+              "type": "string",
+              "description": "The picker's name (default: the picker the request acts for)",
+              "source": "ochazuke.picker.list",
+              "free": true,
+              "noun": "ochazuke.picker",
+              "focus": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "More prop=value words after the first, filling props",
+              "rest": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "The prop toggle flips; a prop=value word fills props (with value, the one-prop form props replaces)",
+              "free": true,
+              "pairs": true
+            },
+            "props": {
+              "type": "object",
+              "description": "The props to write: an object of prop (or @role: @label, @owner, @archive) to value, a subset or all of them; the others keep their values"
+            },
+            "toggle": {
+              "type": "boolean",
+              "description": "Flip the boolean prop instead of giving a value",
+              "excludes": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "any",
+              "description": "The prop's new value, typed by the prop (a word such as 3, true or 400ms, a JSON array or object); props replaces it",
+              "valueOf": "prop"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "name",
+            "prop",
+            "value",
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "set"
+        },
+        {
+          "guards": [
+            "picker-up"
+          ],
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "up",
+          "description": "Step the source back out (the parent folder)",
+          "kind": "application",
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true,
+          "aliases": [
+            {
+              "alias": "ochazuke.picker.parent",
+              "action": "ochazuke.picker.up",
+              "noun": "ochazuke.picker",
+              "verb": "parent",
+              "since": "v0.96.0",
+              "removeAfter": "v0.97.0",
+              "source": "framework"
+            }
+          ]
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "name": {
+              "type": "string",
+              "description": "The picker's name: this one alone (default: every picker)",
+              "source": "ochazuke.picker.list",
+              "free": true,
+              "noun": "ochazuke.picker"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: watch the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "name"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "watch"
+        }
+      ]
+    },
+    {
       "name": "ochazuke.register",
       "kind": "collection",
       "unpersisted": true,
@@ -13292,12 +14330,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -13645,7 +14683,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "cycle-match",
-          "description": "Step the open search (the / filter line, a chooser, the path picker) to the next match mode: substring, fuzzy, regex, round again; for this search only, the setting is unchanged",
+          "description": "Step the open search (the / filter line or a picker, the path finder too) to the next match mode: substring, fuzzy, regex, round again; for this search only, the setting is unchanged",
           "kind": "interaction",
           "params": {
             "step": {
@@ -13982,12 +15020,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -14964,7 +16002,7 @@
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -15948,7 +16986,7 @@
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -16307,7 +17345,7 @@
           "destructive": false,
           "agent": "allow",
           "name": "pick",
-          "description": "Pick a section of the shown tab from a chooser and show it",
+          "description": "Pick a section of the shown tab from a picker and show it",
           "kind": "interaction",
           "result": "context",
           "history": "action",
@@ -16731,12 +17769,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -18110,12 +19148,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -19445,12 +20483,12 @@
           "destructive": false,
           "agent": "allow",
           "name": "edit",
-          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its chooser instead, edit.field-chooser or chooser); supplied props write directly without opening a form",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
           "kind": "application",
           "params": {
             "chooser": {
               "type": "boolean",
-              "description": "With field on a prop that takes a choice: true opens its chooser (the pick writes and closes), false the one-field form; omitted, edit.field-chooser decides",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
               "plumbing": true
             },
             "field": {
@@ -19962,225 +21000,6 @@
   ],
   "bindings": [
     {
-      "noun": "ochazuke.chooser",
-      "keys": "alt+[",
-      "request": {
-        "verb": "filter-cycle",
-        "noun": "ochazuke.list",
-        "args": {
-          "step": -1
-        }
-      },
-      "hint": "previous filter",
-      "hidden": true
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "alt+]",
-      "request": {
-        "verb": "filter-cycle",
-        "noun": "ochazuke.list",
-        "args": {
-          "step": 1
-        }
-      },
-      "hint": "next filter"
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "alt+backspace",
-      "request": {
-        "verb": "clear-props",
-        "noun": "ochazuke.chooser"
-      },
-      "hint": "clear props"
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "alt+enter",
-      "request": {
-        "verb": "pick",
-        "noun": "ochazuke.chooser"
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "alt+o",
-      "request": {
-        "verb": "previous-source",
-        "noun": "ochazuke.chooser"
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "alt+up",
-      "request": {
-        "verb": "up",
-        "noun": "ochazuke.chooser"
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "backspace",
-      "request": {
-        "verb": "up",
-        "noun": "ochazuke.chooser"
-      },
-      "when": "chooser-up-empty"
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "ctrl+f",
-      "request": {
-        "verb": "filter-cycle",
-        "noun": "ochazuke.list",
-        "args": {
-          "step": 1
-        }
-      },
-      "when": "list-prop-filtered",
-      "hint": "next filter"
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "ctrl+f",
-      "request": {
-        "verb": "filter-prop",
-        "noun": "ochazuke.list",
-        "args": {
-          "clear": true
-        }
-      },
-      "hint": "prop filter"
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "ctrl+j",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "delta": 1
-        }
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "ctrl+k",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "delta": -1
-        }
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "ctrl+l",
-      "request": {
-        "verb": "open",
-        "noun": "ochazuke.chooser"
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "ctrl+n",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "delta": 1
-        }
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "ctrl+o",
-      "request": {
-        "verb": "next-source",
-        "noun": "ochazuke.chooser"
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "ctrl+p",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "delta": -1
-        }
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "down",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "delta": 1
-        }
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "enter",
-      "request": {
-        "verb": "open",
-        "noun": "ochazuke.chooser"
-      },
-      "when": "chooser-enter-opens"
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "enter",
-      "request": {
-        "verb": "pick",
-        "noun": "ochazuke.chooser"
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "esc",
-      "request": {
-        "verb": "close",
-        "noun": "ochazuke.modal"
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "shift+tab",
-      "request": {
-        "verb": "cycle-match",
-        "noun": "ochazuke.search",
-        "args": {
-          "step": -1
-        }
-      },
-      "hidden": true
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "tab",
-      "request": {
-        "verb": "cycle-match",
-        "noun": "ochazuke.search"
-      }
-    },
-    {
-      "noun": "ochazuke.chooser",
-      "keys": "up",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "delta": -1
-        }
-      }
-    },
-    {
       "noun": "ochazuke.confirm",
       "pattern": "any",
       "request": {
@@ -20274,6 +21093,249 @@
         "noun": "ochazuke.filter-form"
       },
       "hint": "save"
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "alt+[",
+      "request": {
+        "verb": "filter-cycle",
+        "noun": "ochazuke.list",
+        "args": {
+          "step": -1
+        }
+      },
+      "hint": "previous filter",
+      "hidden": true
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "alt+]",
+      "request": {
+        "verb": "filter-cycle",
+        "noun": "ochazuke.list",
+        "args": {
+          "step": 1
+        }
+      },
+      "hint": "next filter"
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "alt+backspace",
+      "request": {
+        "verb": "clear-props",
+        "noun": "ochazuke.picker"
+      },
+      "hint": "clear props"
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "alt+enter",
+      "request": {
+        "verb": "pick",
+        "noun": "ochazuke.picker"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "alt+o",
+      "request": {
+        "verb": "previous-source",
+        "noun": "ochazuke.picker"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "alt+up",
+      "request": {
+        "verb": "up",
+        "noun": "ochazuke.picker"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "backspace",
+      "request": {
+        "verb": "up",
+        "noun": "ochazuke.picker"
+      },
+      "when": "picker-up-empty"
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+f",
+      "request": {
+        "verb": "filter-cycle",
+        "noun": "ochazuke.list",
+        "args": {
+          "step": 1
+        }
+      },
+      "when": "list-prop-filtered",
+      "hint": "next filter"
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+f",
+      "request": {
+        "verb": "filter-prop",
+        "noun": "ochazuke.list",
+        "args": {
+          "clear": true
+        }
+      },
+      "hint": "prop filter"
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+j",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+k",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "delta": -1
+        }
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+l",
+      "request": {
+        "verb": "into",
+        "noun": "ochazuke.picker"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+n",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+o",
+      "request": {
+        "verb": "next-source",
+        "noun": "ochazuke.picker"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+p",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "delta": -1
+        }
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+s",
+      "request": {
+        "verb": "pick",
+        "noun": "ochazuke.picker"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "ctrl+t",
+      "request": {
+        "verb": "cycle-match",
+        "noun": "ochazuke.search"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "down",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "enter",
+      "request": {
+        "verb": "into",
+        "noun": "ochazuke.picker"
+      },
+      "when": "picker-enter-opens"
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "enter",
+      "request": {
+        "verb": "pick",
+        "noun": "ochazuke.picker"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "esc",
+      "request": {
+        "verb": "close",
+        "noun": "ochazuke.modal"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "shift+tab",
+      "request": {
+        "verb": "cycle-match",
+        "noun": "ochazuke.search",
+        "args": {
+          "step": -1
+        }
+      },
+      "hidden": true
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "tab",
+      "request": {
+        "verb": "complete",
+        "noun": "ochazuke.picker"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "tab",
+      "request": {
+        "verb": "cycle-match",
+        "noun": "ochazuke.search"
+      }
+    },
+    {
+      "noun": "ochazuke.picker",
+      "keys": "up",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "delta": -1
+        }
+      }
     },
     {
       "noun": "ochazuke.yank-history",
@@ -20538,42 +21600,6 @@
       },
       "hint": "cancel",
       "help": "Leave without binding"
-    },
-    {
-      "mode": "insert",
-      "noun": "ochazuke.chooser",
-      "pattern": "printable",
-      "request": {
-        "verb": "insert",
-        "noun": "ochazuke.input"
-      },
-      "from": {
-        "text": "text"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "insert",
-      "noun": "ochazuke.chooser",
-      "pattern": "paste",
-      "request": {
-        "verb": "insert",
-        "noun": "ochazuke.input"
-      },
-      "from": {
-        "text": "text"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "insert",
-      "noun": "ochazuke.chooser",
-      "keys": "esc",
-      "request": {
-        "verb": "normal",
-        "noun": "ochazuke.chooser"
-      },
-      "hidden": true
     },
     {
       "mode": "insert",
@@ -21441,6 +22467,42 @@
         "key": "key"
       },
       "hint": "indent"
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.picker",
+      "pattern": "printable",
+      "request": {
+        "verb": "insert",
+        "noun": "ochazuke.input"
+      },
+      "from": {
+        "text": "text"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.picker",
+      "pattern": "paste",
+      "request": {
+        "verb": "insert",
+        "noun": "ochazuke.input"
+      },
+      "from": {
+        "text": "text"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.picker",
+      "keys": "esc",
+      "request": {
+        "verb": "normal",
+        "noun": "ochazuke.picker"
+      },
+      "hidden": true
     },
     {
       "mode": "insert",
@@ -22521,63 +23583,6 @@
     },
     {
       "mode": "normal",
-      "noun": "ochazuke.chooser",
-      "keys": "G",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "to": "last"
-        }
-      }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.chooser",
-      "keys": "g esc",
-      "request": {
-        "verb": "leave",
-        "noun": "ochazuke.mode"
-      }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.chooser",
-      "keys": "g g",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "to": "first"
-        }
-      }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.chooser",
-      "keys": "j",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "delta": 1
-        }
-      }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.chooser",
-      "keys": "k",
-      "request": {
-        "verb": "move",
-        "noun": "ochazuke.chooser",
-        "args": {
-          "delta": -1
-        }
-      }
-    },
-    {
-      "mode": "normal",
       "noun": "ochazuke.docs-viewer",
       "keys": "/",
       "request": {
@@ -22843,6 +23848,22 @@
     {
       "mode": "normal",
       "noun": "ochazuke.editor",
+      "keys": "%",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "match"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
       "keys": "0",
       "request": {
         "verb": "move",
@@ -22871,12 +23892,60 @@
     {
       "mode": "normal",
       "noun": "ochazuke.editor",
+      "keys": "B",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-backward"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
+      "keys": "E",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-end"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
       "keys": "G",
       "request": {
         "verb": "move",
         "noun": "ochazuke.input",
         "args": {
           "motion": "last-line"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
+      "keys": "H",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-top"
         }
       },
       "from": {
@@ -22894,6 +23963,38 @@
         "args": {
           "position": "first"
         }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
+      "keys": "L",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-bottom"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
+      "keys": "M",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-middle"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
       }
     },
     {
@@ -22933,6 +24034,22 @@
         "args": {
           "shape": "line"
         }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
+      "keys": "W",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-forward"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
       }
     },
     {
@@ -23330,6 +24447,42 @@
       "from": {
         "opcount": "count"
       }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
+      "keys": "{",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "paragraph-backward"
+        }
+      },
+      "when": "multiline",
+      "from": {
+        "line": "line",
+        "steps": "count"
+      },
+      "capture": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.editor",
+      "keys": "}",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "paragraph-forward"
+        }
+      },
+      "when": "multiline",
+      "from": {
+        "line": "line",
+        "steps": "count"
+      },
+      "capture": true
     },
     {
       "mode": "normal",
@@ -25128,6 +26281,63 @@
     },
     {
       "mode": "normal",
+      "noun": "ochazuke.picker",
+      "keys": "G",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "to": "last"
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.picker",
+      "keys": "g esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.picker",
+      "keys": "g g",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "to": "first"
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.picker",
+      "keys": "j",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "delta": 1
+        }
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.picker",
+      "keys": "k",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.picker",
+        "args": {
+          "delta": -1
+        }
+      }
+    },
+    {
+      "mode": "normal",
       "noun": "ochazuke.setting",
       "keys": "backspace",
       "request": {
@@ -26414,6 +27624,23 @@
     {
       "mode": "operator_pending",
       "noun": "ochazuke.editor",
+      "keys": "%",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "match"
+        }
+      },
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
       "keys": "0",
       "request": {
         "verb": "append",
@@ -26444,12 +27671,114 @@
     {
       "mode": "operator_pending",
       "noun": "ochazuke.editor",
+      "keys": "B",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-backward"
+        }
+      },
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
+      "keys": "E",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-end"
+        }
+      },
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
       "keys": "G",
       "request": {
         "verb": "operator",
         "noun": "ochazuke.input",
         "args": {
           "motion": "last-line"
+        }
+      },
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
+      "keys": "H",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-top"
+        }
+      },
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
+      "keys": "L",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-bottom"
+        }
+      },
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
+      "keys": "M",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-middle"
+        }
+      },
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
+      "keys": "W",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-forward"
         }
       },
       "from": {
@@ -26757,6 +28086,42 @@
       }
     },
     {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
+      "keys": "{",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "paragraph-backward"
+        }
+      },
+      "when": "multiline",
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
+      "mode": "operator_pending",
+      "noun": "ochazuke.editor",
+      "keys": "}",
+      "request": {
+        "verb": "operator",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "paragraph-forward"
+        }
+      },
+      "when": "multiline",
+      "from": {
+        "line": "line",
+        "operator": "op",
+        "steps": "steps"
+      }
+    },
+    {
       "mode": "register_pending",
       "noun": "app",
       "pattern": "any",
@@ -26927,6 +28292,22 @@
     {
       "mode": "visual",
       "noun": "ochazuke.editor",
+      "keys": "%",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "match"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
       "keys": "0",
       "request": {
         "verb": "move",
@@ -26952,6 +28333,38 @@
     {
       "mode": "visual",
       "noun": "ochazuke.editor",
+      "keys": "B",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-backward"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
+      "keys": "E",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-end"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
       "keys": "G",
       "request": {
         "verb": "move",
@@ -26968,10 +28381,58 @@
     {
       "mode": "visual",
       "noun": "ochazuke.editor",
+      "keys": "H",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-top"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
       "keys": "I",
       "request": {
         "verb": "cancel",
         "noun": "ochazuke.input"
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
+      "keys": "L",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-bottom"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
+      "keys": "M",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "screen-middle"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
       }
     },
     {
@@ -27008,6 +28469,22 @@
         "args": {
           "shape": "line"
         }
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
+      "keys": "W",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "WORD-forward"
+        }
+      },
+      "from": {
+        "line": "line",
+        "steps": "count"
       }
     },
     {
@@ -27390,6 +28867,40 @@
         "args": {
           "operator": "y"
         }
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
+      "keys": "{",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "paragraph-backward"
+        }
+      },
+      "when": "multiline",
+      "from": {
+        "line": "line",
+        "steps": "count"
+      }
+    },
+    {
+      "mode": "visual",
+      "noun": "ochazuke.editor",
+      "keys": "}",
+      "request": {
+        "verb": "move",
+        "noun": "ochazuke.input",
+        "args": {
+          "motion": "paragraph-forward"
+        }
+      },
+      "when": "multiline",
+      "from": {
+        "line": "line",
+        "steps": "count"
       }
     },
     {

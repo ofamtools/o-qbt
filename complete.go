@@ -32,7 +32,7 @@ func (t *Tool) completeFilters(app *oden.App, sh *ocli.Shell, next func(context.
 			return next(ctx, args)
 		}
 		before, current := words[:len(words)-1], words[len(words)-1]
-		op := sh.Runtime.Operations[strings.Join(filterCommand, ".")]
+		op := sh.Runtime.Operations.At(ochazuke.Key(strings.Join(filterCommand, ".")))
 		var cands []string
 		switch {
 		case strings.HasPrefix(current, "--") && !strings.Contains(current, "="):

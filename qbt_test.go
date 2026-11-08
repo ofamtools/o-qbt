@@ -14,6 +14,7 @@ import (
 	"ofam.dev/oden"
 	"time"
 
+	"ofam.dev/ochazuke"
 	ocli "ofam.dev/ochazuke/cli"
 )
 
@@ -306,5 +307,23 @@ func TestUnknownWordIsNotFound(t *testing.T) {
 	out, errOut, err := cli(t, tool, "torrentz")
 	if oden.ExitCode(err) != 1 || out != "" || !strings.HasPrefix(errOut, "o-qbt: command \"torrentz\" not found\ndid you mean: torrent\n") {
 		t.Fatalf("torrentz: %v %q\n%s", err, out, errOut)
+	}
+}
+
+func TestCatalogDeclaresSingularNamespace(t *testing.T) {
+	tool := testTool(t, "http://127.0.0.1:1", "", nil)
+	out, _, err := cli(t, tool, "catalog")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc ocli.CatalogDoc
+	if err := json.Unmarshal([]byte(out), &doc); err != nil {
+		t.Fatal(err)
+	}
+	if doc.Namespace != "qbt" || ochazuke.DefaultNamespace != "qbt" {
+		t.Fatalf("catalog namespace %q, default %q; want qbt", doc.Namespace, ochazuke.DefaultNamespace)
+	}
+	if got, err := ocli.CatalogNamespace(doc, "o-qbt"); err != nil || got != "qbt" {
+		t.Fatal(got, err)
 	}
 }

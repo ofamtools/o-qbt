@@ -29,6 +29,16 @@ var nouns = []string{"app", "torrent", "tracker", "transfer", "guard", "category
 // listNouns are the nouns with rows.
 var listNouns = []string{"torrent", "category"}
 
+// Namespace is the singular namespace o-qbt declares (lexicon plan): its
+// operations are qbt.<noun>.<verb> and a host mounts its catalog under it.
+const Namespace = "qbt"
+
+func init() {
+	if err := ochazuke.DeclareNamespace(Namespace); err != nil {
+		panic(err)
+	}
+}
+
 func params(kv ...any) map[string]ochazuke.Parameter {
 	out := map[string]ochazuke.Parameter{}
 	for i := 0; i+1 < len(kv); i += 2 {
@@ -284,7 +294,7 @@ func (t *Tool) shell() *ocli.Shell {
 			return t.answer(Message{Message: fmt.Sprintf("%s %s (%s)", v.verb, h, path)}, err)
 		}, v.desc)
 		setHistory(r, ochazuke.HistoryChange, "torrent."+v.verb)
-		r.Operations["torrent."+v.verb] = withParams(r.Operations["torrent."+v.verb], params("all", allParam))
+		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key("torrent."+v.verb)), params("all", allParam)))
 	}
 	r.Define("torrent").Verb("delete", func(c ochazuke.Ctx) ochazuke.Result {
 		files, _ := c.Args["files"].(bool)
@@ -349,23 +359,23 @@ func (t *Tool) shell() *ocli.Shell {
 		return t.answer(Message{Message: fmt.Sprintf("deleted %d torrents, %s", len(hs), what)}, nil)
 	}, "remove --target HASH, or a selection (--hashes H1,H2; --state STATE, the exact qBittorrent state; --filter, --category, --tag), from qBittorrent in batches of 200; --files deletes their data too (asks first; --yes skips the question)").Destructive().Confirm("Delete torrent {{label}}?")
 	setHistory(r, ochazuke.HistoryChange, "torrent.delete")
-	r.Operations["torrent.delete"] = withParams(r.Operations["torrent.delete"], params(append([]any{
+	r.Operations.Set(withParams(r.Operations.At("torrent.delete"), params(append([]any{
 		"files", ochazuke.Parameter{Type: "boolean", Description: "delete the downloaded data as well"},
 		"hashes", ochazuke.Parameter{Type: "string", Description: "comma-separated hashes to remove instead of --target"},
 		"state", ochazuke.Parameter{Type: "string", Description: "only torrents in exactly this state (missingFiles, error, ...)"},
-	}, queryParams(true)[:6]...)...))
+	}, queryParams(true)[:6]...)...)))
 	for _, p := range torrentPresets {
 		r.Define("torrent").Verb(p.Verb, func(c ochazuke.Ctx) ochazuke.Result { return listTorrents(c, p.Filter, nil) },
 			"alias of torrent list --filter "+p.Filter+": "+p.About).Fetch()
-		r.Operations["torrent."+p.Verb] = withParams(r.Operations["torrent."+p.Verb], params(append(queryParams(false), outputParams()...)...))
+		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key("torrent."+p.Verb)), params(append(queryParams(false), outputParams()...)...)))
 	}
 	for _, verb := range []string{"list", "export"} {
-		r.Operations["torrent."+verb] = withParams(r.Operations["torrent."+verb], params(append(queryParams(true), outputParams()...)...))
+		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key("torrent."+verb)), params(append(queryParams(true), outputParams()...)...)))
 	}
 	// export writes --out FILE: a change; list prints (its --out is optional).
 	setHistory(r, ochazuke.HistoryChange, "torrent.export")
-	r.Operations["torrent.summary"] = withParams(r.Operations["torrent.summary"], params(append(queryParams(true)[:6], outputParams()...)...))
-	r.Operations["torrent.overview"] = withParams(r.Operations["torrent.overview"], params(outputParams()[:4]...))
+	r.Operations.Set(withParams(r.Operations.At("torrent.summary"), params(append(queryParams(true)[:6], outputParams()...)...)))
+	r.Operations.Set(withParams(r.Operations.At("torrent.overview"), params(outputParams()[:4]...)))
 
 	// trackersOf is every tracker of the torrents c's query selects, one
 	// request per torrent through the pool, with a progress line on stderr.
@@ -435,12 +445,12 @@ func (t *Tool) shell() *ocli.Shell {
 			}
 			return t.present(c, hosts, HostsTable(hosts), nil)
 		}, "the distinct tracker hosts (scheme://host) of the torrents --filter, --category, --tag select, one per line for piping (--format renders a host table)").Fetch()
-	r.Operations["tracker.list"] = withParams(r.Operations["tracker.list"], params(append([]any{
-		"full-url", ochazuke.Parameter{Type: "boolean", Description: "data.url and the url column carry the whole announce URL, passkey included (for the owner only)"}}, outputParams()...)...))
+	r.Operations.Set(withParams(r.Operations.At("tracker.list"), params(append([]any{
+		"full-url", ochazuke.Parameter{Type: "boolean", Description: "data.url and the url column carry the whole announce URL, passkey included (for the owner only)"}}, outputParams()...)...)))
 	for _, verb := range []string{"summary", "hosts"} {
-		r.Operations["tracker."+verb] = withParams(r.Operations["tracker."+verb], params(append(queryParams(true)[:6], outputParams()...)...))
+		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key("tracker."+verb)), params(append(queryParams(true)[:6], outputParams()...)...)))
 	}
-	r.Operations["tracker.summary"].Parameters["by"] = ochazuke.Parameter{Type: "string", Enum: SummaryKeys, Description: "group by host (default) or name: the tracker table's names (o qbt tracker table), a host no entry owns as itself"}
+	r.Operations.At("tracker.summary").Parameters["by"] = ochazuke.Parameter{Type: "string", Enum: SummaryKeys, Description: "group by host (default) or name: the tracker table's names (o qbt tracker table), a host no entry owns as itself"}
 
 	r.Define("transfer").
 		Verb("info", func(c ochazuke.Ctx) ochazuke.Result {
@@ -492,9 +502,9 @@ func (t *Tool) shell() *ocli.Shell {
 			return t.answer(TransferInfo(ctx, cl))
 		}, "switch the alternative speed limits on or off; prints transfer info")
 	setHistory(r, ochazuke.HistoryChange, "transfer.limit", "transfer.speed-limits-toggle")
-	r.Operations["transfer.limit"] = withParams(r.Operations["transfer.limit"], params(
+	r.Operations.Set(withParams(r.Operations.At("transfer.limit"), params(
 		"dl", ochazuke.Parameter{Type: "integer", Description: "download limit, bytes/s (0 = unlimited)"},
-		"up", ochazuke.Parameter{Type: "integer", Description: "upload limit, bytes/s (0 = unlimited)"}))
+		"up", ochazuke.Parameter{Type: "integer", Description: "upload limit, bytes/s (0 = unlimited)"})))
 
 	guardVerb := func(verb, desc string, run func(ctx context.Context, c ochazuke.Ctx, gs GuardSettings) (any, error)) {
 		r.Define("guard").Verb(verb, func(c ochazuke.Ctx) ochazuke.Result {
@@ -541,11 +551,11 @@ func (t *Tool) shell() *ocli.Shell {
 	setHistory(r, ochazuke.HistoryFetch, "guard.status")
 	guardParams := guardParamKV()
 	for _, verb := range []string{"check", "status", "resume"} {
-		r.Operations["guard."+verb] = withParams(r.Operations["guard."+verb], params(guardParams...))
+		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key("guard."+verb)), params(guardParams...)))
 	}
-	r.Operations["guard.rebase"] = withParams(r.Operations["guard.rebase"], params(append(guardParams,
-		"bytes", ochazuke.Parameter{Type: "integer", Description: "the baseline in bytes instead of the current free space"})...))
-	r.Operations["guard.log"] = withParams(r.Operations["guard.log"], params("tail", ochazuke.Parameter{Type: "integer", Description: "how many lines (default 20)"}))
+	r.Operations.Set(withParams(r.Operations.At("guard.rebase"), params(append(guardParams,
+		"bytes", ochazuke.Parameter{Type: "integer", Description: "the baseline in bytes instead of the current free space"})...)))
+	r.Operations.Set(withParams(r.Operations.At("guard.log"), params("tail", ochazuke.Parameter{Type: "integer", Description: "how many lines (default 20)"})))
 
 	r.Define("category").
 		Verb("list", func(c ochazuke.Ctx) ochazuke.Result {
@@ -570,13 +580,13 @@ func (t *Tool) shell() *ocli.Shell {
 		}, "set KEY to VALUE; pass is never taken from the command line: it prompts with echo off, or reads one line with --stdin").Positional("key", "value")
 	setHistory(r, ochazuke.HistoryChange, "config.init", "config.set")
 	configSet := r.CanonicalKey("config.set") // o-qbt's own, not app.config's
-	r.Operations[configSet] = withParams(r.Operations[configSet], params(
+	r.Operations.Set(withParams(r.Operations.At(ochazuke.Key(configSet)), params(
 		"key", ochazuke.Parameter{Type: "string", Required: true, Enum: configKeys, Description: "the setting"},
 		"value", ochazuke.Parameter{Type: "string", Description: "the new value (not for pass)"},
-		"stdin", ochazuke.Parameter{Type: "boolean", Description: "read the value from one line of stdin"}))
+		"stdin", ochazuke.Parameter{Type: "boolean", Description: "read the value from one line of stdin"})))
 
 	for _, key := range []string{"app.info", "transfer.info", "category.list"} {
-		r.Operations[key] = withParams(r.Operations[key], params(outputParams()...))
+		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key(key)), params(outputParams()...)))
 	}
 
 	sh := ocli.New(r, "o-qbt", t.Stdin, t.Stdout, t.Stderr)
@@ -773,11 +783,11 @@ func deleteSelects(c ochazuke.Ctx) bool {
 func setHistory(r *ochazuke.Runtime, kind string, keys ...string) {
 	for _, key := range keys {
 		key = r.CanonicalKey(key)
-		op, ok := r.Operations[key]
+		op, ok := r.Operations.Find(ochazuke.Key(key))
 		if !ok {
 			panic("setHistory: no operation " + key)
 		}
 		op.HistoryKind = kind
-		r.Operations[key] = op
+		r.Operations.Set(op)
 	}
 }

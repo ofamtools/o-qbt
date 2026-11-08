@@ -27,12 +27,13 @@ func TestEveryVerbDeclaresItsHistory(t *testing.T) {
 	for _, noun := range doc.Nouns {
 		for _, v := range noun.Verbs {
 			key := noun.Name + "." + v.Name
-			if _, ok := framework[key]; ok {
+			if _, ok := framework.Find(ochazuke.Key(key)); ok {
 				continue
 			}
 			n++
-			if v.History == "" || ops[key].HistoryKind == "" || v.History != ops[key].HistoryKind {
-				t.Errorf("catalog verb %s: history %q, declared %q", key, v.History, ops[key].HistoryKind)
+			op := ops.At(ochazuke.Key(key))
+			if v.History == "" || op.HistoryKind == "" || v.History != op.HistoryKind {
+				t.Errorf("catalog verb %s: history %q, declared %q", key, v.History, op.HistoryKind)
 			}
 		}
 	}
@@ -51,7 +52,7 @@ func TestVerbHistoryKinds(t *testing.T) {
 		"torrent.pause": ochazuke.HistoryChange, "torrent.delete": ochazuke.HistoryChange, "torrent.export": ochazuke.HistoryChange,
 		"guard.check": ochazuke.HistoryChange, "transfer.limit": ochazuke.HistoryChange, "config.set": ochazuke.HistoryChange,
 	} {
-		if got := ops[key].HistoryKind; got != want {
+		if got := ops.At(ochazuke.Key(key)).HistoryKind; got != want {
 			t.Errorf("%s: %q, want %q", key, got, want)
 		}
 	}

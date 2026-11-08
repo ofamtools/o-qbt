@@ -100,8 +100,8 @@ func (t *Tool) defineFilters(r *ochazuke.Runtime, api func() (*Client, error), f
 			ws := byCategory(Vocabulary(trackerTable(conf)))
 			return t.present(c, ws, WordTable(ws), nil)
 		}, "the filter words (o qbt words): category, name, aliases, the values it selects; the categories are tracker, privacy, completion, activity and state").Fetch()
-	r.Operations["torrent.find"] = withParams(r.Operations["torrent.find"], params(append(filterParams(), query...)...))
-	r.Operations["torrent.vocabulary"] = withParams(r.Operations["torrent.vocabulary"], params(named(outputParams())...))
+	r.Operations.Set(withParams(r.Operations.At("torrent.find"), params(append(filterParams(), query...)...)))
+	r.Operations.Set(withParams(r.Operations.At("torrent.vocabulary"), params(named(outputParams())...)))
 
 	r.Define("tracker").
 		Verb("registry", func(c ochazuke.Ctx) ochazuke.Result {
@@ -120,8 +120,8 @@ func (t *Tool) defineFilters(r *ochazuke.Runtime, api func() (*Client, error), f
 			cs := CountByTracker(ts, table)
 			return t.present(c, cs, TrackerCountTable(cs), nil)
 		}, "torrents per tracker table name (a torrent no entry owns counts under its hosts): torrents, size, completed, active; takes filter words and torrent list's query; one request").Fetch().Positional("terms")
-	r.Operations["tracker.registry"] = withParams(r.Operations["tracker.registry"], params(named(outputParams())...))
-	r.Operations["tracker.counts"] = withParams(r.Operations["tracker.counts"], params(append(filterParams(), query...)...))
+	r.Operations.Set(withParams(r.Operations.At("tracker.registry"), params(named(outputParams())...)))
+	r.Operations.Set(withParams(r.Operations.At("tracker.counts"), params(append(filterParams(), query...)...)))
 
 	r.Define("guard").Verb("disk", func(c ochazuke.Ctx) ochazuke.Result {
 		conf, _, _, err := t.config()
@@ -135,10 +135,10 @@ func (t *Tool) defineFilters(r *ochazuke.Runtime, api func() (*Client, error), f
 		raw, _ := c.Args["bytes"].(bool)
 		return t.answer(t.spaceAnswer(context.Background(), gs, ochazuke.StringArg(c.Args, "field", ""), raw, api))
 	}, fmt.Sprintf("free space and the guard's numbers (o qbt space): %s; FIELD prints one alone (o qbt space free), a size or with --bytes the bytes; df errors are reported", strings.Join(SpaceFieldNames(), ", "))).Fetch().Positional("field")
-	r.Operations["guard.disk"] = withParams(r.Operations["guard.disk"], params(append([]any{
+	r.Operations.Set(withParams(r.Operations.At("guard.disk"), params(append([]any{
 		"field", ochazuke.Parameter{Type: "string", Enum: SpaceFieldNames(), Description: "print only this number"},
 		"bytes", ochazuke.Parameter{Type: "boolean", Description: "bytes instead of sizes"},
-	}, named(guardParamKV())...)...))
+	}, named(guardParamKV())...)...)))
 }
 
 // SummaryKeys are tracker summary's --by values: host (the default) or
