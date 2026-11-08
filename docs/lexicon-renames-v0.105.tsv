@@ -1,0 +1,22 @@
+kind	old	new	note
+verb	qbt.guard.status	qbt.guard.get {prop: status}	status is a computed prop of the guard (read as `o-qbt guard status`, JSON, from the settings file's numbers); the guard is a singleton thing
+verb	(added) qbt.guard.show		the guard's record printed for a person, with the threshold flags (--mode, --min-free, ...) that guard status had; same value as the prop
+verb	qbt.config.path	qbt.config.get {prop: path}	computed prop of the config singleton
+verb	qbt.torrent.seeding	saved filter row `seeding` on torrent (status in uploading, stalledUP, queuedUP, forcedUP)	adjective verb is a saved filter (Noun.Filters); `torrent list --filter seeding` still asks qBittorrent's own filter
+verb	qbt.torrent.downloading	saved filter row `downloading` on torrent	as above
+verb	qbt.torrent.paused	saved filter row `paused` on torrent (status in stoppedUP, stoppedDL, pausedUP, pausedDL)	as above
+verb	qbt.torrent.errored	saved filter row `errored` on torrent (status in error, missingFiles)	as above
+verb	qbt.torrent.stalled	saved filter row `stalled` on torrent (status in stalledUP, stalledDL)	as above
+verb	qbt.torrent.active	torrent list --filter active	no saved filter row: active is a speed OR a state, which an AND of conditions cannot say; the filter word `active` and the server filter remain
+prop	qbt.torrent.state	qbt.torrent.status	the torrent store prop; qBittorrent's own key stays state on its Web API (Torrent.UnmarshalJSON reads it)
+json-key	torrent row data / export json: state	status	TorrentData, torrent list/export json, jsonl, tsv, csv, md, toon columns
+json-key	summary rows [{state,count,size}]	[{status,count,size}]	StateCount is StatusCount; overview section `by state` is `by status`
+column	torrent/summary column state	status	--columns status
+sort	--sort state	--sort status	server sort key state stays on the wire
+parameter	torrent delete --state	torrent delete --status	the exact qBittorrent state
+filter-category	filter word category state	status	`o qbt words` category column; filter words themselves unchanged
+json-key	guard marker (data dir `paused`): torrents[].state	torrents[].status	an older marker is read as status (PausedTorrent.UnmarshalJSON) and written back as status; test TestOlderMarkerStateKeyReadsAsStatus
+noun	qbt.torrent (main)	qbt.torrent	unchanged; declared the main noun (`o-qbt list` is `torrent list`)
+kept	qbt.app.rows	qbt.app.rows	the state source (Result lists) was already named rows, not state
+kept	app.info app.prefs transfer.info torrent.overview torrent.vocabulary tracker.registry		read-only values that are candidates for props; kept as verbs: they take output-format parameters (--format, --columns, --out) and need a network read, and app/transfer have no store to hang a computed prop on yet
+go	ochazuke.List	ochazuke.Collection	framework v0.104.0 (not used here)

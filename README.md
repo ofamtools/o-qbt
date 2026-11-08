@@ -20,16 +20,16 @@ qBittorrent bans an IP after repeated failed logins. A process logs in at most o
 ## Commands
 
 ```
-o qbt app info [output] | prefs | state
+o qbt app info [output] | prefs | rows
 o qbt torrent list | active | seeding | downloading | paused | errored | stalled   [query] [output]
 o qbt torrent export --out FILE [query] [output] | summary [query] [output] | overview [output]
 o qbt torrent show --target HASH
 o qbt torrent pause|resume|recheck --target HASH | --all
 o qbt torrent delete --target HASH [--files] [--yes]
-o qbt torrent delete --hashes H1,H2 | [--state STATE] [--filter F] [--category C] [--tag T]  [--files] [--yes]
+o qbt torrent delete --hashes H1,H2 | [--status STATUS] [--filter F] [--category C] [--tag T]  [--files] [--yes]
 o qbt tracker list --target HASH [--full-url] [output] | summary [query] [output] | hosts [query] [output]
 o qbt transfer info [output] | limit --dl N --up N | speed-limits-toggle     (bytes/s, 0 = unlimited)
-o qbt guard check|status|rebase|resume [--mode floor|allowance] [--min-free 5GiB] [--resume-above 20GiB] [--limit 10G] | rebase --bytes N | install | uninstall | log [N]
+o qbt guard check|show|rebase|resume [--mode floor|allowance] [--min-free 5GiB] [--resume-above 20GiB] [--limit 10G] | rebase --bytes N | install | uninstall | log [N]
 o qbt category list [output]
 o qbt torrents | categories | overview | words | space   (shortcuts)
 o qbt WORD... [--tracker P] [--name P] [--match substring|fuzzy|regex|glob] [query] [output]   (filter words: torrent find)
@@ -41,9 +41,9 @@ o qbt catalog
 
 Bare noun groups such as `o qbt tracker` (or `o qbt tracker --help`) show their scoped verbs and descriptions without contacting qBittorrent. Shared oden/ochazuke help also supports operation help, such as `o qbt tracker list --help`, with usage and parameter metadata.
 
-`app info` changes nothing: it reads `app/version`, `app/webapiVersion`, `app/buildInfo`, `transfer/info` and `sync/maindata` and exits 0 only when the login worked. `torrent pause`/`resume` use v5's `torrents/stop`/`start` and fall back to v4's `pause`/`resume` on a 404. `torrent delete` asks `Delete torrent LABEL?` unless `--yes`. With a selection instead of `--target` (`--hashes`, or torrents/info's `--filter`/`--category`/`--tag` narrowed by `--state`, the exact qBittorrent state), it posts `torrents/delete` in batches of 200 hashes and prints `deleted N/TOTAL` on stderr when there is more than one batch.
+`app info` changes nothing: it reads `app/version`, `app/webapiVersion`, `app/buildInfo`, `transfer/info` and `sync/maindata` and exits 0 only when the login worked. `torrent pause`/`resume` use v5's `torrents/stop`/`start` and fall back to v4's `pause`/`resume` on a 404. `torrent delete` asks `Delete torrent LABEL?` unless `--yes`. With a selection instead of `--target` (`--hashes`, or torrents/info's `--filter`/`--category`/`--tag` narrowed by `--status`, the exact qBittorrent state), it posts `torrents/delete` in batches of 200 hashes and prints `deleted N/TOTAL` on stderr when there is more than one batch.
 
-A torrent row is `{id: HASH, label: "state  progress%  name", data: {state, progress, size, dlspeed, eta, category, added_on, completed_on, save_path}}`; a category row is `{id: "category/NAME", label, data: {name, savePath}}`. `app rows` prints both lists as JSON Lines `{noun, id, label}` (the catalog's state). List-like verbs print in `--format` (below). Other verbs a person reads (`guard *`, `config *`, `transfer limit`) print a short table; with `--json '{...}'` (how a host calls) every verb prints JSON.
+A torrent row is `{id: HASH, label: "status  progress%  name", data: {status, progress, size, dlspeed, eta, category, added_on, completed_on, save_path}}`; a category row is `{id: "category/NAME", label, data: {name, savePath}}`. `app rows` prints both lists as JSON Lines `{noun, id, label}` (the catalog's state). List-like verbs print in `--format` (below). Other verbs a person reads (`guard *`, `config *`, `transfer limit`) print a short table; with `--json '{...}'` (how a host calls) every verb prints JSON.
 
 ## Listing and exporting
 
@@ -53,10 +53,10 @@ The query is qBittorrent's own (`torrents/info`), passed through:
 |---|---|
 | `--filter F` | `all downloading seeding completed paused stopped active inactive resumed running stalled stalled_uploading stalled_downloading errored checking moving` |
 | `--category C` / `--tag T` | one category or tag (`""` = none) |
-| `--sort FIELD` | `name size progress dlspeed upspeed eta ratio added_on completed_on state` (server-side; without it the list is by name) |
+| `--sort FIELD` | `name size progress dlspeed upspeed eta ratio added_on completed_on status` (server-side; without it the list is by name) |
 | `--reverse`, `--limit N` | reverse the order, keep the first N |
 
-`torrent active|seeding|downloading|paused|errored|stalled` are aliases of `torrent list --filter` with that value (a table in `shell.go`), and take the other flags.
+`seeding`, `downloading`, `paused`, `errored` and `stalled` are saved filter rows of the torrent noun (a status condition each; `torrent` rows in a list or the TUI offer them, `collection.filters` in `settings.json` adds or replaces them); the commands `torrent active|seeding|...` are gone, use `torrent list --filter seeding` (qBittorrent's own filter, `active` included) or the filter words (`o qbt seeding`).
 
 Output, on `torrent list|export|summary|overview`, the presets, `category list`, `transfer info` and `app info`:
 
@@ -69,12 +69,12 @@ Output, on `torrent list|export|summary|overview`, the presets, `category list`,
 `table` and `md` humanise sizes, speeds, eta and times (`1.2 GiB`, `3.4 MiB/s`, `2h 10m`, `∞`, `2026-10-25 12:30`); every other format carries the raw numbers. A torrent's columns are `hash name state progress size dlspeed eta` (the default) then `upspeed ratio category tags added_on completed_on save_path`. A host's `--json '{}'` without a `format` still gets the rows (`{id, label, data}`); `--json '{"format":"csv"}'` renders.
 
 ```sh
-o qbt torrent seeding --sort ratio --reverse --limit 10
+o qbt torrent list --filter seeding --sort ratio --reverse --limit 10
 o qbt torrent list --category tv --format md --columns name,size,ratio
 o qbt torrent export --filter completed --out done.csv
 o qbt torrents --format toon | pbcopy
-o qbt torrent summary            # count and size per state, total last
-o qbt overview                   # one screen: totals and guard, by state, top 5 down/up, 5 oldest unfinished, categories
+o qbt torrent summary            # count and size per status, total last
+o qbt overview                   # one screen: totals and guard, by status, top 5 down/up, 5 oldest unfinished, categories
 ```
 
 `torrent overview` (also `o qbt overview`) prints a totals line (torrents, active, seeding, downloading, paused, errored, size, speeds, the free space qBittorrent reports, the guard), the per-state table, the top 5 by download and by upload speed (moving torrents only), the 5 oldest unfinished, and the categories with their counts. `--format json` is the whole structure `{totals, states, top_download, top_upload, oldest_unfinished, categories}`; md, toon, csv, tsv and jsonl print each section in turn (md under `## name`, the others after `# name`, toon under its own header).
@@ -84,7 +84,7 @@ o qbt overview                   # one screen: totals and guard, by state, top 5
 `--format toon` is Token-Oriented Object Notation for uniform rows:
 
 ```
-torrent[3]{hash,name,state,progress,size,dlspeed,eta}:
+torrent[3]{hash,name,status,progress,size,dlspeed,eta}:
   aaa,alpha,downloading,0.4217,4096,3565158,60
   ccc,"Movie, The \"Cut\"",pausedDL,0.5,1288490188,0,7800
 ```
@@ -102,7 +102,7 @@ o qbt private fseeding                # force-started seeds on any private track
 o qbt tl not-completed                # torrentleech, not finished
 o qbt seeding fseeding --sort ratio   # seeding, forced or not
 o qbt --tracker '*.to' --match glob   # any tracker host ending in .to
-o qbt nyaa --name 'S01' --format md --columns name,state,trackers
+o qbt nyaa --name 'S01' --format md --columns name,status,trackers
 ```
 
 Each word belongs to one category. **Words of one category OR, categories AND**: `avz nyaa completed inactive` is (avistaz OR nyaa) AND completed AND inactive. `not-WORD` drops the torrents WORD selects (`not-avz not-nyaa`: neither). Only bare words and `--flags` are used, so nothing needs quoting in bash or zsh except a glob or regex pattern you pass to `--tracker`/`--name` (`'*.to'`). The result is the torrent list: `torrent list`'s columns and its `--format`, `--columns`, `--out`, `--filter`, `--category`, `--tag`, `--sort` and `--reverse`; `--limit` cuts after the filter. The columns `trackers` (the tracker hostnames, never the announce URLs) and `private` are there for `--columns`. `o qbt words` lists every word (`--format` renders it); `o qbt torrent find WORD...` is the same command spelled out.
@@ -113,7 +113,7 @@ Each word belongs to one category. **Words of one category OR, categories AND**:
 | privacy | `public`, `private` | the torrent's private flag (qBittorrent 5); before that, whether a private table entry owns one of its hosts |
 | completion | `completed` (`done`), `incomplete` | progress is 100% or not |
 | activity | `active`, `inactive` (`idle`) | moving data now (below) |
-| state | the groups below, and every literal qBittorrent state | its state |
+| status | the groups below, and every literal qBittorrent state | its state |
 
 **Active** means moving data now: download or upload speed above zero, or a state qBittorrent gives only while data moves (`downloading`, `uploading`, `metaDL`, `forcedMetaDL`, `moving`). Everything else is inactive. Forced is not activity: a forced seed nobody is downloading from is inactive. This differs from `torrent active` (qBittorrent's own `active` filter), which counts every forced torrent as active.
 
@@ -134,7 +134,7 @@ State groups; a plain group and its forced one (`f` prefix) never overlap, so `s
 | `errored` | error, missingFiles |
 | a literal state | `stalledUP`, `missingFiles`, ... in any case; `downloading` is the group's alias, so the literal state alone is `download not-stalledDL not-queuedDL not-metaDL not-checkingDL not-allocating` |
 
-The old `torrent seeding|downloading|active|...` verbs are unchanged: they ask qBittorrent's own filter, which counts forced torrents in `seeding` and `downloading`.
+`torrent list --filter seeding|downloading|active|...` asks qBittorrent's own filter, which counts forced torrents in `seeding` and `downloading`.
 
 **How a word resolves**: an exact word or alias (any case; a group wins over a literal state of the same name), else the one word it is a prefix of (`comp` → completed, `stalledu` → stalledUP, `torr` → torrentleech), else the one tracker whose name or host holds it (`leech`, `tleech` → torrentleech). Several candidates is an error naming them (`"pri" is ambiguous: private (privacy), privatehd (tracker)`); no candidate is an error pointing at `o qbt words`.
 
@@ -222,7 +222,7 @@ Without a password a check logs `error:no-credentials` and exits 0. Each check, 
 2026-10-25T19:05:00-0400 mode=floor min=5.0 resume=20.0 free=24.0 baseline=584.8 used=560.8 limit=10.0 action=resumed downloads=3 forced=1
 ```
 
-`guard install` writes `~/Library/LaunchAgents/com.unixsuperhero.o-qbt-guard.plist` (runs `~/bin/o-qbt guard check` every 300 s and at load; stdout and stderr in `~/Library/Logs/o-qbt/`), lints it and bootstraps it in `gui/UID`. `guard status` shows the agent, the last log line, the mode and its thresholds (`min free`, `resume`), free space (against the baseline and limit in allowance mode) and whether the guard paused (since when, and how many downloads). `guard uninstall` removes the agent and keeps the data.
+`guard install` writes `~/Library/LaunchAgents/com.unixsuperhero.o-qbt-guard.plist` (runs `~/bin/o-qbt guard check` every 300 s and at load; stdout and stderr in `~/Library/Logs/o-qbt/`), lints it and bootstraps it in `gui/UID`. `guard show` (and the `guard status` prop, as JSON) shows the agent, the last log line, the mode and its thresholds (`min free`, `resume`), free space (against the baseline and limit in allowance mode) and whether the guard paused (since when, and how many downloads). `guard uninstall` removes the agent and keeps the data.
 
 It replaces the earlier shell guard (`qbt-guard.sh` on the NAS, driven by `com.unixsuperhero.qbt-guard`).
 

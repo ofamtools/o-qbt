@@ -213,8 +213,27 @@ type GuardMarker struct {
 type PausedTorrent struct {
 	Hash   string `json:"hash"`
 	Name   string `json:"name"`
-	State  string `json:"state"`  // its state when the guard stopped it
+	Status string `json:"status"` // its state when the guard stopped it
 	Forced bool   `json:"forced"` // it was force-started: resuming restores force start
+}
+
+// UnmarshalJSON reads a paused torrent; a marker an older o-qbt wrote says
+// "state" for what is now "status" (the lexicon: state is a status), and is
+// read as status; the next write says status.
+func (p *PausedTorrent) UnmarshalJSON(b []byte) error {
+	type plain PausedTorrent
+	x := struct {
+		plain
+		State string `json:"state"`
+	}{}
+	if err := json.Unmarshal(b, &x); err != nil {
+		return err
+	}
+	*p = PausedTorrent(x.plain)
+	if p.Status == "" {
+		p.Status = x.State
+	}
+	return nil
 }
 
 // has reports whether m lists hash.
@@ -381,12 +400,12 @@ func (t *Tool) pauseDownloads(ctx context.Context, c Config, g GuardLine, m Guar
 	}
 	var hashes []string
 	for _, x := range ts {
-		if !slices.Contains(DownloadStates, x.State) {
+		if !slices.Contains(DownloadStates, x.Status) {
 			continue
 		}
 		hashes = append(hashes, x.Hash)
 		if !m.has(x.Hash) {
-			m.Torrents = append(m.Torrents, PausedTorrent{Hash: x.Hash, Name: x.Name, State: x.State, Forced: slices.Contains(ForcedStates, x.State)})
+			m.Torrents = append(m.Torrents, PausedTorrent{Hash: x.Hash, Name: x.Name, Status: x.Status, Forced: slices.Contains(ForcedStates, x.Status)})
 		}
 	}
 	left := len(ts) - len(hashes)
@@ -508,7 +527,7 @@ func (t *Tool) GuardResume(ctx context.Context, gs GuardSettings) (GuardLine, er
 	return t.resumeMarked(ctx, c, g)
 }
 
-// GuardStatus is guard status's answer.
+// GuardStatus is guard show's answer and the guard status prop's value.
 type GuardStatus struct {
 	Launchd     string `json:"launchd"`
 	LastLine    string `json:"last_line"`

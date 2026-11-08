@@ -23,7 +23,7 @@
 //	o-qbt category list
 //	o-qbt catalog
 //
-// A verb a person reads (app info, guard status, config show, ...) prints a
+// A verb a person reads (app info, guard show, config show, ...) prints a
 // short table; with --json '{...}' (how a host calls) every verb prints JSON.
 // qBittorrent bans an IP after repeated failed logins: a process logs in at
 // most once and never retries.

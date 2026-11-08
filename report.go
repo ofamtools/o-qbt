@@ -9,34 +9,34 @@ import (
 // Aggregations over torrents: summary (counts and size per state) and the
 // overview. Nothing here knows the command line or a format.
 
-// StateCount is one state's torrents: how many and their total size. The
+// StatusCount is one state's torrents: how many and their total size. The
 // summary's last element is the total, state "total".
-type StateCount struct {
-	State string `json:"state"`
-	Count int    `json:"count"`
-	Size  int64  `json:"size"`
+type StatusCount struct {
+	Status string `json:"status"`
+	Count  int    `json:"count"`
+	Size   int64  `json:"size"`
 }
 
 // Summarize counts ts per state, by state name, then the total.
-func Summarize(ts []Torrent) []StateCount {
-	by := map[string]*StateCount{}
-	total := StateCount{State: "total"}
+func Summarize(ts []Torrent) []StatusCount {
+	by := map[string]*StatusCount{}
+	total := StatusCount{Status: "total"}
 	for _, t := range ts {
-		s := by[t.State]
+		s := by[t.Status]
 		if s == nil {
-			s = &StateCount{State: t.State}
-			by[t.State] = s
+			s = &StatusCount{Status: t.Status}
+			by[t.Status] = s
 		}
 		s.Count++
 		s.Size += t.Size
 		total.Count++
 		total.Size += t.Size
 	}
-	out := make([]StateCount, 0, len(by)+1)
+	out := make([]StatusCount, 0, len(by)+1)
 	for _, s := range by {
 		out = append(out, *s)
 	}
-	slices.SortFunc(out, func(a, b StateCount) int { return cmp.Compare(a.State, b.State) })
+	slices.SortFunc(out, func(a, b StatusCount) int { return cmp.Compare(a.Status, b.Status) })
 	return append(out, total)
 }
 
@@ -92,7 +92,7 @@ type CategoryCount struct {
 // fastest downloads and uploads, the oldest unfinished, and categories.
 type Overview struct {
 	Totals           Totals          `json:"totals"`
-	States           []StateCount    `json:"states"`
+	States           []StatusCount   `json:"states"`
 	TopDownload      []Torrent       `json:"top_download"`
 	TopUpload        []Torrent       `json:"top_upload"`
 	OldestUnfinished []Torrent       `json:"oldest_unfinished"`
@@ -112,7 +112,7 @@ func Overviews(ts []Torrent, st ServerState, g GuardState) Overview {
 			x.Active++
 		}
 		for _, sg := range stateGroups {
-			if slices.Contains(sg.States, t.State) {
+			if slices.Contains(sg.States, t.Status) {
 				*group[sg.Name]++
 			}
 		}

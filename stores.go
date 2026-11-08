@@ -27,7 +27,7 @@ func torrentProps() []ochazuke.PropSpec {
 	return []ochazuke.PropSpec{
 		{Name: "hash", Key: true, Parameter: ochazuke.Parameter{Type: "string", Description: "The torrent's info hash"}},
 		{Name: "name", Role: ochazuke.RoleLabel, ReadOnly: true, Parameter: ochazuke.Parameter{Type: "string", Description: "The torrent's name"}},
-		qbtProp("state", "string", "qBittorrent's state (downloading, stalledUP, pausedDL, error, missingFiles ...)"),
+		qbtProp("status", "string", "qBittorrent's state (downloading, stalledUP, pausedDL, error, missingFiles ...)"),
 		qbtProp("progress", ochazuke.SettingNumber, "Fraction done, 0 to 1"),
 		qbtProp("size", ochazuke.SettingInteger, "Bytes"),
 		qbtProp("dlspeed", ochazuke.SettingInteger, "Download speed, bytes/s"),
@@ -62,7 +62,7 @@ func trackerProps() []ochazuke.PropSpec {
 	}
 }
 
-func configProps() []ochazuke.PropSpec {
+func (t *Tool) configProps() []ochazuke.PropSpec {
 	text := func(name, desc string) ochazuke.PropSpec {
 		return ochazuke.PropSpec{Name: name, Parameter: ochazuke.Parameter{Type: "string", Description: desc}}
 	}
@@ -74,6 +74,8 @@ func configProps() []ochazuke.PropSpec {
 		text("cfg_ssh", "The ssh destination for the guard's disk reads (the settings file's ssh)"),
 		qbtProp("pass_set", ochazuke.SettingBoolean, "Whether a password is set (config set pass reads it with echo off)"),
 		qbtProp("exists", ochazuke.SettingBoolean, "Whether the settings file exists"),
+		{Name: "path", ReadOnly: true, Parameter: ochazuke.Parameter{Type: "string", Description: "The settings file's path, whether or not it exists (o-qbt app config path prints the framework's directories)"},
+			Read: func(ochazuke.Ctx, ochazuke.Thing) (any, error) { return t.ConfigPath(), nil }},
 	}
 }
 
@@ -85,7 +87,7 @@ type storeRows struct {
 }
 
 func (s storeRows) torrentStore() ochazuke.Store {
-	return ochazuke.Store{Kind: ochazuke.Collection, Facts: true,
+	return ochazuke.Store{Kind: ochazuke.KindCollection, Facts: true,
 		List: func(ochazuke.Ctx, ochazuke.ListQuery) ([]ochazuke.Thing, error) {
 			ts, err := s.torrents(context.Background())
 			if err != nil {
@@ -116,7 +118,7 @@ func (s storeRows) torrentStore() ochazuke.Store {
 
 func (s storeRows) categoryStore() ochazuke.Store {
 	thing := func(c Category) ochazuke.Thing { return ochazuke.Thing{"name": c.Name, "savePath": c.SavePath} }
-	return ochazuke.Store{Kind: ochazuke.Collection, Facts: true,
+	return ochazuke.Store{Kind: ochazuke.KindCollection, Facts: true,
 		List: func(ochazuke.Ctx, ochazuke.ListQuery) ([]ochazuke.Thing, error) {
 			cs, err := s.categories(context.Background())
 			if err != nil {
@@ -145,7 +147,7 @@ func (s storeRows) categoryStore() ochazuke.Store {
 }
 
 func (s storeRows) trackerStore() ochazuke.Store {
-	return ochazuke.Store{Kind: ochazuke.Collection, Facts: true,
+	return ochazuke.Store{Kind: ochazuke.KindCollection, Facts: true,
 		ListParams: map[string]ochazuke.Parameter{
 			"torrent": {Type: "string", Required: true, Noun: "torrent", Description: "The torrent's hash: trackers are one torrent's"},
 		},
@@ -220,8 +222,11 @@ func (t *Tool) defineStores(r *ochazuke.Runtime, api func() (*Client, error),
 			return Trackers(ctx, cl, hash)
 		},
 	}
-	r.Define("torrent").Props(torrentProps()...).Store(src.torrentStore())
+	torrent := r.Define("torrent").Props(torrentProps()...).Store(src.torrentStore())
+	for _, f := range torrentFilters {
+		torrent.Filters(ochazuke.SavedFilter{Name: f.Name, Conditions: []ochazuke.PropFilter{{Prop: "status", Op: "in", Value: f.Statuses}}})
+	}
 	r.Define("category").Props(categoryProps()...).Store(src.categoryStore())
 	r.Define("tracker").Props(trackerProps()...).Store(src.trackerStore())
-	r.DefineOwn("config").Props(configProps()...).Store(t.configStore())
+	r.DefineOwn("config").Props(t.configProps()...).Store(t.configStore())
 }

@@ -47,8 +47,8 @@ func TestEveryVerbDeclaresItsHistory(t *testing.T) {
 func TestVerbHistoryKinds(t *testing.T) {
 	ops := testTool(t, "http://127.0.0.1:1", "", nil).shell().Runtime.Operations
 	for key, want := range map[string]string{
-		"app.rows": ochazuke.HistoryFetch, "torrent.list": ochazuke.HistoryFetch, "torrent.seeding": ochazuke.HistoryFetch,
-		"tracker.hosts": ochazuke.HistoryFetch, "guard.status": ochazuke.HistoryFetch, "config.show": ochazuke.HistoryFetch,
+		"app.rows": ochazuke.HistoryFetch, "torrent.list": ochazuke.HistoryFetch,
+		"tracker.hosts": ochazuke.HistoryFetch, "guard.show": ochazuke.HistoryFetch, "config.show": ochazuke.HistoryFetch,
 		"torrent.pause": ochazuke.HistoryChange, "torrent.delete": ochazuke.HistoryChange, "torrent.export": ochazuke.HistoryChange,
 		"guard.check": ochazuke.HistoryChange, "transfer.limit": ochazuke.HistoryChange, "config.set": ochazuke.HistoryChange,
 	} {

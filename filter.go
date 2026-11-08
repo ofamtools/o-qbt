@@ -94,6 +94,7 @@ func (t *Torrent) UnmarshalJSON(b []byte) error {
 	type plain Torrent
 	var x struct {
 		plain
+		State   string `json:"state"` // qBittorrent's own key; a row we wrote says status
 		Tracker string `json:"tracker"`
 		Magnet  string `json:"magnet_uri"`
 	}
@@ -101,6 +102,9 @@ func (t *Torrent) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	*t = Torrent(x.plain)
+	if x.State != "" {
+		t.Status = x.State
+	}
 	urls := []string{x.Tracker}
 	if _, query, ok := strings.Cut(x.Magnet, "?"); ok {
 		if v, err := url.ParseQuery(query); err == nil {
@@ -156,7 +160,7 @@ var ActiveStates = []string{"downloading", "uploading", "metaDL", "forcedMetaDL"
 
 // active reports whether t is moving data now (ActiveStates).
 func active(t Torrent) bool {
-	return t.DLSpeed > 0 || t.UPSpeed > 0 || slices.Contains(ActiveStates, t.State)
+	return t.DLSpeed > 0 || t.UPSpeed > 0 || slices.Contains(ActiveStates, t.Status)
 }
 
 // filterCategory is one category: its name, what it is about, and a
@@ -191,7 +195,7 @@ var filterCategories = []filterCategory{
 	{"privacy", "the torrent's private flag (qBittorrent 5), else the tracker table's", func(f torrentFacts) []string { return either(f.Private, "private", "public") }, nil},
 	{"completion", "progress: completed is 100%", func(f torrentFacts) []string { return either(f.T.Progress >= 1, "completed", "incomplete") }, nil},
 	{"activity", "moving data now: a speed above zero or one of " + strings.Join(ActiveStates, ", "), func(f torrentFacts) []string { return either(active(f.T), "active", "inactive") }, nil},
-	{"state", "qBittorrent's state: a group below, or a literal state (any case, a unique prefix)", func(f torrentFacts) []string { return []string{f.T.State} }, nil},
+	{"status", "qBittorrent's state: a group below, or a literal state (any case, a unique prefix)", func(f torrentFacts) []string { return []string{f.T.Status} }, nil},
 	{NameCategory, "--name PATTERN only", func(f torrentFacts) []string { return []string{f.T.Name} }, nil},
 }
 
@@ -228,6 +232,24 @@ var (
 	stoppedStates   = []string{"stoppedUP", "stoppedDL", "pausedUP", "pausedDL"}
 )
 
+// torrentFilters are the torrent noun's saved filter rows (the adjective
+// verbs active, seeding, downloading, paused, errored and stalled of the
+// lexicon's first release were verbs that listed with a fixed filter; a
+// word that picks rows is a saved filter, configuration). Each is a status
+// in the states of the filter word of its name. The activity word (moving
+// data now) is a speed or a state, an OR a saved filter cannot say; it stays
+// torrent list --filter active.
+var torrentFilters = []struct {
+	Name     string
+	Statuses []string
+}{
+	{"downloading", slices.Concat(downloadStates, fDownloadStates)},
+	{"seeding", slices.Concat(seedingStates, fSeedingStates)},
+	{"paused", stoppedStates},
+	{"errored", []string{"error", "missingFiles"}},
+	{"stalled", []string{"stalledUP", "stalledDL"}},
+}
+
 // LiteralStates are qBittorrent's states (Web API v2, versions 4 and 5).
 var LiteralStates = []string{"error", "missingFiles", "uploading", "pausedUP", "stoppedUP", "queuedUP", "stalledUP", "checkingUP", "forcedUP",
 	"allocating", "downloading", "metaDL", "forcedMetaDL", "pausedDL", "stoppedDL", "queuedDL", "stalledDL", "checkingDL", "forcedDL", "checkingResumeData", "moving", "unknown"}
@@ -241,17 +263,17 @@ var fixedWords = []FilterWord{
 	{Name: "incomplete", Category: "completion", Selects: []string{"incomplete"}, About: "progress below 100%"},
 	{Name: "active", Category: "activity", Selects: []string{"active"}, About: "moving data now"},
 	{Name: "inactive", Aliases: []string{"idle"}, Category: "activity", Selects: []string{"inactive"}, About: "not moving data now"},
-	{Name: "download", Aliases: []string{"downloading"}, Category: "state", Selects: downloadStates, About: "downloading or waiting to, not forced"},
-	{Name: "fdownload", Aliases: []string{"force-download", "forced-download"}, Category: "state", Selects: fDownloadStates, About: "force-started downloads"},
-	{Name: "seeding", Aliases: []string{"seed"}, Category: "state", Selects: seedingStates, About: "seeding, not forced (fseeding is the forced ones)"},
-	{Name: "fseeding", Aliases: []string{"force-seeding", "forced-seeding"}, Category: "state", Selects: fSeedingStates, About: "force-started seeds"},
-	{Name: "started", Category: "state", Selects: startedStates, About: "started (not stopped), not forced"},
-	{Name: "fstarted", Aliases: []string{"force-started", "forced"}, Category: "state", Selects: forcedStates, About: "force-started, downloading or seeding"},
-	{Name: "stopped", Aliases: []string{"paused"}, Category: "state", Selects: stoppedStates, About: "stopped (v4: paused)"},
-	{Name: "queued", Category: "state", Selects: []string{"queuedUP", "queuedDL"}, About: "queued"},
-	{Name: "stalled", Category: "state", Selects: []string{"stalledUP", "stalledDL"}, About: "started, no data moving"},
-	{Name: "checking", Category: "state", Selects: []string{"checkingUP", "checkingDL", "checkingResumeData"}, About: "being checked"},
-	{Name: "errored", Category: "state", Selects: []string{"error", "missingFiles"}, About: "in error or missing files"},
+	{Name: "download", Aliases: []string{"downloading"}, Category: "status", Selects: downloadStates, About: "downloading or waiting to, not forced"},
+	{Name: "fdownload", Aliases: []string{"force-download", "forced-download"}, Category: "status", Selects: fDownloadStates, About: "force-started downloads"},
+	{Name: "seeding", Aliases: []string{"seed"}, Category: "status", Selects: seedingStates, About: "seeding, not forced (fseeding is the forced ones)"},
+	{Name: "fseeding", Aliases: []string{"force-seeding", "forced-seeding"}, Category: "status", Selects: fSeedingStates, About: "force-started seeds"},
+	{Name: "started", Category: "status", Selects: startedStates, About: "started (not stopped), not forced"},
+	{Name: "fstarted", Aliases: []string{"force-started", "forced"}, Category: "status", Selects: forcedStates, About: "force-started, downloading or seeding"},
+	{Name: "stopped", Aliases: []string{"paused"}, Category: "status", Selects: stoppedStates, About: "stopped (v4: paused)"},
+	{Name: "queued", Category: "status", Selects: []string{"queuedUP", "queuedDL"}, About: "queued"},
+	{Name: "stalled", Category: "status", Selects: []string{"stalledUP", "stalledDL"}, About: "started, no data moving"},
+	{Name: "checking", Category: "status", Selects: []string{"checkingUP", "checkingDL", "checkingResumeData"}, About: "being checked"},
+	{Name: "errored", Category: "status", Selects: []string{"error", "missingFiles"}, About: "in error or missing files"},
 }
 
 // Vocabulary is every filter word against table: the fixed words, the
@@ -263,7 +285,7 @@ func Vocabulary(table []TrackerEntry) []FilterWord {
 	}
 	for _, s := range LiteralStates {
 		if !taken(s) {
-			out = append(out, FilterWord{Name: s, Category: "state", Selects: []string{s}, About: "the literal state"})
+			out = append(out, FilterWord{Name: s, Category: "status", Selects: []string{s}, About: "the literal state"})
 		}
 	}
 	for _, e := range table {

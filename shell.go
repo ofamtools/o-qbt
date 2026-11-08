@@ -66,10 +66,10 @@ func (t *Tool) answer(v any, err error) ochazuke.Result {
 
 func (t *Tool) shell() *ocli.Shell {
 	r := ochazuke.NewRuntime()
-	lists := map[string]*ochazuke.List{}
+	lists := map[string]*ochazuke.Collection{}
 	var err error
 	for _, noun := range listNouns {
-		var list *ochazuke.List
+		var list *ochazuke.Collection
 		list, err = r.AddList("list/"+noun, nil)
 		if err != nil {
 			panic(err) // a fresh runtime takes every list
@@ -195,7 +195,7 @@ func (t *Tool) shell() *ocli.Shell {
 				}
 			}
 			return ochazuke.Done(out)
-		}, "every list's rows in one call, JSON Lines {noun, id, label} for torrent and category (the catalog's state)").State().Fetch() // not "state": app.state is the framework's noun (ochazuke v0.16.0)
+		}, "every list's rows in one call, JSON Lines {noun, id, label} for torrent and category (the catalog's state)").Lists().Fetch() // not "state": app.state is the framework's noun (ochazuke v0.16.0)
 
 	// listTorrents answers a torrent list-like verb: the rows (a host's
 	// --json), else the torrents in --format; preset fixes the filter.
@@ -212,9 +212,9 @@ func (t *Tool) shell() *ocli.Shell {
 		ts, rows, err := torrentsOf(ctxOf(c), q)
 		return t.present(c, rows, TorrentTable(ts, loc), err)
 	}
-	r.Define("torrent").
-		Verb("list", func(c ochazuke.Ctx) ochazuke.Result { return listTorrents(c, "", nil) },
-			"the torrent rows: {id: hash, label: \"state  progress%  name\", data: {state, progress, size, dlspeed, eta, category, added_on, completed_on, save_path}}; --filter, --category, --tag, --sort, --reverse, --limit are torrents/info's query; --format, --columns, --out render them (a host's --json without --format gets the rows)").Rows("torrent").Fetch().
+	r.Define("torrent").Main(). // the tool's main noun: `o-qbt list` is `torrent list`
+					Verb("list", func(c ochazuke.Ctx) ochazuke.Result { return listTorrents(c, "", nil) },
+			"the torrent rows: {id: hash, label: \"status  progress%  name\", data: {status, progress, size, dlspeed, eta, category, added_on, completed_on, save_path}}; --filter, --category, --tag, --sort, --reverse, --limit are torrents/info's query; --format, --columns, --out render them (a host's --json without --format gets the rows)").Rows("torrent").Fetch().
 		Verb("export", func(c ochazuke.Ctx) ochazuke.Result {
 			return listTorrents(c, "", func(c ochazuke.Ctx) error {
 				if ochazuke.StringArg(c.Args, "out", "") == "" {
@@ -305,7 +305,7 @@ func (t *Tool) shell() *ocli.Shell {
 		var hs []string
 		if bulk := deleteSelects(c); bulk {
 			if c.Instance != nil && c.Instance.Noun == "torrent" && c.Instance.Data != nil {
-				return ochazuke.Failed(errors.New("torrent delete: --target or a selection (--hashes, --state, --filter, --category, --tag), not both"))
+				return ochazuke.Failed(errors.New("torrent delete: --target or a selection (--hashes, --status, --filter, --category, --tag), not both"))
 			}
 			if v := ochazuke.StringArg(c.Args, "hashes", ""); v != "" {
 				hs = strings.FieldsFunc(v, func(r rune) bool { return r == ',' || r == '|' })
@@ -322,9 +322,9 @@ func (t *Tool) shell() *ocli.Shell {
 				if err != nil {
 					return ochazuke.Failed(err)
 				}
-				state := ochazuke.StringArg(c.Args, "state", "")
+				state := ochazuke.StringArg(c.Args, "status", "")
 				for _, x := range ts {
-					if state == "" || x.State == state {
+					if state == "" || x.Status == state {
 						hs = append(hs, x.Hash)
 					}
 				}
@@ -357,18 +357,13 @@ func (t *Tool) shell() *ocli.Shell {
 			return t.answer(Message{Message: "deleted torrent " + hs[0] + ", " + strings.Replace(what, "their", "its", 1)}, nil)
 		}
 		return t.answer(Message{Message: fmt.Sprintf("deleted %d torrents, %s", len(hs), what)}, nil)
-	}, "remove --target HASH, or a selection (--hashes H1,H2; --state STATE, the exact qBittorrent state; --filter, --category, --tag), from qBittorrent in batches of 200; --files deletes their data too (asks first; --yes skips the question)").Destructive().Confirm("Delete torrent {{label}}?")
+	}, "remove --target HASH, or a selection (--hashes H1,H2; --status STATUS, the exact qBittorrent state; --filter, --category, --tag), from qBittorrent in batches of 200; --files deletes their data too (asks first; --yes skips the question)").Destructive().Confirm("Delete torrent {{label}}?")
 	setHistory(r, ochazuke.HistoryChange, "torrent.delete")
 	r.Operations.Set(withParams(r.Operations.At("torrent.delete"), params(append([]any{
 		"files", ochazuke.Parameter{Type: "boolean", Description: "delete the downloaded data as well"},
 		"hashes", ochazuke.Parameter{Type: "string", Description: "comma-separated hashes to remove instead of --target"},
-		"state", ochazuke.Parameter{Type: "string", Description: "only torrents in exactly this state (missingFiles, error, ...)"},
+		"status", ochazuke.Parameter{Type: "string", Description: "only torrents in exactly this status (missingFiles, error, ...)"},
 	}, queryParams(true)[:6]...)...)))
-	for _, p := range torrentPresets {
-		r.Define("torrent").Verb(p.Verb, func(c ochazuke.Ctx) ochazuke.Result { return listTorrents(c, p.Filter, nil) },
-			"alias of torrent list --filter "+p.Filter+": "+p.About).Fetch()
-		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key("torrent."+p.Verb)), params(append(queryParams(false), outputParams()...)...)))
-	}
 	for _, verb := range []string{"list", "export"} {
 		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key("torrent."+verb)), params(append(queryParams(true), outputParams()...)...)))
 	}
@@ -523,7 +518,7 @@ func (t *Tool) shell() *ocli.Shell {
 	guardVerb("check", "the monitor step: df the volume over ssh; floor mode (default) stops the downloads (forced downloads too) when free space is below --min-free (5GiB) and starts the ones it stopped above --resume-above (20GiB); allowance mode stops them once free space is more than --limit below the baseline; seeds and torrents stopped by hand are never touched; the marker lists what it stopped; one line to guard.log", func(ctx context.Context, _ ochazuke.Ctx, gs GuardSettings) (any, error) {
 		return t.GuardCheck(ctx, gs)
 	})
-	guardVerb("status", "the launchd agent, the last guard.log line, the mode and its thresholds, free space (against the baseline in allowance mode), whether the guard paused", func(ctx context.Context, _ ochazuke.Ctx, gs GuardSettings) (any, error) {
+	guardVerb("show", "the guard's record: the launchd agent, the last guard.log line, the mode and its thresholds (the flags override the settings file's), free space (against the baseline in allowance mode), whether the guard paused; the same value as the status prop, printed for a person", func(ctx context.Context, _ ochazuke.Ctx, gs GuardSettings) (any, error) {
 		return t.GuardStatusOf(ctx, gs)
 	})
 	guardVerb("rebase", "store the current free space as the baseline (or --bytes N) and clear the marker without starting what it lists (guard resume starts it); only allowance mode reads the baseline", func(ctx context.Context, c ochazuke.Ctx, gs GuardSettings) (any, error) {
@@ -544,13 +539,14 @@ func (t *Tool) shell() *ocli.Shell {
 		Verb("log", func(c ochazuke.Ctx) ochazuke.Result {
 			return t.answer(t.GuardLogTail(ochazuke.IntArg(c.Args, "tail", 20)), nil)
 		}, "the last --tail N lines of guard.log (default 20)").Fetch().Positional("tail")
+	t.defineGuardStatus(r)
 	// check is the monitor step: it may stop or start downloads and
 	// appends to guard.log, so it is a change, as rebase, resume, install and
-	// uninstall are; status reads.
+	// uninstall are.
 	setHistory(r, ochazuke.HistoryChange, "guard.check", "guard.rebase", "guard.resume", "guard.install", "guard.uninstall")
-	setHistory(r, ochazuke.HistoryFetch, "guard.status")
+	setHistory(r, ochazuke.HistoryFetch, "guard.show")
 	guardParams := guardParamKV()
-	for _, verb := range []string{"check", "status", "resume"} {
+	for _, verb := range []string{"check", "show", "resume"} {
 		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key("guard."+verb)), params(guardParams...)))
 	}
 	r.Operations.Set(withParams(r.Operations.At("guard.rebase"), params(append(guardParams,
@@ -572,8 +568,6 @@ func (t *Tool) shell() *ocli.Shell {
 			"write the settings file (url, user admin, empty pass, volume, ssh), mode 600, unless it exists; prints its path").
 		Verb("show", func(ochazuke.Ctx) ochazuke.Result { return t.answer(t.ConfigShow()) },
 			"the effective settings and the environment overrides; never the password, only whether one is set").Fetch().
-		Verb("path", func(ochazuke.Ctx) ochazuke.Result { return ochazuke.Done(t.ConfigPath()) },
-			"the settings file's path (whether or not it exists); o-qbt app config path prints the framework's directories").Fetch().
 		Verb("set", func(c ochazuke.Ctx) ochazuke.Result {
 			stdin, _ := c.Args["stdin"].(bool)
 			return t.answer(t.ConfigSet(ochazuke.StringArg(c.Args, "key", ""), ochazuke.StringArg(c.Args, "value", ""), stdin))
@@ -620,17 +614,6 @@ func guardParamKV() []any {
 func withParams(op ochazuke.Operation, p map[string]ochazuke.Parameter) ochazuke.Operation {
 	op.Parameters = p
 	return op
-}
-
-// torrentPresets are torrent verbs that are torrent list with a fixed
-// --filter: data, not code paths.
-var torrentPresets = []struct{ Verb, Filter, About string }{
-	{"active", "active", "torrents moving data now"},
-	{"seeding", "seeding", "complete torrents uploading or waiting to"},
-	{"downloading", "downloading", "incomplete torrents downloading or waiting to"},
-	{"paused", "paused", "stopped torrents (v5 calls the filter stopped)"},
-	{"errored", "errored", "torrents in error or missing files"},
-	{"stalled", "stalled", "torrents with peers but no data moving"},
 }
 
 // queryParams are torrents/info's query as parameters (filter first, when
@@ -768,7 +751,7 @@ var deleteBatch = 200
 // deleteSelects reports whether c selects torrents for delete by
 // --hashes or a query rather than --target.
 func deleteSelects(c ochazuke.Ctx) bool {
-	for _, k := range []string{"hashes", "state", "filter", "category", "tag"} {
+	for _, k := range []string{"hashes", "status", "filter", "category", "tag"} {
 		if _, ok := c.Args[k]; ok {
 			return true
 		}
@@ -790,4 +773,24 @@ func setHistory(r *ochazuke.Runtime, kind string, keys ...string) {
 		op.HistoryKind = kind
 		r.Operations.Set(op)
 	}
+}
+
+// defineGuardStatus makes the guard one thing with a computed status prop
+// (the agent, the last log line, the mode and thresholds, free space,
+// whether it paused), read as `guard status` from the settings file's
+// numbers; guard show is the same value with the flags and a human print.
+func (t *Tool) defineGuardStatus(r *ochazuke.Runtime) {
+	r.Define("guard").Props(ochazuke.PropSpec{Name: "status", ReadOnly: true,
+		Parameter: ochazuke.Parameter{Type: ochazuke.SettingString, Description: "the launchd agent, the last guard.log line, the mode and its thresholds, free space (against the baseline in allowance mode), whether the guard paused"},
+		Read: func(ochazuke.Ctx, ochazuke.Thing) (any, error) {
+			conf, _, _, err := t.config()
+			if err != nil {
+				return nil, err
+			}
+			gs, err := guardSettings(conf, ochazuke.Arguments{})
+			if err != nil {
+				return nil, err
+			}
+			return t.GuardStatusOf(context.Background(), gs)
+		}}).Store(ochazuke.Store{Kind: ochazuke.Singleton, Facts: true, Get: func(ochazuke.Ctx, string) (ochazuke.Thing, error) { return ochazuke.Thing{}, nil }})
 }

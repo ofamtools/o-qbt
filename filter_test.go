@@ -154,7 +154,7 @@ func TestFilterWordErrors(t *testing.T) {
 		want []string
 	}{
 		{[]string{"pri"}, []string{`"pri" is ambiguous`, "private (privacy)", "privatehd (tracker)"}},
-		{[]string{"avz", "st"}, []string{`"st" is ambiguous`, "started (state)", "stalledUP (state)"}},
+		{[]string{"avz", "st"}, []string{`"st" is ambiguous`, "started (status)", "stalledUP (status)"}},
 		{[]string{"avz", "bogus"}, []string{`"bogus"`, "o qbt words"}},
 		{[]string{"--tracker", "[", "--match", "glob"}, []string{"glob"}},
 		{[]string{"--tracker", "(", "--match", "regex"}, []string{"regex"}},
@@ -169,18 +169,9 @@ func TestFilterWordErrors(t *testing.T) {
 }
 
 // TestFilterKeepsCommands: a first word that is a command runs it as
-// before; the old torrent presets keep their server filter.
+// before (the old torrent presets are saved filter rows now).
 func TestFilterKeepsCommands(t *testing.T) {
 	f, tool := filterFake(t)
-	for _, verb := range []string{"active", "seeding", "downloading", "paused", "errored", "stalled"} {
-		f.queries = nil
-		if _, _, err := cli(t, tool, "torrent", verb, "--format", "json"); err != nil {
-			t.Fatal(err)
-		}
-		if len(f.queries) != 1 || f.queries[0] != "filter="+verb {
-			t.Errorf("torrent %s asked %v", verb, f.queries)
-		}
-	}
 	f.queries = nil
 	hashesOf(t, tool, "seeding")
 	if len(f.queries) != 1 || f.queries[0] != "" {
@@ -223,17 +214,17 @@ func TestWordsListing(t *testing.T) {
 		"tracker\ttorrentleech\ttl\ttorrentleech\ttorrentleech.org, tleechreload.org",
 		"privacy\tprivate\t",
 		"activity\tinactive\tidle\tinactive",
-		"state\tseeding\tseed\tuploading,stalledUP,queuedUP\t",
-		"state\tfseeding\tforce-seeding,forced-seeding\tforcedUP\t",
-		"state\tfstarted\tforce-started,forced\tforcedUP,forcedDL,forcedMetaDL\t",
-		"state\tdownload\tdownloading\tdownloading,stalledDL,queuedDL,metaDL,checkingDL,allocating\t",
-		"state\tstalledUP\t\tstalledUP\t",
+		"status\tseeding\tseed\tuploading,stalledUP,queuedUP\t",
+		"status\tfseeding\tforce-seeding,forced-seeding\tforcedUP\t",
+		"status\tfstarted\tforce-started,forced\tforcedUP,forcedDL,forcedMetaDL\t",
+		"status\tdownload\tdownloading\tdownloading,stalledDL,queuedDL,metaDL,checkingDL,allocating\t",
+		"status\tstalledUP\t\tstalledUP\t",
 	} {
 		if !strings.Contains(out, want+"") {
 			t.Errorf("words lacks %q:\n%s", want, out)
 		}
 	}
-	if strings.Contains(out, "state\tdownloading\t") {
+	if strings.Contains(out, "status\tdownloading\t") {
 		t.Errorf("the literal downloading shadows the download group:\n%s", out)
 	}
 }

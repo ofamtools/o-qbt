@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"maps"
 	"os"
@@ -45,7 +46,7 @@ func TestGuardThresholdMarkerAndResume(t *testing.T) {
 	if m := tool.marker(); m != "2026-10-25T12:30:00-0400" {
 		t.Fatalf("marker %q", m)
 	}
-	out, _, err := cli(t, tool, "guard", "status")
+	out, _, err := cli(t, tool, "guard", "show")
 	if err != nil || !strings.Contains(out, "paused    by the guard since 2026-10-25T12:30:00-0400") || !strings.Contains(out, "used      20.0 GiB of 10.0 GiB limit") {
 		t.Fatalf("status: %v\n%s", err, out)
 	}
@@ -115,7 +116,7 @@ func TestGuardFloor(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	out, _, err := cli(t, tool, "guard", "status")
+	out, _, err := cli(t, tool, "guard", "show")
 	for _, want := range []string{"mode      floor", "min free  50.0 GiB (pause below)", "resume    above 150.0 GiB when the guard paused", "free      100.0 GiB on nas:/volume1", "paused    by the guard since 2026-10-25T12:30:00-0400"} {
 		if err != nil || !strings.Contains(out, want) {
 			t.Errorf("status lacks %q: %v\n%s", want, err, out)
@@ -234,7 +235,7 @@ func TestGuardFloorPausesOnlyDownloads(t *testing.T) {
 		t.Fatalf("marker %+v", m)
 	}
 	for _, p := range m.Torrents {
-		if p.Forced != (p.Hash == "d3") || p.State != guardTorrents[slices.IndexFunc(guardTorrents, func(x map[string]any) bool { return x["hash"] == p.Hash })]["state"] {
+		if p.Forced != (p.Hash == "d3") || p.Status != guardTorrents[slices.IndexFunc(guardTorrents, func(x map[string]any) bool { return x["hash"] == p.Hash })]["state"] {
 			t.Errorf("marker entry %+v", p)
 		}
 	}
@@ -256,7 +257,7 @@ func TestGuardFloorPausesOnlyDownloads(t *testing.T) {
 	if m, _ := tool.readMarker(); len(m.Torrents) != 6 || m.Time != "2026-10-25T12:30:00-0400" {
 		t.Fatalf("marker after the second pause %+v", m)
 	}
-	out, _, _ = cli(t, tool, "guard", "status")
+	out, _, _ = cli(t, tool, "guard", "show")
 	if !strings.Contains(out, "paused    by the guard since 2026-10-25T12:30:00-0400: 6 downloads; seeds left alone (o qbt guard resume)") {
 		t.Errorf("status:\n%s", out)
 	}
@@ -350,7 +351,7 @@ func TestGuardLegacyMarker(t *testing.T) {
 	if m, ok := tool.readMarker(); !ok || !m.Legacy || m.Time != "2026-10-20T01:00:00-0400" || tool.marker() != m.Time {
 		t.Fatalf("legacy marker %+v %v", m, ok)
 	}
-	out, _, _ := cli(t, tool, "guard", "status")
+	out, _, _ := cli(t, tool, "guard", "show")
 	if !strings.Contains(out, "by the guard since 2026-10-20T01:00:00-0400: an older marker that lists no torrents") {
 		t.Errorf("status:\n%s", out)
 	}
@@ -378,5 +379,29 @@ func TestGuardLegacyMarker(t *testing.T) {
 	before := len(f.posted())
 	if out, _, _ = cli(t, tool, "guard", "resume"); !strings.Contains(out, "downloads=0 forced=0\nnote: no marker") || len(f.posted()) != before {
 		t.Fatalf("resume without a marker: %q", out)
+	}
+}
+
+// A marker an older o-qbt wrote says "state" for what is now "status": it is
+// read as status, and written back so.
+func TestOlderMarkerStateKeyReadsAsStatus(t *testing.T) {
+	var m GuardMarker
+	old := `{"time":"2026-10-25T12:30:00-0400","torrents":[{"hash":"aaa","name":"alpha","state":"downloading","forced":false}]}`
+	if err := json.Unmarshal([]byte(old), &m); err != nil || len(m.Torrents) != 1 || m.Torrents[0].Status != "downloading" {
+		t.Fatalf("older marker: %+v (%v)", m, err)
+	}
+	out, err := json.Marshal(m)
+	if err != nil || !strings.Contains(string(out), `"status":"downloading"`) || strings.Contains(string(out), `"state"`) {
+		t.Fatalf("written back: %s (%v)", out, err)
+	}
+}
+
+// guard status is a prop of the guard (the same value guard show prints).
+func TestGuardStatusIsAProp(t *testing.T) {
+	f := newFake(t)
+	tool := testTool(t, f.URL, "good", nil)
+	out, _, err := cli(t, tool, "guard", "status")
+	if err != nil || !strings.Contains(out, `"launchd"`) {
+		t.Fatalf("guard status prop: %q (%v)", out, err)
 	}
 }

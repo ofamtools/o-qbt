@@ -22,22 +22,22 @@
   },
   "states": [
     {
-      "state": "downloading",
+      "status": "downloading",
       "count": 1,
       "size": 4096
     },
     {
-      "state": "pausedDL",
+      "status": "pausedDL",
       "count": 1,
       "size": 1288490188
     },
     {
-      "state": "stalledUP",
+      "status": "stalledUP",
       "count": 1,
       "size": 2048
     },
     {
-      "state": "total",
+      "status": "total",
       "count": 3,
       "size": 1288496332
     }
@@ -46,7 +46,7 @@
     {
       "hash": "aaa",
       "name": "alpha",
-      "state": "downloading",
+      "status": "downloading",
       "progress": 0.4217,
       "size": 4096,
       "dlspeed": 3565158,
@@ -64,7 +64,7 @@
     {
       "hash": "bbb",
       "name": "Zeta",
-      "state": "stalledUP",
+      "status": "stalledUP",
       "progress": 1,
       "size": 2048,
       "dlspeed": 0,
@@ -82,7 +82,7 @@
     {
       "hash": "ccc",
       "name": "Movie, The \"Cut\"",
-      "state": "pausedDL",
+      "status": "pausedDL",
       "progress": 0.5,
       "size": 1288490188,
       "dlspeed": 0,
@@ -98,7 +98,7 @@
     {
       "hash": "aaa",
       "name": "alpha",
-      "state": "downloading",
+      "status": "downloading",
       "progress": 0.4217,
       "size": 4096,
       "dlspeed": 3565158,

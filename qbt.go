@@ -18,7 +18,7 @@ import (
 type Torrent struct {
 	Hash        string  `json:"hash"`
 	Name        string  `json:"name"`
-	State       string  `json:"state"`
+	Status      string  `json:"status"`
 	Progress    float64 `json:"progress"`
 	Size        int64   `json:"size"`
 	DLSpeed     int64   `json:"dlspeed"`
@@ -38,7 +38,7 @@ type Torrent struct {
 
 // TorrentData is a torrent row's data.
 type TorrentData struct {
-	State       string  `json:"state"`
+	Status      string  `json:"status"`
 	Progress    float64 `json:"progress"`
 	Size        int64   `json:"size"`
 	DLSpeed     int64   `json:"dlspeed"`
@@ -59,8 +59,8 @@ type Row struct {
 func torrentRow(t Torrent) Row {
 	return Row{
 		ID:    t.Hash,
-		Label: fmt.Sprintf("%s  %.1f%%  %s", t.State, t.Progress*100, t.Name),
-		Data:  TorrentData{t.State, t.Progress, t.Size, t.DLSpeed, t.ETA, t.Category, t.AddedOn, t.CompletedOn, t.SavePath},
+		Label: fmt.Sprintf("%s  %.1f%%  %s", t.Status, t.Progress*100, t.Name),
+		Data:  TorrentData{t.Status, t.Progress, t.Size, t.DLSpeed, t.ETA, t.Category, t.AddedOn, t.CompletedOn, t.SavePath},
 	}
 }
 
@@ -79,7 +79,7 @@ type TorrentQuery struct {
 var TorrentFilters = []string{"all", "downloading", "seeding", "completed", "paused", "stopped", "active", "inactive", "resumed", "running", "stalled", "stalled_uploading", "stalled_downloading", "errored", "checking", "moving"}
 
 // TorrentSorts are the --sort fields; the value is the Web API's field.
-var TorrentSorts = map[string]string{"name": "name", "size": "size", "progress": "progress", "dlspeed": "dlspeed", "upspeed": "upspeed", "eta": "eta", "ratio": "ratio", "added_on": "added_on", "completed_on": "completion_on", "state": "state"}
+var TorrentSorts = map[string]string{"name": "name", "size": "size", "progress": "progress", "dlspeed": "dlspeed", "upspeed": "upspeed", "eta": "eta", "ratio": "ratio", "added_on": "added_on", "completed_on": "completion_on", "status": "state"}
 
 // Values is q as torrents/info's query string.
 func (q TorrentQuery) Values() url.Values {

@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"ofam.dev/ochazuke"
 )
 
 // golden compares got with testdata/NAME (rewritten with -update).
@@ -49,12 +51,6 @@ func TestListQueryIsPassedThrough(t *testing.T) {
 		{[]string{"torrent", "export", "--filter", "active", "--out", filepath.Join(t.TempDir(), "x.csv")}, "filter=active"},
 		{[]string{"torrent", "summary", "--filter", "stalled_downloading"}, "filter=stalled_downloading"},
 	}
-	for _, p := range torrentPresets {
-		cases = append(cases, struct {
-			args []string
-			want string
-		}{[]string{"torrent", p.Verb, "--limit", "1"}, "filter=" + p.Filter + "&limit=1"})
-	}
 	for _, tc := range cases {
 		run(t, tool, tc.args...)
 		if got := f.queries[len(f.queries)-1]; got != tc.want {
@@ -94,7 +90,7 @@ func TestSortLimitReverseAndPresets(t *testing.T) {
 		}
 	}
 	for verb, want := range map[string]string{"active": "aaa,bbb", "seeding": "bbb", "downloading": "aaa", "paused": "ccc", "errored": "", "stalled": "bbb"} {
-		got := strings.Join(strings.Fields(strings.TrimPrefix(run(t, tool, "torrent", verb, "--format", "tsv", "--columns", "hash"), "hash\n")), ",")
+		got := strings.Join(strings.Fields(strings.TrimPrefix(run(t, tool, "torrent", "list", "--filter", verb, "--format", "tsv", "--columns", "hash"), "hash\n")), ",")
 		if got != want {
 			t.Errorf("torrent %s: %q, want %q", verb, got, want)
 		}
@@ -112,7 +108,7 @@ func TestFormatsGolden(t *testing.T) {
 	golden(t, "formats/category.toon", run(t, tool, "category", "list", "--format", "toon"))
 	golden(t, "formats/transfer.md", run(t, tool, "transfer", "info", "--format", "md"))
 	golden(t, "formats/app.csv", run(t, tool, "app", "info", "--format", "csv", "--columns", "version,webapi_version,free_space_on_disk"))
-	if _, _, err := cli(t, tool, "torrent", "list", "--format", "csv", "--columns", "name,colour"); err == nil || !strings.Contains(err.Error(), `torrent has no column "colour" (columns: hash,name,state,progress,size,dlspeed,eta,upspeed,ratio`) {
+	if _, _, err := cli(t, tool, "torrent", "list", "--format", "csv", "--columns", "name,colour"); err == nil || !strings.Contains(err.Error(), `torrent has no column "colour" (columns: hash,name,status,progress,size,dlspeed,eta,upspeed,ratio`) {
 		t.Errorf("unknown column: %v", err)
 	}
 }
@@ -175,4 +171,29 @@ func TestSummaryAndOverviewGolden(t *testing.T) {
 	golden(t, "overview-guard.table", run(t, tool, "torrent", "overview", "--format", "table"))
 	golden(t, "overview.json", run(t, tool, "torrent", "overview"))
 	golden(t, "overview.md", run(t, tool, "torrent", "overview", "--format", "md"))
+}
+
+// The adjectives that were torrent verbs (seeding, downloading, paused,
+// errored, stalled) are the torrent noun's saved filter rows, and the verbs
+// are gone; the filter option still takes the words.
+func TestAdjectivesAreSavedFilters(t *testing.T) {
+	f := newFake(t)
+	tool := testTool(t, f.URL, "good", nil)
+	r := tool.shell().Runtime
+	rows, err := r.SavedFilters("", "torrent")
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[string]bool{}
+	for _, f := range rows {
+		got[f.Name] = len(f.Conditions) == 1 && f.Conditions[0].Prop == "status"
+	}
+	for _, f := range torrentFilters {
+		if !got[f.Name] {
+			t.Errorf("no saved filter row %q on a status condition: %v", f.Name, got)
+		}
+		if _, ok := r.Operations.Find(ochazuke.Key("qbt.torrent." + f.Name)); ok {
+			t.Errorf("torrent %s is still a verb", f.Name)
+		}
+	}
 }

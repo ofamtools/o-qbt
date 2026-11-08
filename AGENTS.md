@@ -9,7 +9,7 @@ The qBittorrent family tool (`o-qbt`, so `o qbt`). An oden app with an ochazuke 
 | Settings file, env overrides, the password prompt | `config.go` |
 | The Web API session: one login per process, stop/pause fallback | `client.go` |
 | What each verb asks qBittorrent; records and tables | `qbt.go` |
-| Aggregations: summary per state, overview | `report.go` |
+| Aggregations: summary per status, overview | `report.go` |
 | The output engine: `Table`, formats (table, json, jsonl, tsv, csv, md, toon), humanisers | `format.go` |
 | Each record type as a `Table`; the overview's rendering | `tables.go` |
 | Filter words (`o qbt avz completed inactive`): the tracker table, the categories and words, word resolution, `--tracker`/`--name` patterns, tracker counts | `filter.go` |

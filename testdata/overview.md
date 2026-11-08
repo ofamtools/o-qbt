@@ -22,7 +22,7 @@
 
 ## states
 
-| state | count | size |
+| status | count | size |
 | --- | --: | --: |
 | downloading | 1 | 4.0 KiB |
 | pausedDL | 1 | 1.2 GiB |
@@ -43,7 +43,7 @@
 
 ## oldest_unfinished
 
-| name | added_on | progress | state |
+| name | added_on | progress | status |
 | --- | --- | --: | --- |
 | Movie, The "Cut" | 1969-12-31 20:00 | 50.0% | pausedDL |
 | alpha | 1969-12-31 20:00 | 42.2% | downloading |

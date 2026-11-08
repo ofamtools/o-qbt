@@ -181,7 +181,7 @@ func TestDeleteAsksFirst(t *testing.T) {
 func TestDeleteSelection(t *testing.T) {
 	f := newFake(t)
 	tool := testTool(t, f.URL, "good", nil)
-	if _, _, err := cli(t, tool, "torrent", "delete", "--state", "stalledUP", "--yes"); err != nil {
+	if _, _, err := cli(t, tool, "torrent", "delete", "--status", "stalledUP", "--yes"); err != nil {
 		t.Fatal(err)
 	}
 	if _, _, err := cli(t, tool, "torrent", "delete", "--hashes", "aaa,ccc", "--yes"); err != nil {
@@ -200,7 +200,7 @@ func TestDeleteSelection(t *testing.T) {
 	if got := strings.Join(f.removed, ","); got != "bbb files=false,aaa|ccc files=false,aaa|ccc files=false,bbb files=false" {
 		t.Fatalf("removed %v", f.removed)
 	}
-	if _, _, err := cli(t, tool, "torrent", "delete", "--target", "aaa", "--state", "x", "--yes"); err == nil || !strings.Contains(err.Error(), "not both") {
+	if _, _, err := cli(t, tool, "torrent", "delete", "--target", "aaa", "--status", "x", "--yes"); err == nil || !strings.Contains(err.Error(), "not both") {
 		t.Fatal("--target with a selection should fail")
 	}
 }

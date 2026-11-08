@@ -12,7 +12,7 @@ import (
 // torrentColumns are a torrent's columns; the first seven are the default.
 func torrentColumns(loc *time.Location) []Column {
 	return []Column{
-		{Name: "hash"}, {Name: "name"}, {Name: "state"},
+		{Name: "hash"}, {Name: "name"}, {Name: "status"},
 		{Name: "progress", Human: hPct, Right: true},
 		{Name: "size", Human: hBytes, Right: true},
 		{Name: "dlspeed", Human: hRate, Right: true},
@@ -27,14 +27,14 @@ func torrentColumns(loc *time.Location) []Column {
 	}
 }
 
-var torrentDefault = []string{"hash", "name", "state", "progress", "size", "dlspeed", "eta"}
+var torrentDefault = []string{"hash", "name", "status", "progress", "size", "dlspeed", "eta"}
 
 func torrentValues(t Torrent) []any {
 	var private any
 	if t.Private != nil {
 		private = *t.Private
 	}
-	return []any{t.Hash, t.Name, t.State, t.Progress, t.Size, t.DLSpeed, t.ETA, t.UPSpeed, t.Ratio, t.Category, t.Tags, t.AddedOn, t.CompletedOn, t.SavePath, strings.Join(t.Hosts, ","), private}
+	return []any{t.Hash, t.Name, t.Status, t.Progress, t.Size, t.DLSpeed, t.ETA, t.UPSpeed, t.Ratio, t.Category, t.Tags, t.AddedOn, t.CompletedOn, t.SavePath, strings.Join(t.Hosts, ","), private}
 }
 
 // WordTable is the filter vocabulary as table "word": one row per word.
@@ -84,10 +84,10 @@ func CategoryTable(cs []Category) Table {
 }
 
 // SummaryTable is counts and size per state, the total last.
-func SummaryTable(ss []StateCount) Table {
-	t := Table{Name: "summary", Columns: []Column{{Name: "state"}, {Name: "count", Right: true}, {Name: "size", Human: hBytes, Right: true}}, Rows: make([][]any, len(ss))}
+func SummaryTable(ss []StatusCount) Table {
+	t := Table{Name: "summary", Columns: []Column{{Name: "status"}, {Name: "count", Right: true}, {Name: "size", Human: hBytes, Right: true}}, Rows: make([][]any, len(ss))}
 	for i, s := range ss {
-		t.Rows[i] = []any{s.State, s.Count, s.Size}
+		t.Rows[i] = []any{s.Status, s.Count, s.Size}
 	}
 	return t
 }
@@ -162,7 +162,7 @@ func (v OverviewView) sections() []Table {
 		v.totals(), states,
 		pick("top_download", v.O.TopDownload, "name", "dlspeed", "progress", "eta"),
 		pick("top_upload", v.O.TopUpload, "name", "upspeed", "ratio"),
-		pick("oldest_unfinished", v.O.OldestUnfinished, "name", "added_on", "progress", "state"),
+		pick("oldest_unfinished", v.O.OldestUnfinished, "name", "added_on", "progress", "status"),
 		cats,
 	}
 }
@@ -194,7 +194,7 @@ func (v OverviewView) Render(format string, columns []string) (string, error) {
 		var b strings.Builder
 		fmt.Fprintf(&b, "torrents %d  active %d  seeding %d  downloading %d  paused %d  errored %d  size %s  down %s  up %s  free %s  %s\n",
 			x.Torrents, x.Active, x.Seeding, x.Downloading, x.Paused, x.Errored, bytesH(x.Size), rate(x.DLSpeed), rate(x.UPSpeed), bytesH(x.Free), x.Guard.line())
-		titles := map[string]string{"states": "by state", "top_download": "top download", "top_upload": "top upload", "oldest_unfinished": "oldest unfinished"}
+		titles := map[string]string{"states": "by status", "top_download": "top download", "top_upload": "top upload", "oldest_unfinished": "oldest unfinished"}
 		secs := v.sections()
 		for _, t := range secs[1 : len(secs)-1] {
 			b.WriteString("\n" + titles[t.Name] + "\n")
