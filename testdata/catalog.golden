@@ -86,7 +86,7 @@
     {
       "name": "ochazuke.",
       "kind": "inline",
-      "summary": "(+78 nouns)",
+      "summary": "(+81 nouns)",
       "source": "namespace",
       "aliases": [
         "ochazuke"
@@ -563,12 +563,38 @@
       ]
     },
     {
+      "name": "ochazuke.referrer",
+      "kind": "inline",
+      "summary": "· std get list watch",
+      "source": "noun",
+      "aliases": [
+        "referrer"
+      ]
+    },
+    {
       "name": "ochazuke.register",
       "kind": "inline",
       "summary": "append select · std get list set edit watch",
       "source": "noun",
       "aliases": [
         "register"
+      ]
+    },
+    {
+      "name": "ochazuke.related",
+      "kind": "inline",
+      "source": "noun",
+      "aliases": [
+        "related"
+      ]
+    },
+    {
+      "name": "ochazuke.related-section",
+      "kind": "inline",
+      "summary": "associate close close-all first hide last move-down move-up new next open open-all previous refresh show toggle unassociate · std get list watch",
+      "source": "noun",
+      "aliases": [
+        "related-section"
       ]
     },
     {
@@ -851,7 +877,10 @@
     "pane": "ochazuke.pane",
     "picker": "ochazuke.picker",
     "prompt": "ochazuke.prompt",
+    "referrer": "ochazuke.referrer",
     "register": "ochazuke.register",
+    "related": "ochazuke.related",
+    "related-section": "ochazuke.related-section",
     "request": "ochazuke.request",
     "search": "ochazuke.search",
     "search-state": "ochazuke.search-state",
@@ -6143,6 +6172,10 @@
             "desc": {
               "type": "boolean",
               "description": "Set descending or ascending explicitly; omit to cycle"
+            },
+            "field": {
+              "type": "string",
+              "description": "Cycle this prop (ascending, descending, off) instead of the current column or a chosen field"
             },
             "id": {
               "type": "string",
@@ -14494,6 +14527,435 @@
       ]
     },
     {
+      "name": "ochazuke.referrer",
+      "kind": "collection",
+      "props": [
+        {
+          "name": "id",
+          "type": "string",
+          "description": "The referring prop's place: NOUN.PROP",
+          "readOnly": true,
+          "key": true,
+          "human": true
+        },
+        {
+          "name": "noun",
+          "type": "string",
+          "description": "The noun that declares the prop",
+          "readOnly": true
+        },
+        {
+          "name": "prop",
+          "type": "string",
+          "description": "The referring prop",
+          "readOnly": true
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "description": "The prop's role (owner: the thing belongs to the referenced one)",
+          "readOnly": true
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "description": "Whether set refuses to write the prop",
+          "readOnly": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "description": "The heading of a section of the referring noun's things",
+          "readOnly": true,
+          "role": "label"
+        }
+      ],
+      "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "The referrer's id (default: the referrer the request acts for)",
+              "source": "ochazuke.referrer.list",
+              "free": true,
+              "noun": "ochazuke.referrer",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "id"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "from": {
+              "type": "any",
+              "description": "Copy this thing (an id or a human key, or a row holding its key): every prop create writes, read from it, unless given",
+              "source": "ochazuke.referrer.list",
+              "free": true,
+              "noun": "ochazuke.referrer",
+              "covers": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "create"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": true,
+          "agent": "never",
+          "name": "delete",
+          "description": "Delete a thing (asks first)",
+          "kind": "application",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "The referrer's id (default: the referrer the request acts for)",
+              "source": "ochazuke.referrer.list",
+              "free": true,
+              "noun": "ochazuke.referrer",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "confirm": "Delete {{noun}} {{label}}?",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "id"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "delete"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
+              "plumbing": true
+            },
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "free": true,
+              "plumbing": true
+            },
+            "id": {
+              "type": "string",
+              "description": "The referrer's id (default: the referrer the request acts for)",
+              "source": "ochazuke.referrer.list",
+              "free": true,
+              "noun": "ochazuke.referrer",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "id",
+            "field",
+            "chooser"
+          ],
+          "history": "action",
+          "builtin": true,
+          "standard": "edit"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "The referrer's id (default: the referrer the request acts for)",
+              "source": "ochazuke.referrer.list",
+              "free": true,
+              "noun": "ochazuke.referrer",
+              "focus": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "id",
+                "noun",
+                "prop",
+                "role",
+                "readOnly",
+                "label",
+                "@label"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "id",
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "get"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "list",
+          "description": "List the things, each its props with id and label, as a page {items, page, per_page, total}; filter and where keep the things that meet conditions, sort orders them, group-by gathers them into groups, per-page and page cut the result into pages (rows, never groups)",
+          "kind": "application",
+          "params": {
+            "archived": {
+              "type": "boolean",
+              "description": "Include the archived things collection.hide-archived hides by default"
+            },
+            "filter": {
+              "type": "string",
+              "description": "Keep the things that meet every condition: words prop=value, prop!=value, prop~value (contains), prop!~value, with a|b for alternatives; or the name of a saved prop filter for this noun. ANDed with where",
+              "free": true
+            },
+            "group-by": {
+              "type": "string",
+              "description": "Gather the rows that share these props' values into groups (comma-separated props); each row names its group",
+              "free": true
+            },
+            "group-sort": {
+              "type": "string",
+              "description": "Order the groups by group-by props, each prop[:desc] (default: the order the groups first appear in)",
+              "free": true
+            },
+            "limit": {
+              "type": "integer",
+              "description": "At most this many rows: the first page of that size (0: every row)"
+            },
+            "noun": {
+              "type": "string",
+              "description": "Only props that name this noun's things"
+            },
+            "page": {
+              "type": "integer",
+              "description": "The page to answer, from 1 (with per-page)"
+            },
+            "per-page": {
+              "type": "integer",
+              "description": "Rows per page, counting rows, never groups (0: one page of every row)"
+            },
+            "props": {
+              "type": "string",
+              "description": "The props each row holds besides id and label, comma-separated (default: every prop but secrets)"
+            },
+            "sort": {
+              "type": "string",
+              "description": "Order the rows by props, comma-separated, each prop[:desc]; ties keep the store's order",
+              "free": true
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: keep the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "rows",
+          "rows": "ochazuke.referrer",
+          "positional": [
+            "limit",
+            "noun",
+            "props",
+            "where"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "list"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "set",
+          "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
+          "kind": "application",
+          "params": {
+            "changes": {
+              "type": "object",
+              "description": "The old name of props (accepted for one release)"
+            },
+            "id": {
+              "type": "string",
+              "description": "The referrer's id (default: the referrer the request acts for)",
+              "source": "ochazuke.referrer.list",
+              "free": true,
+              "noun": "ochazuke.referrer",
+              "focus": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "More prop=value words after the first, filling props",
+              "rest": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "The prop toggle flips; a prop=value word fills props (with value, the one-prop form props replaces)",
+              "free": true,
+              "pairs": true
+            },
+            "props": {
+              "type": "object",
+              "description": "The props to write: an object of prop (or @role: @label, @owner, @archive) to value, a subset or all of them; the others keep their values"
+            },
+            "toggle": {
+              "type": "boolean",
+              "description": "Flip the boolean prop instead of giving a value",
+              "excludes": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "any",
+              "description": "The prop's new value, typed by the prop (a word such as 3, true or 400ms, a JSON array or object); props replaces it",
+              "valueOf": "prop"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "id",
+            "prop",
+            "value",
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "set"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "The referrer's id: this one alone (default: every referrer)",
+              "source": "ochazuke.referrer.list",
+              "free": true,
+              "noun": "ochazuke.referrer"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: watch the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "id"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "watch"
+        }
+      ]
+    },
+    {
       "name": "ochazuke.register",
       "kind": "collection",
       "unpersisted": true,
@@ -15035,6 +15497,945 @@
           "result": "JSON value",
           "positional": [
             "name"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "watch"
+        }
+      ]
+    },
+    {
+      "name": "ochazuke.related-section",
+      "kind": "collection",
+      "props": [
+        {
+          "name": "id",
+          "type": "string",
+          "description": "The section's place: NOUN.PROP of the referring prop",
+          "readOnly": true,
+          "key": true,
+          "human": true
+        },
+        {
+          "name": "noun",
+          "type": "string",
+          "description": "The noun whose things the section lists",
+          "readOnly": true
+        },
+        {
+          "name": "prop",
+          "type": "string",
+          "description": "The prop that names the thing",
+          "readOnly": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "description": "The section's heading",
+          "readOnly": true,
+          "role": "label"
+        },
+        {
+          "name": "count",
+          "type": "integer",
+          "description": "How many things it lists",
+          "readOnly": true
+        },
+        {
+          "name": "collapsed",
+          "type": "boolean",
+          "description": "Whether it is folded to its heading",
+          "readOnly": true
+        },
+        {
+          "name": "hidden",
+          "type": "boolean",
+          "description": "Whether the hidden setting keeps it out",
+          "readOnly": true
+        },
+        {
+          "name": "position",
+          "type": "integer",
+          "description": "Its place in the display order, from 1",
+          "readOnly": true
+        }
+      ],
+      "verbs": [
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "archive",
+          "description": "Archive a thing: set its archive prop",
+          "kind": "application",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "The related-section's id (default: the related-section the request acts for)",
+              "source": "ochazuke.related-section.list",
+              "free": true,
+              "noun": "ochazuke.related-section",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "id"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "archive"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "associate",
+          "description": "Set the referring prop of existing things of the section's noun to the section's thing: name one with thing, or be asked which",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            },
+            "thing": {
+              "type": "string",
+              "description": "The thing to associate (its key); asked for when missing",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "close",
+          "description": "Fold the section to its heading",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "close-all",
+          "description": "Fold every section to its heading",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "create",
+          "description": "Create a thing from the props given (each omitted one its default), or a copy of the thing from names (its props create writes, the props given in place of its values); answers the new thing",
+          "kind": "application",
+          "params": {
+            "from": {
+              "type": "any",
+              "description": "Copy this thing (an id or a human key, or a row holding its key): every prop create writes, read from it, unless given",
+              "source": "ochazuke.related-section.list",
+              "free": true,
+              "noun": "ochazuke.related-section",
+              "covers": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "prop=value words for the props (plan 2.6: NOUN create [p=v ...]), after the label",
+              "rest": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "positional": [
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "create"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": true,
+          "agent": "never",
+          "name": "delete",
+          "description": "Delete a thing (asks first)",
+          "kind": "application",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "The related-section's id (default: the related-section the request acts for)",
+              "source": "ochazuke.related-section.list",
+              "free": true,
+              "noun": "ochazuke.related-section",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "confirm": "Delete {{noun}} {{label}}?",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "id"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "delete"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "edit",
+          "description": "Edit a thing's writable props in a form, or one of them (field, a prop or @role: with edit.field-only the form holds only it, else it is focused; a field that takes a choice opens its picker instead, edit.field-picker or the chooser argument); supplied props write directly without opening a form",
+          "kind": "application",
+          "params": {
+            "chooser": {
+              "type": "boolean",
+              "description": "With field on a prop that takes a choice: true opens its picker (the pick writes and closes), false the one-field form; omitted, edit.field-picker decides (the argument keeps its old name chooser)",
+              "plumbing": true
+            },
+            "field": {
+              "type": "string",
+              "description": "The one prop to edit (a name, or @label, @owner, @archive for the prop with that role): with edit.field-only the form holds only it, else the full form opens on it",
+              "free": true,
+              "plumbing": true
+            },
+            "id": {
+              "type": "string",
+              "description": "The related-section's id (default: the related-section the request acts for)",
+              "source": "ochazuke.related-section.list",
+              "free": true,
+              "noun": "ochazuke.related-section",
+              "focus": true
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "its store writes no props (no Store.Patch)",
+          "many": true,
+          "positional": [
+            "id",
+            "field",
+            "chooser"
+          ],
+          "history": "action",
+          "builtin": true,
+          "standard": "edit"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "first",
+          "description": "Go to the first section's heading",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "motion": true,
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "get",
+          "description": "Read a thing's props: every prop as an object, one prop's value (prop), or some props (props)",
+          "kind": "application",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "The related-section's id (default: the related-section the request acts for)",
+              "source": "ochazuke.related-section.list",
+              "free": true,
+              "noun": "ochazuke.related-section",
+              "focus": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "One prop (or @role: the prop with that role): answer its value alone; a dotted path (prop.key.0.key) reads inside an object or list prop",
+              "enum": [
+                "id",
+                "noun",
+                "prop",
+                "label",
+                "count",
+                "collapsed",
+                "hidden",
+                "position",
+                "@label"
+              ],
+              "free": true
+            },
+            "props": {
+              "type": "string",
+              "description": "The props to answer, comma-separated (default: every prop but secrets)"
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "id",
+            "prop"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "get"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "hide",
+          "description": "Keep the section out of the stack (writes the hidden setting)",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "last",
+          "description": "Go to the last section's heading",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "motion": true,
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "list",
+          "description": "List the things, each its props with id and label, as a page {items, page, per_page, total}; filter and where keep the things that meet conditions, sort orders them, group-by gathers them into groups, per-page and page cut the result into pages (rows, never groups)",
+          "kind": "application",
+          "params": {
+            "archived": {
+              "type": "boolean",
+              "description": "Include the archived things collection.hide-archived hides by default"
+            },
+            "filter": {
+              "type": "string",
+              "description": "Keep the things that meet every condition: words prop=value, prop!=value, prop~value (contains), prop!~value, with a|b for alternatives; or the name of a saved prop filter for this noun. ANDed with where",
+              "free": true
+            },
+            "group-by": {
+              "type": "string",
+              "description": "Gather the rows that share these props' values into groups (comma-separated props); each row names its group",
+              "free": true
+            },
+            "group-sort": {
+              "type": "string",
+              "description": "Order the groups by group-by props, each prop[:desc] (default: the order the groups first appear in)",
+              "free": true
+            },
+            "limit": {
+              "type": "integer",
+              "description": "At most this many rows: the first page of that size (0: every row)"
+            },
+            "page": {
+              "type": "integer",
+              "description": "The page to answer, from 1 (with per-page)"
+            },
+            "per-page": {
+              "type": "integer",
+              "description": "Rows per page, counting rows, never groups (0: one page of every row)"
+            },
+            "props": {
+              "type": "string",
+              "description": "The props each row holds besides id and label, comma-separated (default: every prop but secrets)"
+            },
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "sort": {
+              "type": "string",
+              "description": "Order the rows by props, comma-separated, each prop[:desc]; ties keep the store's order",
+              "free": true
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: keep the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "rows",
+          "rows": "ochazuke.related-section",
+          "positional": [
+            "limit",
+            "props",
+            "related",
+            "where"
+          ],
+          "history": "fetch",
+          "builtin": true,
+          "standard": "list"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "move-down",
+          "description": "Move the section down the stack (writes the order setting)",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "move-up",
+          "description": "Move the section up the stack (writes the order setting)",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "new",
+          "description": "Create a thing of the section's noun that belongs to the section's thing: the noun's create with the referring prop filled",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "next",
+          "description": "Go to the next section's heading",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "motion": true,
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "open",
+          "description": "Unfold the section: its things show",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "open-all",
+          "description": "Unfold every section",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "previous",
+          "description": "Go to the previous section's heading",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "motion": true,
+          "history": "action",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "refresh",
+          "description": "Read the sections' things again (every section, or the one named)",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "set",
+          "description": "Write a thing's props: props, an object of prop to value (a subset or all of them; @label, @owner and @archive name a prop by its role), or prop=value words; toggle flips one boolean prop; answers the thing after the write",
+          "kind": "application",
+          "params": {
+            "changes": {
+              "type": "object",
+              "description": "The old name of props (accepted for one release)"
+            },
+            "id": {
+              "type": "string",
+              "description": "The related-section's id (default: the related-section the request acts for)",
+              "source": "ochazuke.related-section.list",
+              "free": true,
+              "noun": "ochazuke.related-section",
+              "focus": true
+            },
+            "pairs": {
+              "type": "string",
+              "description": "More prop=value words after the first, filling props",
+              "rest": true
+            },
+            "prop": {
+              "type": "string",
+              "description": "The prop toggle flips; a prop=value word fills props (with value, the one-prop form props replaces)",
+              "free": true,
+              "pairs": true
+            },
+            "props": {
+              "type": "object",
+              "description": "The props to write: an object of prop (or @role: @label, @owner, @archive) to value, a subset or all of them; the others keep their values"
+            },
+            "toggle": {
+              "type": "boolean",
+              "description": "Flip the boolean prop instead of giving a value",
+              "excludes": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "any",
+              "description": "The prop's new value, typed by the prop (a word such as 3, true or 400ms, a JSON array or object); props replaces it",
+              "valueOf": "prop"
+            }
+          },
+          "result": "JSON value",
+          "disabled": true,
+          "unavailable": "a system fact",
+          "many": true,
+          "positional": [
+            "id",
+            "prop",
+            "value",
+            "pairs"
+          ],
+          "history": "change",
+          "builtin": true,
+          "standard": "set"
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "show",
+          "description": "Bring a hidden section back (writes the hidden setting)",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "toggle",
+          "description": "Fold the section to its heading, or unfold it",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "unassociate",
+          "description": "Clear the referring prop of the selected (or marked) things of the section: they become unassociated, never deleted; one undo step",
+          "kind": "application",
+          "params": {
+            "related": {
+              "type": "string",
+              "description": "The related stack (default: the one at the focus, else the first)",
+              "noun": "ochazuke.related",
+              "named": true
+            },
+            "section": {
+              "type": "string",
+              "description": "The section, NOUN.PROP (default: the one at the focus)",
+              "source": "ochazuke.related-section.list",
+              "noun": "ochazuke.related-section",
+              "named": true
+            }
+          },
+          "result": "JSON value",
+          "history": "change",
+          "builtin": true
+        },
+        {
+          "examples": [
+            {
+              "args": {},
+              "note": "Template: replace placeholder values before running"
+            }
+          ],
+          "destructive": false,
+          "agent": "allow",
+          "name": "watch",
+          "description": "Stream what happens to the things (one, or those where matches): a JSON line per thing added, modified or deleted, from since when given; the CLI streams until interrupted",
+          "kind": "application",
+          "params": {
+            "id": {
+              "type": "string",
+              "description": "The related-section's id: this one alone (default: every related-section)",
+              "source": "ochazuke.related-section.list",
+              "free": true,
+              "noun": "ochazuke.related-section"
+            },
+            "since": {
+              "type": "string",
+              "description": "Start from this hash (an earlier event's hash): emit what changed since it instead of every thing as added"
+            },
+            "where": {
+              "type": "string",
+              "description": "prop=value pairs, comma- or space-separated: watch the things whose props equal every value",
+              "free": true,
+              "pairs": true
+            }
+          },
+          "result": "JSON value",
+          "positional": [
+            "id"
           ],
           "history": "fetch",
           "builtin": true,
@@ -21573,7 +22974,8 @@
       "request": {
         "verb": "close",
         "noun": "ochazuke.modal"
-      }
+      },
+      "when": "setting:modal.esc-closes"
     },
     {
       "noun": "ochazuke.confirm",
@@ -21847,7 +23249,8 @@
       "request": {
         "verb": "close",
         "noun": "ochazuke.modal"
-      }
+      },
+      "when": "setting:modal.esc-closes"
     },
     {
       "noun": "ochazuke.picker",
@@ -22785,7 +24188,22 @@
       "request": {
         "verb": "close",
         "noun": "ochazuke.modal"
-      }
+      },
+      "when": "setting:modal.esc-closes"
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.find-line",
+      "keys": "esc",
+      "request": {
+        "verb": "switch",
+        "noun": "ochazuke.mode",
+        "args": {
+          "mode": "normal"
+        }
+      },
+      "when": "input-unpinned",
+      "hint": "normal"
     },
     {
       "mode": "insert",
@@ -23057,7 +24475,21 @@
         "verb": "normal",
         "noun": "ochazuke.picker"
       },
-      "hidden": true
+      "hint": "normal"
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.prompt",
+      "keys": "esc",
+      "request": {
+        "verb": "switch",
+        "noun": "ochazuke.mode",
+        "args": {
+          "mode": "normal"
+        }
+      },
+      "when": "input-unpinned",
+      "hint": "normal"
     },
     {
       "mode": "insert",
@@ -23075,7 +24507,22 @@
       "request": {
         "verb": "close",
         "noun": "ochazuke.modal"
-      }
+      },
+      "when": "setting:modal.esc-closes"
+    },
+    {
+      "mode": "insert",
+      "noun": "ochazuke.setting-value",
+      "keys": "esc",
+      "request": {
+        "verb": "switch",
+        "noun": "ochazuke.mode",
+        "args": {
+          "mode": "normal"
+        }
+      },
+      "when": "input-unpinned",
+      "hint": "normal"
     },
     {
       "mode": "leader_pending",
@@ -23937,7 +25384,8 @@
       "request": {
         "verb": "close",
         "noun": "ochazuke.about"
-      }
+      },
+      "when": "setting:modal.esc-closes"
     },
     {
       "mode": "normal",
@@ -24048,6 +25496,22 @@
     {
       "mode": "normal",
       "noun": "ochazuke.bindings-help",
+      "keys": "U",
+      "request": {
+        "verb": "filter-prop-clear",
+        "noun": "ochazuke.collection",
+        "args": {
+          "prop": "unbound"
+        }
+      },
+      "when": "help-table",
+      "hint": "all",
+      "hidden": true,
+      "help": "Table view: clear the unbound-only filter"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.bindings-help",
       "keys": "a",
       "request": {
         "verb": "args",
@@ -24124,6 +25588,21 @@
     {
       "mode": "normal",
       "noun": "ochazuke.bindings-help",
+      "keys": "s",
+      "request": {
+        "verb": "sort-column",
+        "noun": "ochazuke.collection",
+        "args": {
+          "field": "key"
+        }
+      },
+      "when": "help-table",
+      "hint": "sort key",
+      "help": "Table view: sort the rows by key, then descending, then back to the default order (own keys first, literal before key classes)"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.bindings-help",
       "keys": "shift+tab",
       "request": {
         "verb": "show",
@@ -24148,6 +25627,23 @@
       },
       "hidden": true,
       "help": "Next view, as tab cycles the views of anything with views"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.bindings-help",
+      "keys": "u",
+      "request": {
+        "verb": "filter-prop",
+        "noun": "ochazuke.collection",
+        "args": {
+          "prop": "unbound",
+          "value": true
+        }
+      },
+      "when": "help-table",
+      "hint": "unbound only",
+      "hidden": true,
+      "help": "Table view: keep only the unbound verbs (U shows the keys again)"
     },
     {
       "mode": "normal",
@@ -26046,7 +27542,7 @@
         "noun": "ochazuke.form"
       },
       "when": "no-modal",
-      "help": "Leave a form placed on a page; in a modal form q and esc reach the modal noun (modal.close, which leaves it)"
+      "help": "Leave a form placed on a page; in a modal form q reaches the modal noun (modal.close, which leaves it) and esc leaves insert"
     },
     {
       "mode": "normal",
@@ -26057,7 +27553,7 @@
         "noun": "ochazuke.form"
       },
       "when": "no-modal",
-      "help": "Leave a form placed on a page; in a modal form q and esc reach the modal noun (modal.close, which leaves it)"
+      "help": "Leave a form placed on a page; in a modal form q reaches the modal noun (modal.close, which leaves it) and esc leaves insert"
     },
     {
       "mode": "normal",
@@ -26544,7 +28040,8 @@
       "request": {
         "verb": "close",
         "noun": "ochazuke.modal"
-      }
+      },
+      "when": "setting:modal.esc-closes"
     },
     {
       "mode": "normal",
@@ -26910,6 +28407,150 @@
     },
     {
       "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "[ [",
+      "request": {
+        "verb": "previous",
+        "noun": "ochazuke.related-section"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "[ esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "] ]",
+      "request": {
+        "verb": "next",
+        "noun": "ochazuke.related-section"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "] esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "a",
+      "request": {
+        "verb": "associate",
+        "noun": "ochazuke.related-section"
+      },
+      "when": "related-on-heading"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "d esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "d u",
+      "request": {
+        "verb": "unassociate",
+        "noun": "ochazuke.related-section"
+      },
+      "when": "related-on-row"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "enter",
+      "request": {
+        "verb": "toggle",
+        "noun": "ochazuke.related-section"
+      },
+      "when": "related-on-heading"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "n",
+      "request": {
+        "verb": "new",
+        "noun": "ochazuke.related-section"
+      },
+      "when": "related-on-heading"
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "z M",
+      "request": {
+        "verb": "close-all",
+        "noun": "ochazuke.related-section"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "z R",
+      "request": {
+        "verb": "open-all",
+        "noun": "ochazuke.related-section"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "z a",
+      "request": {
+        "verb": "toggle",
+        "noun": "ochazuke.related-section"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "z c",
+      "request": {
+        "verb": "close",
+        "noun": "ochazuke.related-section"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "z esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "ochazuke.related-section",
+      "keys": "z o",
+      "request": {
+        "verb": "open",
+        "noun": "ochazuke.related-section"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
       "noun": "ochazuke.setting",
       "keys": "backspace",
       "request": {
@@ -27212,7 +28853,8 @@
       "request": {
         "verb": "close",
         "noun": "ochazuke.setting"
-      }
+      },
+      "when": "setting:modal.esc-closes"
     },
     {
       "mode": "normal",
