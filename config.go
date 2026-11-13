@@ -9,9 +9,11 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"sort"
 	"strings"
 
 	"golang.org/x/term"
+	"ofam.dev/ochazuke"
 )
 
 // Config is the tool's settings file, $XDG_CONFIG_HOME/o-qbt/config.json
@@ -300,4 +302,36 @@ func readLine(r io.Reader) (string, error) {
 		return "", err
 	}
 	return strings.TrimRight(line, "\r\n"), nil
+}
+
+// ConfigSetProps writes each cfg_KEY prop of props as config set KEY VALUE:
+// the standard set's and edit's form of the same write.
+func (t *Tool) ConfigSetProps(props map[string]any) (Message, error) {
+	keys := make([]string, 0, len(props))
+	for prop := range props {
+		keys = append(keys, prop)
+	}
+	sort.Strings(keys)
+	var last Message
+	for _, prop := range keys {
+		key, ok := strings.CutPrefix(prop, cfgProp)
+		if !ok {
+			return Message{}, fmt.Errorf("config set: %q is not a writable prop (%s)", prop, strings.Join(configKeys, ", "))
+		}
+		var err error
+		if last, err = t.ConfigSet(key, fmt.Sprint(props[prop]), false); err != nil {
+			return Message{}, err
+		}
+	}
+	return last, nil
+}
+
+// configSetVerb is config set: KEY VALUE, or the standard set's props form
+// (what config edit writes through).
+func (t *Tool) configSetVerb(c ochazuke.Ctx) ochazuke.Result {
+	stdin, _ := c.Args["stdin"].(bool)
+	if props, ok := c.Args["props"].(map[string]any); ok && ochazuke.StringArg(c.Args, "key", "") == "" {
+		return t.answer(t.ConfigSetProps(props))
+	}
+	return t.answer(t.ConfigSet(ochazuke.StringArg(c.Args, "key", ""), ochazuke.StringArg(c.Args, "value", ""), stdin))
 }

@@ -327,3 +327,15 @@ func TestCatalogDeclaresSingularNamespace(t *testing.T) {
 		t.Fatal(got, err)
 	}
 }
+
+// config edit writes through the standard set's props form; it lands in the
+// same file config set KEY VALUE writes.
+func TestConfigEditWritesProps(t *testing.T) {
+	tool := testTool(t, "http://127.0.0.1:1", "", nil)
+	if _, _, err := cli(t, tool, "config", "edit", "--cfg_ssh", "nas3"); err != nil {
+		t.Fatal(err)
+	}
+	if c, _, _, _ := tool.config(); c.SSH != "nas3" {
+		t.Fatalf("ssh %q", c.SSH)
+	}
+}

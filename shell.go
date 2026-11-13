@@ -568,14 +568,12 @@ func (t *Tool) shell() *ocli.Shell {
 			"write the settings file (url, user admin, empty pass, volume, ssh), mode 600, unless it exists; prints its path").
 		Verb("show", func(ochazuke.Ctx) ochazuke.Result { return t.answer(t.ConfigShow()) },
 			"the effective settings and the environment overrides; never the password, only whether one is set").Fetch().
-		Verb("set", func(c ochazuke.Ctx) ochazuke.Result {
-			stdin, _ := c.Args["stdin"].(bool)
-			return t.answer(t.ConfigSet(ochazuke.StringArg(c.Args, "key", ""), ochazuke.StringArg(c.Args, "value", ""), stdin))
-		}, "set KEY to VALUE; pass is never taken from the command line: it prompts with echo off, or reads one line with --stdin").Positional("key", "value")
+		Verb("set", t.configSetVerb, "set KEY to VALUE; pass is never taken from the command line: it prompts with echo off, or reads one line with --stdin").Positional("key", "value")
 	setHistory(r, ochazuke.HistoryChange, "config.init", "config.set")
 	configSet := r.CanonicalKey("config.set") // o-qbt's own, not app.config's
 	r.Operations.Set(withParams(r.Operations.At(ochazuke.Key(configSet)), params(
-		"key", ochazuke.Parameter{Type: "string", Required: true, Enum: configKeys, Description: "the setting"},
+		"key", ochazuke.Parameter{Type: "string", Enum: configKeys, Description: "the setting (required unless props is given)"},
+		"props", ochazuke.Parameter{Type: "object", Description: "the standard set's form: an object of cfg_KEY to value (what config edit writes)"},
 		"value", ochazuke.Parameter{Type: "string", Description: "the new value (not for pass)"},
 		"stdin", ochazuke.Parameter{Type: "boolean", Description: "read the value from one line of stdin"})))
 
