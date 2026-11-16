@@ -38571,35 +38571,6 @@
     {
       "mode": "normal",
       "noun": "category",
-      "keys": "d a",
-      "request": {
-        "verb": "archive",
-        "noun": "category"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "category",
-      "keys": "d d",
-      "request": {
-        "verb": "delete",
-        "noun": "category"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "category",
-      "keys": "d esc",
-      "request": {
-        "verb": "leave",
-        "noun": "ochazuke.mode"
-      }
-    },
-    {
-      "mode": "normal",
-      "noun": "category",
       "keys": "m",
       "request": {
         "verb": "list",
@@ -46088,25 +46059,6 @@
         "noun": "torrent"
       },
       "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "torrent",
-      "keys": "d a",
-      "request": {
-        "verb": "archive",
-        "noun": "torrent"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "torrent",
-      "keys": "d esc",
-      "request": {
-        "verb": "leave",
-        "noun": "ochazuke.mode"
-      }
     },
     {
       "mode": "normal",

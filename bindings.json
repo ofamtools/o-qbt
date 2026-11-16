@@ -2,9 +2,7 @@
 {
   "bindings": [
     {"context": "category/normal", "bindings": [
-      {"key": "d a", "action": "category.archive", "hidden": true},
       {"key": "n", "action": "category.create", "hidden": true},
-      {"key": "d d", "action": "category.delete", "hidden": true},
       {"key": "r", "action": "category.edit", "hidden": true},
       {"key": "M", "action": "category.get", "hidden": true},
       {"key": "U", "action": "category.history", "hidden": true},
@@ -47,7 +45,6 @@
       {"key": "E", "action": "guard.yank", "hidden": true}
     ]},
     {"context": "torrent/normal", "bindings": [
-      {"key": "d a", "action": "torrent.archive", "hidden": true},
       {"key": "n", "action": "torrent.create", "hidden": true},
       {"key": "r", "action": "torrent.edit", "hidden": true},
       {"key": "e", "action": "torrent.export", "hidden": true},
