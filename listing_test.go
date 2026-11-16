@@ -57,11 +57,20 @@ func TestListQueryIsPassedThrough(t *testing.T) {
 			t.Errorf("%v sent %q, want %q", tc.args, got, tc.want)
 		}
 	}
-	if _, _, err := cli(t, tool, "torrent", "list", "--filter", "nope"); err == nil || !strings.Contains(err.Error(), "filter must be one of all, downloading") {
-		t.Errorf("bad filter: %v", err)
-	}
-	if _, _, err := cli(t, tool, "torrent", "list", "--sort", "colour"); err == nil {
-		t.Error("bad sort accepted")
+	// A value outside a parameter's choices is accepted and passed on
+	// (ochazuke v0.142.0, no refusals).
+	for _, tc := range []struct {
+		args []string
+		want string
+	}{
+		{[]string{"torrent", "list", "--filter", "nope"}, "filter=nope"},
+		{[]string{"torrent", "list", "--sort", "colour"}, "sort="},
+	} {
+		if _, _, err := cli(t, tool, tc.args...); err != nil {
+			t.Errorf("%v: %v", tc.args, err)
+		} else if got := f.queries[len(f.queries)-1]; !strings.Contains(got, tc.want) {
+			t.Errorf("%v sent %q, want it to hold %q", tc.args, got, tc.want)
+		}
 	}
 	if _, _, err := cli(t, tool, "torrent", "export"); err == nil || !strings.Contains(err.Error(), "needs --out FILE") {
 		t.Errorf("export without --out: %v", err)
