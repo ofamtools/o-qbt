@@ -1,0 +1,69 @@
+// o-qbt hidden default key rows (run-3 key picker)
+{
+  "bindings": [
+    {"context": "category/normal", "bindings": [
+      {"key": "d a", "action": "category.archive", "hidden": true},
+      {"key": "n", "action": "category.create", "hidden": true},
+      {"key": "d d", "action": "category.delete", "hidden": true},
+      {"key": "r", "action": "category.edit", "hidden": true},
+      {"key": "M", "action": "category.get", "hidden": true},
+      {"key": "U", "action": "category.history", "hidden": true},
+      {"key": "m", "action": "category.list", "hidden": true},
+      {"key": "*", "action": "category.set", "hidden": true},
+      {"key": "v", "action": "category.show", "hidden": true},
+      {"key": "w", "action": "category.watch", "hidden": true},
+      {"key": "p", "action": "category.yank", "hidden": true}
+    ]},
+    {"context": "config/normal", "bindings": [
+      {"key": "d a", "action": "config.archive", "hidden": true},
+      {"key": "n", "action": "config.create", "hidden": true},
+      {"key": "d d", "action": "config.delete", "hidden": true},
+      {"key": "r", "action": "config.edit", "hidden": true},
+      {"key": "M", "action": "config.get", "hidden": true},
+      {"key": "U", "action": "config.history", "hidden": true},
+      {"key": "a", "action": "config.init", "hidden": true},
+      {"key": "m", "action": "config.list", "hidden": true},
+      {"key": "*", "action": "config.set", "hidden": true},
+      {"key": "v", "action": "config.show", "hidden": true},
+      {"key": "w", "action": "config.watch", "hidden": true},
+      {"key": "p", "action": "config.yank", "hidden": true}
+    ]},
+    {"context": "guard/normal", "bindings": [
+      {"key": "d a", "action": "guard.archive", "hidden": true},
+      {"key": "b", "action": "guard.check", "hidden": true},
+      {"key": "n", "action": "guard.create", "hidden": true},
+      {"key": "d d", "action": "guard.delete", "hidden": true},
+      {"key": "a", "action": "guard.disk", "hidden": true},
+      {"key": "r", "action": "guard.edit", "hidden": true},
+      {"key": "M", "action": "guard.get", "hidden": true},
+      {"key": "U", "action": "guard.history", "hidden": true},
+      {"key": "m", "action": "guard.list", "hidden": true},
+      {"key": "e", "action": "guard.log", "hidden": true},
+      {"key": "f", "action": "guard.rebase", "hidden": true},
+      {"key": "o", "action": "guard.resume", "hidden": true},
+      {"key": "*", "action": "guard.set", "hidden": true},
+      {"key": "v", "action": "guard.show", "hidden": true},
+      {"key": "w", "action": "guard.watch", "hidden": true},
+      {"key": "E", "action": "guard.yank", "hidden": true}
+    ]},
+    {"context": "torrent/normal", "bindings": [
+      {"key": "d a", "action": "torrent.archive", "hidden": true},
+      {"key": "n", "action": "torrent.create", "hidden": true},
+      {"key": "r", "action": "torrent.edit", "hidden": true},
+      {"key": "e", "action": "torrent.export", "hidden": true},
+      {"key": "a", "action": "torrent.find", "hidden": true},
+      {"key": "M", "action": "torrent.get", "hidden": true},
+      {"key": "U", "action": "torrent.history", "hidden": true},
+      {"key": "m", "action": "torrent.list", "hidden": true},
+      {"key": "b", "action": "torrent.overview", "hidden": true},
+      {"key": "f", "action": "torrent.recheck", "hidden": true},
+      {"key": "o", "action": "torrent.resume", "hidden": true},
+      {"key": "*", "action": "torrent.set", "hidden": true},
+      {"key": "v", "action": "torrent.show", "hidden": true},
+      {"key": "p", "action": "torrent.summary", "hidden": true},
+      {"key": "s", "action": "torrent.vocabulary", "hidden": true},
+      {"key": "w", "action": "torrent.watch", "hidden": true},
+      {"key": "E", "action": "torrent.yank", "hidden": true}
+    ]}
+  ]
+}

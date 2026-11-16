@@ -38540,6 +38540,423 @@
     },
     {
       "mode": "normal",
+      "noun": "category",
+      "keys": "*",
+      "request": {
+        "verb": "set",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "M",
+      "request": {
+        "verb": "get",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "U",
+      "request": {
+        "verb": "history",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "d a",
+      "request": {
+        "verb": "archive",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "d d",
+      "request": {
+        "verb": "delete",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "d esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "m",
+      "request": {
+        "verb": "list",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "n",
+      "request": {
+        "verb": "create",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "p",
+      "request": {
+        "verb": "yank",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "r",
+      "request": {
+        "verb": "edit",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "v",
+      "request": {
+        "verb": "show",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "category",
+      "keys": "w",
+      "request": {
+        "verb": "watch",
+        "noun": "category"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "*",
+      "request": {
+        "verb": "set",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "M",
+      "request": {
+        "verb": "get",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "U",
+      "request": {
+        "verb": "history",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "a",
+      "request": {
+        "verb": "init",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "d a",
+      "request": {
+        "verb": "archive",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "d d",
+      "request": {
+        "verb": "delete",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "d esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "m",
+      "request": {
+        "verb": "list",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "n",
+      "request": {
+        "verb": "create",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "p",
+      "request": {
+        "verb": "yank",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "r",
+      "request": {
+        "verb": "edit",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "v",
+      "request": {
+        "verb": "show",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "config",
+      "keys": "w",
+      "request": {
+        "verb": "watch",
+        "noun": "config"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "*",
+      "request": {
+        "verb": "set",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "E",
+      "request": {
+        "verb": "yank",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "M",
+      "request": {
+        "verb": "get",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "U",
+      "request": {
+        "verb": "history",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "a",
+      "request": {
+        "verb": "disk",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "b",
+      "request": {
+        "verb": "check",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "d a",
+      "request": {
+        "verb": "archive",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "d d",
+      "request": {
+        "verb": "delete",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "d esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "e",
+      "request": {
+        "verb": "log",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "f",
+      "request": {
+        "verb": "rebase",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "m",
+      "request": {
+        "verb": "list",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "n",
+      "request": {
+        "verb": "create",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "o",
+      "request": {
+        "verb": "resume",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "r",
+      "request": {
+        "verb": "edit",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "v",
+      "request": {
+        "verb": "show",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "guard",
+      "keys": "w",
+      "request": {
+        "verb": "watch",
+        "noun": "guard"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
       "noun": "ochazuke.about-page",
       "keys": "Y",
       "request": {
@@ -46137,6 +46554,185 @@
         "verb": "yank-step",
         "noun": "ochazuke.timeline"
       }
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "*",
+      "request": {
+        "verb": "set",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "E",
+      "request": {
+        "verb": "yank",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "M",
+      "request": {
+        "verb": "get",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "U",
+      "request": {
+        "verb": "history",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "a",
+      "request": {
+        "verb": "find",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "b",
+      "request": {
+        "verb": "overview",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "d a",
+      "request": {
+        "verb": "archive",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "d esc",
+      "request": {
+        "verb": "leave",
+        "noun": "ochazuke.mode"
+      }
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "e",
+      "request": {
+        "verb": "export",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "f",
+      "request": {
+        "verb": "recheck",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "m",
+      "request": {
+        "verb": "list",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "n",
+      "request": {
+        "verb": "create",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "o",
+      "request": {
+        "verb": "resume",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "p",
+      "request": {
+        "verb": "summary",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "r",
+      "request": {
+        "verb": "edit",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "s",
+      "request": {
+        "verb": "vocabulary",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "v",
+      "request": {
+        "verb": "show",
+        "noun": "torrent"
+      },
+      "hidden": true
+    },
+    {
+      "mode": "normal",
+      "noun": "torrent",
+      "keys": "w",
+      "request": {
+        "verb": "watch",
+        "noun": "torrent"
+      },
+      "hidden": true
     },
     {
       "mode": "operator_g_pending",

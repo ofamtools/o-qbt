@@ -581,6 +581,8 @@ func (t *Tool) shell() *ocli.Shell {
 		r.Operations.Set(withParams(r.Operations.At(ochazuke.Key(key)), params(outputParams()...)))
 	}
 
+	loadDefaultBindings(r)
+
 	sh := ocli.New(r, "o-qbt", t.Stdin, t.Stdout, t.Stderr)
 	sh.Usage = ocli.DefaultUsage(t.Prog)
 	sh.Version = Version
