@@ -39465,16 +39465,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.collection",
-      "keys": "ctrl+t",
-      "request": {
-        "verb": "filter-choose",
-        "noun": "ochazuke.collection"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.collection",
       "keys": "ctrl+u",
       "request": {
         "verb": "scroll",
@@ -41169,39 +41159,9 @@
     {
       "mode": "normal",
       "noun": "ochazuke.filter-form",
-      "keys": "R",
-      "request": {
-        "verb": "direction",
-        "noun": "ochazuke.filter-form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.filter-form",
       "keys": "U",
       "request": {
         "verb": "invert-condition",
-        "noun": "ochazuke.filter-form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.filter-form",
-      "keys": "Y",
-      "request": {
-        "verb": "remove-condition",
-        "noun": "ochazuke.filter-form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.filter-form",
-      "keys": "b",
-      "request": {
-        "verb": "edit-condition",
         "noun": "ochazuke.filter-form"
       },
       "hidden": true
@@ -41226,16 +41186,6 @@
       "keys": "f",
       "request": {
         "verb": "write-saved",
-        "noun": "ochazuke.filter-form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.filter-form",
-      "keys": "space",
-      "request": {
-        "verb": "toggle",
         "noun": "ochazuke.filter-form"
       },
       "hidden": true
@@ -41303,52 +41253,12 @@
     {
       "mode": "normal",
       "noun": "ochazuke.form",
-      "keys": "A",
-      "request": {
-        "verb": "next-missing",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "B",
-      "request": {
-        "verb": "previous",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
       "keys": "C",
       "request": {
         "verb": "clear",
         "noun": "ochazuke.form"
       },
       "hint": "clear"
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "D",
-      "request": {
-        "verb": "run",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "E",
-      "request": {
-        "verb": "suggest",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
     },
     {
       "mode": "normal",
@@ -41363,52 +41273,12 @@
     {
       "mode": "normal",
       "noun": "ochazuke.form",
-      "keys": "a",
-      "request": {
-        "verb": "chip-edge",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "b",
-      "request": {
-        "verb": "chip-line",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "c",
-      "request": {
-        "verb": "chip-move",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
       "keys": "ctrl+r",
       "request": {
         "verb": "redo",
         "noun": "ochazuke.form"
       },
       "when": "input-no-redo"
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "d",
-      "request": {
-        "verb": "chip-toggle",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
     },
     {
       "mode": "normal",
@@ -41434,56 +41304,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.form",
-      "keys": "j",
-      "request": {
-        "verb": "invert",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "k",
-      "request": {
-        "verb": "item-add",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "m",
-      "request": {
-        "verb": "item-delete",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "o",
-      "request": {
-        "verb": "item-edit",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "p",
-      "request": {
-        "verb": "item-first",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
       "keys": "q",
       "request": {
         "verb": "leave",
@@ -41491,16 +41311,6 @@
       },
       "when": "no-modal",
       "help": "Leave a form placed on a page; in a modal form q reaches the modal noun (modal.close, which leaves it) and esc leaves insert"
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "r",
-      "request": {
-        "verb": "item-last",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
     },
     {
       "mode": "normal",
@@ -41531,36 +41341,6 @@
         "noun": "ochazuke.form"
       },
       "when": "input-no-undo"
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "v",
-      "request": {
-        "verb": "item-next",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "w",
-      "request": {
-        "verb": "item-previous",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.form",
-      "keys": "x",
-      "request": {
-        "verb": "item-yank",
-        "noun": "ochazuke.form"
-      },
-      "hidden": true
     },
     {
       "mode": "normal",
@@ -42245,16 +42025,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.help-page",
-      "keys": "a",
-      "request": {
-        "verb": "choose",
-        "noun": "ochazuke.help-page"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.help-page",
       "keys": "f",
       "request": {
         "verb": "refocus",
@@ -42725,16 +42495,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.index",
-      "keys": "m",
-      "request": {
-        "verb": "columns",
-        "noun": "ochazuke.index"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.index",
       "keys": "z A",
       "request": {
         "verb": "show-archived",
@@ -42816,45 +42576,6 @@
       "keys": "ctrl+g",
       "request": {
         "verb": "list",
-        "noun": "ochazuke.noun"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.noun",
-      "keys": "d a",
-      "request": {
-        "verb": "archive",
-        "noun": "ochazuke.noun"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.noun",
-      "keys": "d d",
-      "request": {
-        "verb": "delete",
-        "noun": "ochazuke.noun"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.noun",
-      "keys": "d esc",
-      "request": {
-        "verb": "leave",
-        "noun": "ochazuke.mode"
-      }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.noun",
-      "keys": "d r",
-      "request": {
-        "verb": "restore",
         "noun": "ochazuke.noun"
       },
       "hidden": true
@@ -43122,16 +42843,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.outline",
-      "keys": "f",
-      "request": {
-        "verb": "next",
-        "noun": "ochazuke.outline"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.outline",
       "keys": "g J",
       "request": {
         "verb": "move",
@@ -43181,16 +42892,6 @@
         "verb": "edit",
         "noun": "ochazuke.outline"
       }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.outline",
-      "keys": "k",
-      "request": {
-        "verb": "row-key",
-        "noun": "ochazuke.outline"
-      },
-      "hidden": true
     },
     {
       "mode": "normal",
@@ -43601,16 +43302,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.picker",
-      "keys": "H",
-      "request": {
-        "verb": "history",
-        "noun": "ochazuke.picker"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.picker",
       "keys": "M",
       "request": {
         "verb": "mark",
@@ -43706,26 +43397,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.picker",
-      "keys": "b",
-      "request": {
-        "verb": "normal",
-        "noun": "ochazuke.picker"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.picker",
-      "keys": "c",
-      "request": {
-        "verb": "previous-scope",
-        "noun": "ochazuke.picker"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.picker",
       "keys": "ctrl+g",
       "request": {
         "verb": "list",
@@ -43750,16 +43421,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.picker",
-      "keys": "g F",
-      "request": {
-        "verb": "open",
-        "noun": "ochazuke.picker"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.picker",
       "keys": "g esc",
       "request": {
         "verb": "leave",
@@ -43777,16 +43438,6 @@
           "to": "first"
         }
       }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.picker",
-      "keys": "g v",
-      "request": {
-        "verb": "show",
-        "noun": "ochazuke.picker"
-      },
-      "hidden": true
     },
     {
       "mode": "normal",
@@ -43918,16 +43569,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.picker",
-      "keys": "w",
-      "request": {
-        "verb": "watch",
-        "noun": "ochazuke.picker"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.picker",
       "keys": "y",
       "request": {
         "verb": "yank-path",
@@ -43966,16 +43607,6 @@
       "keys": "F",
       "request": {
         "verb": "refresh",
-        "noun": "ochazuke.rail"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.rail",
-      "keys": "a",
-      "request": {
-        "verb": "look",
         "noun": "ochazuke.rail"
       },
       "hidden": true
@@ -44028,16 +43659,6 @@
     {
       "mode": "normal",
       "noun": "ochazuke.rail",
-      "keys": "enter",
-      "request": {
-        "verb": "inspect",
-        "noun": "ochazuke.rail"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.rail",
       "keys": "h",
       "request": {
         "verb": "close",
@@ -44054,16 +43675,6 @@
         "noun": "ochazuke.related-section"
       },
       "when": "related-on-heading"
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.rail",
-      "keys": "right",
-      "request": {
-        "verb": "enter",
-        "noun": "ochazuke.rail"
-      },
-      "hidden": true
     },
     {
       "mode": "normal",
@@ -44091,25 +43702,6 @@
       "keys": "w",
       "request": {
         "verb": "unpin",
-        "noun": "ochazuke.rail"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.rail",
-      "keys": "y esc",
-      "request": {
-        "verb": "leave",
-        "noun": "ochazuke.mode"
-      }
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.rail",
-      "keys": "y y",
-      "request": {
-        "verb": "yank",
         "noun": "ochazuke.rail"
       },
       "hidden": true
@@ -44173,35 +43765,6 @@
         "noun": "ochazuke.register"
       },
       "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.register",
-      "keys": "d a",
-      "request": {
-        "verb": "archive",
-        "noun": "ochazuke.register"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.register",
-      "keys": "d d",
-      "request": {
-        "verb": "delete",
-        "noun": "ochazuke.register"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.register",
-      "keys": "d esc",
-      "request": {
-        "verb": "leave",
-        "noun": "ochazuke.mode"
-      }
     },
     {
       "mode": "normal",
@@ -44417,26 +43980,6 @@
       "keys": "ctrl+n",
       "request": {
         "verb": "restore",
-        "noun": "ochazuke.related-section"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.related-section",
-      "keys": "d a",
-      "request": {
-        "verb": "archive",
-        "noun": "ochazuke.related-section"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.related-section",
-      "keys": "d d",
-      "request": {
-        "verb": "delete",
         "noun": "ochazuke.related-section"
       },
       "hidden": true
@@ -44779,55 +44322,6 @@
         "noun": "ochazuke.setting"
       },
       "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.setting",
-      "keys": "d D",
-      "request": {
-        "verb": "remove",
-        "noun": "ochazuke.setting"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.setting",
-      "keys": "d a",
-      "request": {
-        "verb": "archive",
-        "noun": "ochazuke.setting"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.setting",
-      "keys": "d b",
-      "request": {
-        "verb": "reset-all",
-        "noun": "ochazuke.setting"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.setting",
-      "keys": "d d",
-      "request": {
-        "verb": "delete",
-        "noun": "ochazuke.setting"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.setting",
-      "keys": "d esc",
-      "request": {
-        "verb": "leave",
-        "noun": "ochazuke.mode"
-      }
     },
     {
       "mode": "normal",
@@ -45185,16 +44679,6 @@
       "keys": "ctrl+g",
       "request": {
         "verb": "list",
-        "noun": "ochazuke.setting-item"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.setting-item",
-      "keys": "d a",
-      "request": {
-        "verb": "archive",
         "noun": "ochazuke.setting-item"
       },
       "hidden": true
@@ -45962,16 +45446,6 @@
       },
       "from": {
         "count": "count"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "normal",
-      "noun": "ochazuke.timeline",
-      "keys": "d",
-      "request": {
-        "verb": "yank-step",
-        "noun": "ochazuke.timeline"
       },
       "hidden": true
     },
@@ -48353,16 +47827,6 @@
     {
       "mode": "visual-line",
       "noun": "ochazuke.outline",
-      "keys": "f",
-      "request": {
-        "verb": "expand",
-        "noun": "ochazuke.outline"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "visual-line",
-      "noun": "ochazuke.outline",
       "keys": "g J",
       "request": {
         "verb": "move",
@@ -48401,36 +47865,6 @@
       "keys": "i",
       "request": {
         "verb": "fold",
-        "noun": "ochazuke.outline"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "visual-line",
-      "noun": "ochazuke.outline",
-      "keys": "j",
-      "request": {
-        "verb": "indent",
-        "noun": "ochazuke.outline"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "visual-line",
-      "noun": "ochazuke.outline",
-      "keys": "k",
-      "request": {
-        "verb": "leave",
-        "noun": "ochazuke.outline"
-      },
-      "hidden": true
-    },
-    {
-      "mode": "visual-line",
-      "noun": "ochazuke.outline",
-      "keys": "m",
-      "request": {
-        "verb": "next",
         "noun": "ochazuke.outline"
       },
       "hidden": true
